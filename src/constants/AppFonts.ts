@@ -4,7 +4,9 @@ const AppFonts = {
     MEDIUM: 'Satoshi-Medium',
     LIGHT: 'Satoshi-Light',
     INTER_REGULAR: 'Inter-Regular',
-    INTER_BOLD: 'Inter-Bold'
+    INTER_BOLD: 'Inter-Bold',
+    INTER_SEMIBOLD: 'Inter-SemiBold',
+    INTER_MEDIUM: 'Inter-Medium'
    }
    
    export default AppFonts;

@@ -74,7 +74,7 @@ const LoginScreen: React.FC<Props> = () => {
         </View>
       </View>
 
-      <ButtonView title="Sign in" onPress={() => {}} />
+      <ButtonView title="Sign in" onPress={() => {navigation.navigate(RouteNames.BottomTabs)}} />
 
       <View marginT-20 center>
         <TouchableOpacity

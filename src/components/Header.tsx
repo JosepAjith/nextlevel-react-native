@@ -12,7 +12,7 @@ export const Header = ({title}: Props) => {
   const navigation = useNavigation();
   return (
     <View row centerV>
-      <View flex>
+      <View style={{flex:0.5}}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <Image source={AppImages.BACK} />
         </TouchableOpacity>
@@ -21,7 +21,7 @@ export const Header = ({title}: Props) => {
         <Text style={AppStyles.title}>{title}</Text>
       </View>
 
-      <View flex></View>
+      <View style={{flex:0.5}}></View>
     </View>
   );
 };

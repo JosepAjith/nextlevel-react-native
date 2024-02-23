@@ -7,6 +7,13 @@ NEXT: require('../images/Next.png'),
 EYE: require('../images/eye.png'),
 EYECLOSE: require('../images/eyeclose.png'),
 BACK: require('../images/back.png'),
+SUCCESS: require('../images/success.png'),
+HOME: require('../images/home.png'),
+JEEP: require('../images/jeep.png'),
+ADDTRIP: require('../images/addTrip.png'),
+PROFILE: require('../images/profile.png'),
+NOTIF: require('../images/notif.png'),
+DOT: require('../images/dot.png'),
 }
 
 export default AppImages;

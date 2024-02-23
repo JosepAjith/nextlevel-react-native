@@ -7,4 +7,10 @@ export type RootStackParams = {
   ChangePasswordScreen: undefined;
   ResetPasswordScreen: undefined;
   VerificationScreen: undefined;
+  SuccessScreen: undefined;
+  BottomTabs: undefined;
+  HomeScreen: undefined;
+  MyTripScreen: undefined;
+  AddTripScreen: undefined;
+  ProfileScreen: undefined;
 };

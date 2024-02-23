@@ -5,5 +5,11 @@ export const RouteNames = {
   ForgotPasswordScreen: 'ForgotPasswordScreen',
   ChangePasswordScreen: 'ChangePasswordScreen',
   ResetPasswordScreen: 'ResetPasswordScreen',
-  VerificationScreen: 'VerificationScreen'
+  VerificationScreen: 'VerificationScreen',
+  SuccessScreen: 'SuccessScreen',
+  BottomTabs: 'BottomTabs',
+  HomeScreen: 'HomeScreen',
+  MyTripScreen: 'MyTripScreen',
+  AddTripScreen: 'AddTripScreen',
+  ProfileScreen: 'ProfileScreen'
 } as const;

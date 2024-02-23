@@ -55,7 +55,7 @@ const ForgotPasswordScreen: React.FC<Props> = () => {
         marginB-30
       />
 
-      <ButtonView title="Get OTP" onPress={() => {}} />
+      <ButtonView title="Get OTP" onPress={() => {navigation.navigate(RouteNames.VerificationScreen)}} />
     </View>
   );
 };
