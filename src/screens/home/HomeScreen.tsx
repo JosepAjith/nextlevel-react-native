@@ -39,6 +39,19 @@ const HomeScreen: React.FC<Props> = () => {
   return (
     <View flex backgroundColor={AppColors.Black} padding-20>
 
+      <View row>
+        <View flex>
+        <Text style={styles.title}>Buckle up and get ready</Text>
+        </View>
+
+        <View center style={styles.notifView}>
+          <Image source={AppImages.NOTIF} width={18} height={21}/>
+          {/* <View style={{position:'absolute', right:13, top:12 }}>
+          <Image source={AppImages.DOT} width={8} height={8}/>
+          </View> */}
+        </View>
+      </View>
+
     </View>
   );
 };
