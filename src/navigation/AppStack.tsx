@@ -10,6 +10,7 @@ import VerificationScreen from '../screens/verification/VerificationScreen';
 import ForgotPasswordScreen from '../screens/forgotPass/ForgotPasswordScreen';
 import SuccessScreen from '../screens/successPage/SuccessScreen';
 import BottomTabs from '../screens/Dashboard/BottomTabs';
+import TripDetails from '../screens/details/TripDetails';
 
 const Stack = createNativeStackNavigator();
 
@@ -29,6 +30,7 @@ const AppStack = () => {
       <Stack.Screen name={RouteNames.VerificationScreen} component={VerificationScreen}/>
       <Stack.Screen name={RouteNames.SuccessScreen} component={SuccessScreen}/>
       <Stack.Screen name={RouteNames.BottomTabs} component={BottomTabs}/>
+      <Stack.Screen name={RouteNames.TripDetails} component={TripDetails}/>
     </Stack.Navigator>
   );
 };

@@ -38,7 +38,29 @@ const AddTripScreen: React.FC<Props> = () => {
 
   return (
     <View flex backgroundColor={AppColors.Black} padding-20>
+      <Header leftIcon={false} title="Create Trip"/>
 
+      <TextField
+        fieldStyle={styles.field}
+        label={'Title'}
+        placeholder={'Enter title'}
+        placeholderTextColor={'#999999'}
+        labelStyle={styles.label}
+        style={styles.text}
+        paddingH-20
+      />
+
+      <TextField
+        fieldStyle={styles.field}
+        label={'City'}
+        placeholder={'Select city'}
+        placeholderTextColor={'#999999'}
+        labelStyle={styles.label}
+        style={styles.text}
+        paddingH-20
+        marginT-25
+        trailingAccessory={<Image source={AppImages.EYE} />}
+      />
     </View>
   );
 };

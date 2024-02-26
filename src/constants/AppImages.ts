@@ -14,6 +14,16 @@ ADDTRIP: require('../images/addTrip.png'),
 PROFILE: require('../images/profile.png'),
 NOTIF: require('../images/notif.png'),
 DOT: require('../images/dot.png'),
+SEARCH: require('../images/search.png'),
+HOME1: require('../images/home1.png'),
+HOME2: require('../images/home2.png'),
+SHARE: require('../images/share.png'),
+DOWN: require('../images/down.png'),
+UP: require('../images/up.png'),
+REFRESH: require('../images/refresh.png'),
+GROUP: require('../images/group.png'),
+DETAILS: require('../images/details.png'),
+FILTER: require('../images/Filter.png'),
 }
 
 export default AppImages;

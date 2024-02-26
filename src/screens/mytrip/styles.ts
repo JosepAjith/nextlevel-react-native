@@ -65,45 +65,67 @@ export const styles = StyleSheet.create({
     fontFamily: AppFonts.REGULAR,
     color: 'white',
   },
-  capView:{
-    backgroundColor:AppColors.Black,
-    paddingHorizontal:10,
-    paddingVertical:5,
-    marginLeft:10,
-    borderRadius:15
+  capView: {
+    backgroundColor: AppColors.Black,
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    marginLeft: 10,
+    borderRadius: 15,
   },
   statusText: {
     fontSize: 10,
     fontFamily: AppFonts.MEDIUM,
     color: AppColors.Black,
   },
-  statusView:{
-    backgroundColor:'#BBFD79',
-    paddingHorizontal:10,
-    paddingVertical:5,
-    borderRadius:15,
-    marginLeft:10
+  statusView: {
+    backgroundColor: '#BBFD79',
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    borderRadius: 15,
+    marginLeft: 10,
   },
   leftText: {
     fontSize: 12,
     fontFamily: AppFonts.REGULAR,
-    color: "#000000",
-    flex:1
+    color: '#000000',
+    flex: 1,
   },
   rightText: {
     fontSize: 12,
     fontFamily: AppFonts.MEDIUM,
-    color: "#000000",
-    flex:1
+    color: '#000000',
+    flex: 1,
   },
-  bottomView:{
-    borderTopColor:AppColors.Orange,
-    borderTopWidth:1,
-    backgroundColor:'white',
-    paddingTop:10,
-    paddingHorizontal:15,
-    borderBottomLeftRadius:10,
-    borderBottomRightRadius:10
+  bottomView: {
+    borderTopColor: AppColors.Orange,
+    borderTopWidth: 1,
+    backgroundColor: 'white',
+    paddingTop: 10,
+    paddingHorizontal: 15,
+    borderBottomLeftRadius: 10,
+    borderBottomRightRadius: 10,
+  },
+  chip: {
+    borderColor: 'white',
+    borderWidth: 1,
+    marginRight:20
+  },
+  chipLabel:{
+    fontSize:12,
+    fontFamily:AppFonts.REGULAR,
+    color:'white'
+  },
+  modal: {
+    width: '100%',
+    position: 'absolute',
+    bottom: 0,
+    backgroundColor: 'white',
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    elevation:10,
+  },
+  divider:{
+    borderBottomColor:'rgba(0,0,0,0.5)',
+    borderBottomWidth:1,
   }
-
 });

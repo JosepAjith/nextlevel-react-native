@@ -1,0 +1,111 @@
+import React, {useRef, useState, useEffect} from 'react';
+import {Chip, Text, View} from 'react-native-ui-lib';
+import {Animated, Dimensions, FlatList, PanResponder, ScrollView} from 'react-native';
+import {styles} from './styles';
+import ButtonView from '../../components/ButtonView';
+import AppColors from '../../constants/AppColors';
+const deviceHeight = Dimensions.get('window').height;
+
+const TripFilter = (props: {close: any}) => {
+  const close = props.close;
+  const [chip, setChip] = useState<number>(null);
+  const [filter, setFilter] = useState([
+    {id: 1, status: 'First Join'},
+    {id: 2, status: 'Newbie'},
+    {id: 3, status: 'Newbie +'},
+    {id: 4, status: 'Intermediate'},
+    {id: 5, status: 'Advanced'},
+    {id: 6, status: 'Marshal'},
+    {id: 7, status: 'Explorer'},
+    {id: 8, status: 'Super Marshal'},
+    {id: 9, status: 'Intermediate Exam'},
+    {id: 10, status: 'Advance Exam'},
+  ]);
+
+  useEffect(() => {
+    openModal();
+  }, []);
+
+  const modalY = useRef(new Animated.Value(deviceHeight)).current;
+
+  const openModal = () => {
+    Animated.timing(modalY, {
+      toValue: 0,
+      duration: 100,
+      useNativeDriver: true,
+    }).start();
+  };
+
+  const closeModal = () => {
+    close();
+    Animated.timing(modalY, {
+      toValue: 300,
+      duration: 100,
+      useNativeDriver: true,
+    }).start();
+  };
+
+  const panResponder = useRef(
+    PanResponder.create({
+      onMoveShouldSetPanResponder: (_, gestureState) => {
+        return Math.abs(gestureState.dy) > 5;
+      },
+      onPanResponderMove: (_, gestureState) => {
+        if (gestureState.dy > 0) {
+          modalY.setValue(gestureState.dy);
+        }
+      },
+      onPanResponderRelease: (_, gestureState) => {
+        if (gestureState.dy > 100) {
+          closeModal();
+        } else {
+          Animated.spring(modalY, {
+            toValue: 0,
+            useNativeDriver: true,
+          }).start();
+        }
+      },
+    }),
+  ).current;
+
+  return (
+    <Animated.View
+      style={[styles.modal, {transform: [{translateY: modalY}]}]}
+      {...panResponder.panHandlers}>
+      <View padding-20 style={styles.divider}>
+        <Text style={[styles.statusText, {fontSize: 16}]}>Filter</Text>
+      </View>
+
+      <View style={{    flexDirection: 'row',
+    flexWrap: 'wrap',marginHorizontal:20, marginTop:20}}>
+        {filter.map((item, index) => (
+           <Chip
+           label={item.status}
+           onPress={() => setChip(index)}
+           labelStyle={[
+             styles.chipLabel,
+             {color: chip == index ? 'white' : 'black'},
+           ]}
+           containerStyle={[
+             styles.chip,
+             {
+               backgroundColor:
+                 chip == index ? AppColors.Orange : 'transparent',
+               borderColor: chip == index ? AppColors.Orange : 'black',
+               marginRight:10,
+               marginBottom:10,
+               padding:5
+             },
+           ]}
+         />
+        ))}
+      </View>
+
+      <View padding-20>
+        <ButtonView title="Save filter" onPress={() => close()} black={true} />
+      </View>
+    </Animated.View>
+  );
+};
+
+export default TripFilter;

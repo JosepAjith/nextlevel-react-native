@@ -11,5 +11,6 @@ export const RouteNames = {
   HomeScreen: 'HomeScreen',
   MyTripScreen: 'MyTripScreen',
   AddTripScreen: 'AddTripScreen',
-  ProfileScreen: 'ProfileScreen'
+  ProfileScreen: 'ProfileScreen',
+  TripDetails: 'TripDetails'
 } as const;
