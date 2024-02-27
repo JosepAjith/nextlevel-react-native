@@ -20,4 +20,23 @@ export const styles = StyleSheet.create({
         fontSize:14,
         fontFamily:AppFonts.REGULAR
     },
+    imageView:{
+        borderStyle:'dashed',
+        borderWidth:1,
+        borderColor:'white',
+        height:160,
+        borderRadius:20,
+        marginVertical:20
+    },
+    click:{
+        color:'white',
+        fontSize:12,
+        fontFamily:AppFonts.LATO_REGULAR
+    },
+    add:{
+        color:'white',
+        fontSize:13,
+        fontFamily:AppFonts.LATO_SEMIBOLD,
+        marginVertical:5
+    },
 });

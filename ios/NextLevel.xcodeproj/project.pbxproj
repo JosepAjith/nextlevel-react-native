@@ -22,6 +22,9 @@
 		E1C9EDD0FBC34706B2880029 /* Inter-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 834C618647C345FDA02ACFC1 /* Inter-Bold.ttf */; };
 		7A04E36B0B504600938AC62E /* Inter-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 5B94B7188FF94106A6BC97F7 /* Inter-Medium.ttf */; };
 		B66EA8EF8EE540A4B9DC53C1 /* Inter-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F9A07CB9975B4CF6A1765502 /* Inter-SemiBold.ttf */; };
+		2AE6345BAE514F2CBD82A9A5 /* Lato-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4EFC8E68C4244B1DB37A5A09 /* Lato-Bold.ttf */; };
+		574221574D204CB69DAE9C44 /* Lato-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CDFF9318E5154FE5A46D897D /* Lato-Regular.ttf */; };
+		8670C5ECC24E4BBE9D238BF9 /* lato-semibold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 7C92E7F7FCD8413E8AA0E05C /* lato-semibold.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -60,6 +63,9 @@
 		834C618647C345FDA02ACFC1 /* Inter-Bold.ttf */ = {isa = PBXFileReference; name = "Inter-Bold.ttf"; path = "../assets/fonts/Inter-Bold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 		5B94B7188FF94106A6BC97F7 /* Inter-Medium.ttf */ = {isa = PBXFileReference; name = "Inter-Medium.ttf"; path = "../assets/fonts/Inter-Medium.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 		F9A07CB9975B4CF6A1765502 /* Inter-SemiBold.ttf */ = {isa = PBXFileReference; name = "Inter-SemiBold.ttf"; path = "../assets/fonts/Inter-SemiBold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		4EFC8E68C4244B1DB37A5A09 /* Lato-Bold.ttf */ = {isa = PBXFileReference; name = "Lato-Bold.ttf"; path = "../assets/fonts/Lato-Bold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		CDFF9318E5154FE5A46D897D /* Lato-Regular.ttf */ = {isa = PBXFileReference; name = "Lato-Regular.ttf"; path = "../assets/fonts/Lato-Regular.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		7C92E7F7FCD8413E8AA0E05C /* lato-semibold.ttf */ = {isa = PBXFileReference; name = "lato-semibold.ttf"; path = "../assets/fonts/lato-semibold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -176,6 +182,9 @@
 				834C618647C345FDA02ACFC1 /* Inter-Bold.ttf */,
 				5B94B7188FF94106A6BC97F7 /* Inter-Medium.ttf */,
 				F9A07CB9975B4CF6A1765502 /* Inter-SemiBold.ttf */,
+				4EFC8E68C4244B1DB37A5A09 /* Lato-Bold.ttf */,
+				CDFF9318E5154FE5A46D897D /* Lato-Regular.ttf */,
+				7C92E7F7FCD8413E8AA0E05C /* lato-semibold.ttf */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -284,6 +293,9 @@
 				E1C9EDD0FBC34706B2880029 /* Inter-Bold.ttf in Resources */,
 				7A04E36B0B504600938AC62E /* Inter-Medium.ttf in Resources */,
 				B66EA8EF8EE540A4B9DC53C1 /* Inter-SemiBold.ttf in Resources */,
+				2AE6345BAE514F2CBD82A9A5 /* Lato-Bold.ttf in Resources */,
+				574221574D204CB69DAE9C44 /* Lato-Regular.ttf in Resources */,
+				8670C5ECC24E4BBE9D238BF9 /* lato-semibold.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

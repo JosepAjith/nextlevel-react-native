@@ -11,6 +11,12 @@ import ForgotPasswordScreen from '../screens/forgotPass/ForgotPasswordScreen';
 import SuccessScreen from '../screens/successPage/SuccessScreen';
 import BottomTabs from '../screens/Dashboard/BottomTabs';
 import TripDetails from '../screens/details/TripDetails';
+import SettingsScreen from '../screens/settings/SettingsScreen';
+import AboutScreen from '../screens/about/AboutScreen';
+import EditProfile from '../screens/edit/EditProfile';
+import AddCar from '../screens/car/AddCar';
+import MarshalList from '../screens/marshal/MarshalList';
+import UserList from '../screens/user/UserList';
 
 const Stack = createNativeStackNavigator();
 
@@ -31,6 +37,12 @@ const AppStack = () => {
       <Stack.Screen name={RouteNames.SuccessScreen} component={SuccessScreen}/>
       <Stack.Screen name={RouteNames.BottomTabs} component={BottomTabs}/>
       <Stack.Screen name={RouteNames.TripDetails} component={TripDetails}/>
+      <Stack.Screen name={RouteNames.SettingsScreen} component={SettingsScreen}/>
+      <Stack.Screen name={RouteNames.AboutScreen} component={AboutScreen}/>
+      <Stack.Screen name={RouteNames.EditProfile} component={EditProfile}/>
+      <Stack.Screen name={RouteNames.AddCar} component={AddCar}/>
+      <Stack.Screen name={RouteNames.MarshalList} component={MarshalList}/>
+      <Stack.Screen name={RouteNames.UserList} component={UserList}/>
     </Stack.Navigator>
   );
 };

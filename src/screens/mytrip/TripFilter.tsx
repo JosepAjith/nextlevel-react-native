@@ -80,6 +80,7 @@ const TripFilter = (props: {close: any}) => {
     flexWrap: 'wrap',marginHorizontal:20, marginTop:20}}>
         {filter.map((item, index) => (
            <Chip
+           key={index}
            label={item.status}
            onPress={() => setChip(index)}
            labelStyle={[

@@ -14,19 +14,19 @@ export const Header = ({title, rightIcon, leftIcon}: Props) => {
   const navigation = useNavigation();
   return (
     <View row centerV>
-      <View style={{flex: 0.5}}>
-        {leftIcon && (
+      <View style={{flex: 0.5}} centerV>
+        {leftIcon == false ? <View/> :
           <TouchableOpacity onPress={() => navigation.goBack()}>
             <Image source={AppImages.BACK} />
           </TouchableOpacity>
-        )}
+}
       </View>
       <View flex center>
         <Text style={AppStyles.title}>{title}</Text>
       </View>
 
       <View style={{flex: 0.5}} right>
-        <Image source={rightIcon} width={21} height={21} />
+        {rightIcon && <Image source={rightIcon} width={21} height={21} />}
       </View>
     </View>
   );
