@@ -33,5 +33,11 @@ export const styles = StyleSheet.create({
     lineText:{
         textDecorationLine:'underline',
         color:AppColors.Orange
-    }
+    },
+    change:{
+        fontSize:13,
+        fontFamily:AppFonts.REGULAR,
+        color:AppColors.Orange
+    },
+
 })
