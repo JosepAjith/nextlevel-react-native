@@ -127,5 +127,36 @@ export const styles = StyleSheet.create({
   divider:{
     borderBottomColor:'rgba(0,0,0,0.5)',
     borderBottomWidth:1,
-  }
+  },
+  name:{
+    fontSize:13,
+    fontFamily:AppFonts.INTER_SEMIBOLD,
+    color:'white'
+  },
+  email:{
+    fontSize:10,
+    fontFamily:AppFonts.INTER_REGULAR,
+    color:'#FAFAFF',
+    opacity:0.7
+  },
+  marshalView:{
+    backgroundColor:'#222222',
+    opacity:0.8,
+    borderRadius:5,
+    marginBottom:10
+  },
+  role:{
+    backgroundColor:'white',
+    borderRadius:5,
+    paddingVertical:5,
+    paddingHorizontal:10,
+    flexDirection:'row',
+    alignItems:'center',
+    marginTop:10
+  },
+  roleText:{
+    fontSize:12,
+    fontFamily:AppFonts.INTER_MEDIUM,
+    color:'black',
+  },
 });

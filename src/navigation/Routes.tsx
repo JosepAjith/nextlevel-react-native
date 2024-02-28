@@ -18,5 +18,6 @@ export const RouteNames = {
   EditProfile: 'EditProfile',
   AddCar: 'AddCar',
   MarshalList: 'MarshalList',
-  UserList: 'UserList'
+  UserList: 'UserList',
+  TripMembers: 'TripMembers'
 } as const;

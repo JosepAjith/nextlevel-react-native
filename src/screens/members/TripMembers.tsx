@@ -14,24 +14,34 @@ import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {useNavigation} from '@react-navigation/native';
 import AppColors from '../../constants/AppColors';
 import AppImages from '../../constants/AppImages';
-import {Dimensions, FlatList} from 'react-native';
+import {
+  Animated,
+  Dimensions,
+  Easing,
+  FlatList,
+  ImageBackground,
+  LayoutAnimation,
+  Platform,
+  TouchableOpacity,
+  UIManager,
+} from 'react-native';
 import {Header} from '../../components/Header';
-import {useDispatch} from 'react-redux';
 import {styles} from '../mytrip/styles';
+import TripFilter from '../mytrip/TripFilter';
 
 const {TextField} = Incubator;
 
-export type MarshalListNavigationProps = NativeStackNavigationProp<
+export type TripMembersNavigationProps = NativeStackNavigationProp<
   RootStackParams,
-  'MarshalList'
+  'TripMembers'
 >;
 
-export type MarshalListRouteProps = RouteProp<RootStackParams, 'MarshalList'>;
+export type TripMembersRouteProps = RouteProp<RootStackParams, 'TripMembers'>;
 
 interface Props {}
 
-const MarshalList: React.FC<Props> = () => {
-  const navigation = useNavigation<MarshalListNavigationProps>();
+const TripMembers: React.FC<Props> = () => {
+  const navigation = useNavigation<TripMembersNavigationProps>();
   const windowWidth = Dimensions.get('window').width;
   const itemWidth = (windowWidth - 50) / 2;
   const [data, setData] = useState([
@@ -39,53 +49,51 @@ const MarshalList: React.FC<Props> = () => {
       img: AppImages.USER1,
       name: 'Mud Maverick',
       email: 'maverick.44x@gmail.com',
-      role: 'Marshal',
+      role: 'Newbie',
+      car:'Bronco',
+      contact: '87676574',
       id: 1,
     },
     {
       img: AppImages.USER2,
       name: 'Mud Maverick',
       email: 'maverick.44x@gmail.com',
-      role: 'Marshal',
+      role: 'Intermediate',
+      car:'Bronco',
+      contact: '87676574',
       id: 2,
     },
     {
       img: AppImages.USER1,
       name: 'Mud Maverick',
       email: 'maverick.44x@gmail.com',
-      role: 'Marshal',
+      role: 'Intermediate+',
+      car:'Bronco',
+      contact: '87676574',
       id: 3,
     },
     {
       img: AppImages.USER2,
       name: 'Mud Maverick',
       email: 'maverick.44x@gmail.com',
-      role: 'Marshal',
+      role: 'First join',
+      car:'Jeep Wrangler',
+      contact: '87676574',
       id: 4,
     },
-    
   ]);
+  
+  
 
   return (
     <View flex backgroundColor={AppColors.Black} padding-20>
-      <Header title="Marshals" rightIcon={AppImages.REFRESH} />
+      <Header title="Trip Members" rightIcon={AppImages.REFRESH} />
 
-      <TextField
-        fieldStyle={[styles.field, {width: '100%'}]}
-        placeholder={'Search'}
-        placeholderTextColor={'#999999'}
-        style={styles.text}
-        paddingH-20
-        marginT-25
-        marginB-20
-        leadingAccessory={
-          <Image source={AppImages.SEARCH} width={20} height={20} marginR-10 />
-        }
-      />
 
       <FlatList
         data={data}
         numColumns={2}
+        contentContainerStyle={{marginTop:20}}
         renderItem={({item, index}) => {
           const isEvenIndex = index % 2 === 0;
           const alignmentStyle = isEvenIndex ? 'flex-start' : 'flex-end';
@@ -97,20 +105,19 @@ const MarshalList: React.FC<Props> = () => {
                   style={{
                     width: '100%',
                     height: 100,
-                    borderRadius: 5
+                    borderRadius: 5,
                   }}
                 />
                 <View paddingV-10 center>
-                <Text style={styles.name}>{item.name}</Text>
-                <Text style={styles.email}>{item.email}</Text>
-                <View row center>
+                  <Text style={styles.name}>{item.name}</Text>
+                  <Text style={styles.email}>{item.email}</Text>
                   <Text style={styles.email}>{item.role}</Text>
-                  <View row marginL-5>
-                    <Image source={AppImages.STAR} width={10} height={10} />
-                    <Image source={AppImages.STAR} width={10} height={10} marginH-5/>
-                    <Image source={AppImages.STAR} width={10} height={10} />
-                  </View>
-                </View>
+                  <Text style={[styles.name,{fontSize:10}]} marginV-5>{item.car}</Text>
+                  <Text style={styles.email}>Contact Info : {item.contact}</Text>
+
+                  <View style={styles.role}>
+                    <Text style={styles.roleText}>View Ride</Text>
+                    </View>
                 </View>
               </View>
             </View>
@@ -120,4 +127,4 @@ const MarshalList: React.FC<Props> = () => {
     </View>
   );
 };
-export default MarshalList;
+export default TripMembers;

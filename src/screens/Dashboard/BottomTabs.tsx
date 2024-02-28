@@ -4,19 +4,30 @@ import MyTripScreen from '../mytrip/MyTripScreen';
 import AddTripScreen from '../addtrip/AddTripScreen';
 import ProfileScreen from '../profile/ProfileScreen';
 import AppImages from '../../constants/AppImages';
-import {ImageSourcePropType, StyleSheet, TouchableOpacity} from 'react-native';
+import {
+  ImageSourcePropType,
+  LayoutAnimation,
+  Platform,
+  StyleSheet,
+  TouchableOpacity,
+  UIManager,
+} from 'react-native';
 import {Image, Text, View} from 'react-native-ui-lib';
 import AppColors from '../../constants/AppColors';
 import AppFonts from '../../constants/AppFonts';
 import TripFilter from '../mytrip/TripFilter';
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../../../store';
+import {useDispatch, useSelector} from 'react-redux';
+import {RootState} from '../../../store';
+
+if (Platform.OS === 'android') {
+  if (UIManager.setLayoutAnimationEnabledExperimental) {
+    UIManager.setLayoutAnimationEnabledExperimental(true);
+  }
+}
 
 const BottomTabs = () => {
   const [activeTab, setActiveTab] = useState('Home');
-  const {openFilter} = useSelector(
-    (state: RootState) => state.TripReducer,
-  );
+  const {openFilter} = useSelector((state: RootState) => state.TripReducer);
   const dispatch = useDispatch();
 
   const FilterClose = () => {
@@ -27,8 +38,17 @@ const BottomTabs = () => {
     <TouchableOpacity
       key={tabName}
       style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}
-      onPress={() => setActiveTab(tabName)}>
-      <View center>
+      onPress={() => {
+        setActiveTab(tabName);
+      }}>
+      <View
+        center
+        backgroundColor={
+          activeTab === tabName ? 'rgba(253,217,178,0.1)' : 'transparent'
+        }
+        flex
+        marginT-10
+        style={{borderTopLeftRadius: 10, borderTopRightRadius: 10, width: 70}}>
         <Image
           source={iconName}
           resizeMode="contain"
@@ -66,15 +86,13 @@ const BottomTabs = () => {
   return (
     <View style={{flex: 1}} backgroundColor={AppColors.Black}>
       {renderScreen()}
-      <View
-        style={styles.tabBar}
-        backgroundColor={AppColors.Black}>
+      <View style={styles.tabBar} backgroundColor={AppColors.Black}>
         {renderTab('Home', AppImages.HOME)}
         {renderTab('My Trips', AppImages.JEEP)}
         {renderTab('Add Trip', AppImages.ADDTRIP)}
         {renderTab('Profile', AppImages.PROFILE)}
       </View>
-      {openFilter && <TripFilter close={FilterClose}/>}
+      {openFilter && <TripFilter close={FilterClose} />}
     </View>
   );
 };
@@ -84,9 +102,9 @@ const styles = StyleSheet.create({
     fontFamily: AppFonts.REGULAR,
     fontSize: 14,
     textAlign: 'center',
-    marginTop:10
+    marginTop: 10,
   },
-  tabBar:{
+  tabBar: {
     flexDirection: 'row',
     height: 80,
     borderTopLeftRadius: 34,
@@ -100,8 +118,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1, // Adjust the opacity as needed
     shadowRadius: 5,
     elevation: 20,
-  }
-  
+  },
 });
 
 export default BottomTabs;

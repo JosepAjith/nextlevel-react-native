@@ -20,4 +20,5 @@ export type RootStackParams = {
   AddCar: undefined;
   MarshalList: undefined;
   UserList: undefined;
+  TripMembers: undefined;
 };

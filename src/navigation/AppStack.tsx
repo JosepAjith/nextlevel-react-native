@@ -17,6 +17,7 @@ import EditProfile from '../screens/edit/EditProfile';
 import AddCar from '../screens/car/AddCar';
 import MarshalList from '../screens/marshal/MarshalList';
 import UserList from '../screens/user/UserList';
+import TripMembers from '../screens/members/TripMembers';
 
 const Stack = createNativeStackNavigator();
 
@@ -43,6 +44,7 @@ const AppStack = () => {
       <Stack.Screen name={RouteNames.AddCar} component={AddCar}/>
       <Stack.Screen name={RouteNames.MarshalList} component={MarshalList}/>
       <Stack.Screen name={RouteNames.UserList} component={UserList}/>
+      <Stack.Screen name={RouteNames.TripMembers} component={TripMembers}/>
     </Stack.Navigator>
   );
 };

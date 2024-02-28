@@ -75,4 +75,31 @@ marginLeft:20
         fontFamily: AppFonts.REGULAR,
         color: "white",
       },
+      deadline:{
+        backgroundColor:'rgba(61,61,61,0.5)',
+        borderRadius:20,
+        paddingVertical:20
+      },
+      divider:{
+        borderBottomColor:'white',
+        opacity:0.1,
+        borderBottomWidth:1,
+        marginVertical:10
+      },
+      smallView:{
+        flexDirection:'row',
+        flex:1,
+        justifyContent:'center',
+        alignItems:'center',
+        margin:5,
+        padding:5,
+        borderRadius:5
+      },
+      attdView:{
+        justifyContent:'center',
+        alignItems:'center',
+        padding:8,
+        borderRadius:5,
+        backgroundColor:'rgba(228,228,228,0.6)'
+      }
 });

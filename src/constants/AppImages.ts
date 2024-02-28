@@ -42,6 +42,9 @@ KEY: require('../images/key.png'),
 DOWNWHITE: require('../images/downWhite.png'),
 USER1: require('../images/user1.png'),
 USER2: require('../images/user2.png'),
+DEADLINE: require('../images/deadline.png'),
+CANCEL: require('../images/cancel.png'),
+UPDATE: require('../images/update.png'),
 }
 
 export default AppImages;

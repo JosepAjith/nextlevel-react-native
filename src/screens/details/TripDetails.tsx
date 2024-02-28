@@ -1,7 +1,5 @@
 import React, {useState} from 'react';
 import {
-  Button,
-  Checkbox,
   Image,
   Incubator,
   Text,
@@ -14,11 +12,10 @@ import {useNavigation} from '@react-navigation/native';
 import AppColors from '../../constants/AppColors';
 import {styles} from './styles';
 import AppImages from '../../constants/AppImages';
-import ButtonView from '../../components/ButtonView';
 import {ScrollView, TouchableOpacity} from 'react-native';
 import {Header} from '../../components/Header';
-import AppFonts from '../../constants/AppFonts';
 import CarouselView from '../../components/CarousalView';
+import Attendance from './Attendance';
 
 const {TextField} = Incubator;
 
@@ -52,14 +49,15 @@ const TripDetails: React.FC<Props> = () => {
               </View>
             </View>
 
-            <View
+            <TouchableOpacity
+              onPress={() => navigation.navigate(RouteNames.TripMembers)}
               style={{
                 backgroundColor: '#F99933',
                 padding: 10,
                 borderRadius: 5,
               }}>
               <Image source={AppImages.GROUP} height={9} width={14} />
-            </View>
+            </TouchableOpacity>
           </View>
 
           <View row centerV marginV-10>
@@ -115,7 +113,6 @@ const TripDetails: React.FC<Props> = () => {
               <Text style={styles.leftText}>22-June-2024 11:00 AM</Text>
             </View>
           </View>
-          
 
           <View row>
             <View style={styles.yellowButton}>
@@ -127,6 +124,8 @@ const TripDetails: React.FC<Props> = () => {
             </View>
 
           </View>
+
+         <Attendance/>
         </View>
       </ScrollView>
     </View>
