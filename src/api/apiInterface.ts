@@ -3,8 +3,12 @@ import {
   SimpleApiClient,
   apiClient,
 } from './apiClient';
+import { SendOtpResponse } from './forgotPassword/SendOtpSlice';
+import { VerifyOtpResponse } from './forgotPassword/VerifyOtpSlice';
 import { LoginResponse } from './login/LoginCreateSlice';
+import { ChangePasswordResponse } from './password/ChangePasswordSlice';
 import { RegisterResponse } from './register/RegisterCreateSlice';
+import { TripListResponse } from './trip/TripListResponse';
 
 type ResponseKind = 'success' | 'failure';
 
@@ -55,7 +59,7 @@ export const createLogin = async (
 export const changePassword = async (
   requestBody: any,
 ): Promise<NetworkResponse<ChangePasswordResponse | null>> => {
-  const response = await apiClient('update/password', 'POST', requestBody);
+  const response = await apiClient('forgot-password-change', 'POST', requestBody);
 
   if (response.status) {
     const json = await response.data;
@@ -93,7 +97,7 @@ export const editProfile = async (
 export const sendOtp = async (
   requestBody: any,
 ): Promise<NetworkResponse<SendOtpResponse | null>> => {
-  const response = await apiClient('send/otp', 'POST', requestBody);
+  const response = await apiClient('forgot-password', 'POST', requestBody);
 
   if (response.status) {
     const json = await response.data;
@@ -112,7 +116,7 @@ export const sendOtp = async (
 export const otpVerify = async (
   requestBody: any,
 ): Promise<NetworkResponse<VerifyOtpResponse | null>> => {
-  const response = await apiClient('verify/otp', 'POST', requestBody);
+  const response = await apiClient('verify-otp', 'POST', requestBody);
 
   if (response.status) {
     const json = await response.data;
@@ -127,10 +131,10 @@ export const otpVerify = async (
   }
 };
 //API FOR TRAVEL LIST
-export const fetchTravelList = async (
+export const fetchTripList = async (
   requestBody: any,
-): Promise<NetworkResponse<TravelData[]>> => {
-  const response = await apiClient('my_travel', 'POST', requestBody);
+): Promise<NetworkResponse<TripListResponse[]>> => {
+  const response = await apiClient('trip/list', 'POST', requestBody);
 
   if (response.status) {
     const json = await response.data.data;

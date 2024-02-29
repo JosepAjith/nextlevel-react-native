@@ -10,6 +10,8 @@ import AppColors from '../../constants/AppColors';
 import PagerView from 'react-native-pager-view';
 import {styles} from './styles';
 import {ImageBackground, TouchableOpacity} from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import AppStrings from '../../constants/AppStrings';
 
 export type OnboardScreenNavigationProps = NativeStackNavigationProp<
   RootStackParams,
@@ -32,13 +34,19 @@ const OnboardScreen: React.FC<Props> = () => {
     setCurrentPage(event.nativeEvent.position);
   };
 
-  const goToNextPage = () => {
+  const goToNextPage = async () => {
     const nextPage = currentPage + 1;
     if (nextPage == 3) {
+      await AsyncStorage.setItem(AppStrings.IS_ONBOARD, 'true');
       navigation.replace(RouteNames.LoginScreen);
     } else {
       pagerRef.current?.setPage(nextPage);
     }
+  };
+
+  const skipPage = async () => {
+      await AsyncStorage.setItem(AppStrings.IS_ONBOARD, 'true');
+      navigation.replace(RouteNames.LoginScreen);
   };
 
   const renderIndicator = (pageIndex: number) => {
@@ -57,9 +65,10 @@ const OnboardScreen: React.FC<Props> = () => {
   };
 
   const renderOnboardPage = (key: string, source: any, text: string) => (
-    <ImageBackground key={key} source={source} style={{ padding: 20 }}>
+    <ImageBackground key={key} source={source} style={{padding: 20}}>
       <View right>
-        <TouchableOpacity onPress={() => navigation.navigate(RouteNames.LoginScreen)}>
+        <TouchableOpacity
+          onPress={skipPage}>
           <Text style={styles.skip}>Skip</Text>
         </TouchableOpacity>
       </View>
@@ -92,9 +101,21 @@ const OnboardScreen: React.FC<Props> = () => {
       initialPage={0}
       orientation={'horizontal'}
       onPageSelected={onPageSelected}>
-      {renderOnboardPage('1', AppImages.ONBOARD1, 'Hit the road, conquer the trails, and create stories that will last a lifetime.')}
-      {renderOnboardPage('2', AppImages.ONBOARD2, 'Share your experiences, exchange tips, and meet like-minded adventurers.')}
-      {renderOnboardPage('3', AppImages.ONBOARD3, 'Customize your trips, from off-road trails to cozy campsites.')}
+      {renderOnboardPage(
+        '1',
+        AppImages.ONBOARD1,
+        'Hit the road, conquer the trails, and create stories that will last a lifetime.',
+      )}
+      {renderOnboardPage(
+        '2',
+        AppImages.ONBOARD2,
+        'Share your experiences, exchange tips, and meet like-minded adventurers.',
+      )}
+      {renderOnboardPage(
+        '3',
+        AppImages.ONBOARD3,
+        'Customize your trips, from off-road trails to cozy campsites.',
+      )}
     </PagerView>
   );
 };

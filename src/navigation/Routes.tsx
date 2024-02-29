@@ -1,4 +1,5 @@
 export const RouteNames = {
+  SplashScreen: 'SplashScreen',
   OnboardScreen: 'OnboardScreen',
   LoginScreen: 'LoginScreen',
   RegisterScreen: 'RegisterScreen',

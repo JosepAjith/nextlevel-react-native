@@ -16,15 +16,16 @@ import {styles} from './styles';
 import AppImages from '../../constants/AppImages';
 import ButtonView from '../../components/ButtonView';
 import {TouchableOpacity} from 'react-native';
-import { AnyAction, ThunkDispatch } from '@reduxjs/toolkit';
-import { RootState } from '../../../store';
-import { useDispatch, useSelector } from 'react-redux';
-import { LoginRequest } from '../../api/login/LoginRequest';
-import { LoginValidation } from '../../api/login/LoginValidation';
-import { createLogin, reset } from '../../api/login/LoginCreateSlice';
-import { showToast } from '../../constants/commonUtils';
+import {AnyAction, ThunkDispatch} from '@reduxjs/toolkit';
+import {RootState} from '../../../store';
+import {useDispatch, useSelector} from 'react-redux';
+import {LoginRequest} from '../../api/login/LoginRequest';
+import {LoginValidation} from '../../api/login/LoginValidation';
+import {createLogin, reset} from '../../api/login/LoginCreateSlice';
+import {showToast} from '../../constants/commonUtils';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import AppStrings from '../../constants/AppStrings';
+import Loader from '../../components/Loader';
 
 const {TextField} = Incubator;
 
@@ -44,9 +45,7 @@ const LoginScreen: React.FC<Props> = () => {
   const {LoginData, loadingLogin, LoginError} = useSelector(
     (state: RootState) => state.loginCreate,
   );
-  const [loginInput, setLogin] = useState<LoginRequest>(
-    new LoginRequest(),
-  );
+  const [loginInput, setLogin] = useState<LoginRequest>(new LoginRequest());
   const [loginValidate, setValidate] = useState<LoginValidation>(
     new LoginValidation(),
   );
@@ -90,14 +89,24 @@ const LoginScreen: React.FC<Props> = () => {
   useEffect(() => {
     if (LoginData != null) {
       if (!loadingLogin && !LoginError && LoginData.status) {
-     showToast(LoginData.message)
+        showToast(LoginData.message);
         AsyncStorage.setItem(
           AppStrings.ACCESS_TOKEN,
           LoginData.token == null ? '' : LoginData.token,
         );
-        navigation.replace(RouteNames.VerificationScreen);
+        AsyncStorage.setItem(
+          AppStrings.IS_LOGIN,
+          'true'
+        );
+        navigation.replace(RouteNames.BottomTabs);
       } else {
-        showToast(LoginData.message)
+        if (LoginData.verified == 0) {
+          navigation.navigate(RouteNames.VerificationScreen, {
+            email: loginInput.email,
+            from:'login'
+          });
+        }
+        showToast(LoginData.message);
       }
     }
   }, [LoginData]);
@@ -119,9 +128,7 @@ const LoginScreen: React.FC<Props> = () => {
           setValidate({...loginValidate, InvalidEmail: false});
         }}
         trailingAccessory={
-          <Text red10>
-            {loginValidate.InvalidEmail ? '*Required' : ''}
-          </Text>
+          <Text red10>{loginValidate.InvalidEmail ? '*Required' : ''}</Text>
         }
       />
 
@@ -177,11 +184,14 @@ const LoginScreen: React.FC<Props> = () => {
         </View>
       </View>
 
-      <ButtonView title="Sign in"   onPress={() => {
-            if (isValidate()) {
-              Login();
-            }
-          }} />
+      <ButtonView
+        title="Sign in"
+        onPress={() => {
+          if (isValidate()) {
+            Login();
+          }
+        }}
+      />
 
       <View marginT-20 center>
         <TouchableOpacity

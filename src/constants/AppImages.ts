@@ -45,6 +45,7 @@ USER2: require('../images/user2.png'),
 DEADLINE: require('../images/deadline.png'),
 CANCEL: require('../images/cancel.png'),
 UPDATE: require('../images/update.png'),
+LOADER: require('../images/Steerwheel.gif'),
 }
 
 export default AppImages;

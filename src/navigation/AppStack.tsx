@@ -1,6 +1,6 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import { RouteNames } from './Routes';
+import {RouteNames} from './Routes';
 import OnboardScreen from '../screens/onboard/OnboardScreen';
 import LoginScreen from '../screens/login/LoginScreen';
 import RegisterScreen from '../screens/register/RegisterScreen';
@@ -18,36 +18,57 @@ import AddCar from '../screens/car/AddCar';
 import MarshalList from '../screens/marshal/MarshalList';
 import UserList from '../screens/user/UserList';
 import TripMembers from '../screens/members/TripMembers';
+import SplashScreen from '../screens/SplashScreen/SplashScreen';
 
 const Stack = createNativeStackNavigator();
 
 const AppStack = () => {
+
+
   return (
     <Stack.Navigator
       screenOptions={{
         headerShown: false,
         animationDuration: 1000,
       }}>
+        <Stack.Screen name={RouteNames.SplashScreen} component={SplashScreen} />
       <Stack.Screen name={RouteNames.OnboardScreen} component={OnboardScreen} />
-      <Stack.Screen name={RouteNames.LoginScreen} component={LoginScreen}/>
-      <Stack.Screen name={RouteNames.RegisterScreen} component={RegisterScreen}/>
-      <Stack.Screen name={RouteNames.ForgotPasswordScreen} component={ForgotPasswordScreen} />
-      <Stack.Screen name={RouteNames.ChangePasswordScreen} component={ChangePasswordScreen} />
-      <Stack.Screen name={RouteNames.ResetPasswordScreen} component={ResetPasswordScreen}/>
-      <Stack.Screen name={RouteNames.VerificationScreen} component={VerificationScreen}/>
-      <Stack.Screen name={RouteNames.SuccessScreen} component={SuccessScreen}/>
-      <Stack.Screen name={RouteNames.BottomTabs} component={BottomTabs}/>
-      <Stack.Screen name={RouteNames.TripDetails} component={TripDetails}/>
-      <Stack.Screen name={RouteNames.SettingsScreen} component={SettingsScreen}/>
-      <Stack.Screen name={RouteNames.AboutScreen} component={AboutScreen}/>
-      <Stack.Screen name={RouteNames.EditProfile} component={EditProfile}/>
-      <Stack.Screen name={RouteNames.AddCar} component={AddCar}/>
-      <Stack.Screen name={RouteNames.MarshalList} component={MarshalList}/>
-      <Stack.Screen name={RouteNames.UserList} component={UserList}/>
-      <Stack.Screen name={RouteNames.TripMembers} component={TripMembers}/>
+      <Stack.Screen name={RouteNames.LoginScreen} component={LoginScreen} />
+      <Stack.Screen
+        name={RouteNames.RegisterScreen}
+        component={RegisterScreen}
+      />
+      <Stack.Screen
+        name={RouteNames.ForgotPasswordScreen}
+        component={ForgotPasswordScreen}
+      />
+      <Stack.Screen
+        name={RouteNames.ChangePasswordScreen}
+        component={ChangePasswordScreen}
+      />
+      <Stack.Screen
+        name={RouteNames.ResetPasswordScreen}
+        component={ResetPasswordScreen}
+      />
+      <Stack.Screen
+        name={RouteNames.VerificationScreen}
+        component={VerificationScreen}
+      />
+      <Stack.Screen name={RouteNames.SuccessScreen} component={SuccessScreen} />
+      <Stack.Screen name={RouteNames.BottomTabs} component={BottomTabs} />
+      <Stack.Screen name={RouteNames.TripDetails} component={TripDetails} />
+      <Stack.Screen
+        name={RouteNames.SettingsScreen}
+        component={SettingsScreen}
+      />
+      <Stack.Screen name={RouteNames.AboutScreen} component={AboutScreen} />
+      <Stack.Screen name={RouteNames.EditProfile} component={EditProfile} />
+      <Stack.Screen name={RouteNames.AddCar} component={AddCar} />
+      <Stack.Screen name={RouteNames.MarshalList} component={MarshalList} />
+      <Stack.Screen name={RouteNames.UserList} component={UserList} />
+      <Stack.Screen name={RouteNames.TripMembers} component={TripMembers} />
     </Stack.Navigator>
   );
 };
-
 
 export default AppStack;

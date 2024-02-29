@@ -69,7 +69,7 @@ export const styles = StyleSheet.create({
     backgroundColor:AppColors.Black,
     paddingHorizontal:10,
     paddingVertical:5,
-    marginLeft:10,
+    marginLeft:5,
     borderRadius:15
   },
   statusText: {
@@ -82,7 +82,7 @@ export const styles = StyleSheet.create({
     paddingHorizontal:10,
     paddingVertical:5,
     borderRadius:15,
-    marginLeft:10
+    marginLeft:5
   },
   leftText: {
     fontSize: 12,

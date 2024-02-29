@@ -146,7 +146,7 @@ const RegisterScreen: React.FC<Props> = () => {
           AppStrings.ACCESS_TOKEN,
           RegisterData.token == null ? '' : RegisterData.token,
         );
-        navigation.replace(RouteNames.VerificationScreen);
+        navigation.replace(RouteNames.VerificationScreen,{email:registerInput.email,from:'register'});
       } else {
         showToast(RegisterData.message)
       }

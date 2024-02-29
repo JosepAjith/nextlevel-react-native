@@ -12,7 +12,6 @@ import {RouteProp} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {useNavigation} from '@react-navigation/native';
 import AppColors from '../../constants/AppColors';
-import {styles} from './styles';
 import AppImages from '../../constants/AppImages';
 import ButtonView from '../../components/ButtonView';
 import {TouchableOpacity} from 'react-native';
@@ -33,8 +32,9 @@ export type SuccessScreenRouteProps = RouteProp<
 
 interface Props {}
 
-const SuccessScreen: React.FC<Props> = () => {
+const SuccessScreen: React.FC<Props> = ({route}: any) => {
   const navigation = useNavigation<SuccessScreenNavigationProps>();
+  const from = route.params.from;
 
   return (
     <View flex backgroundColor={AppColors.Black} padding-20>
@@ -54,11 +54,11 @@ const SuccessScreen: React.FC<Props> = () => {
             lineHeight: 24,
             width: '70%',
           }}>
-          Your password has been successfully Changed !
+          Your password has been successfully {from == 'change' ? 'Changed' : 'Reset'} !
         </Text>
       </View>
 
-      <ButtonView title="Login" onPress={() => {navigation.navigate(RouteNames.ResetPasswordScreen)}} />
+      <ButtonView title="Login" onPress={() => {navigation.navigate(RouteNames.LoginScreen)}} />
     </View>
   );
 };

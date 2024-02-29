@@ -21,6 +21,7 @@ export const styles = StyleSheet.create({
         fontSize:13,
         color:'white',
         opacity:0.5,
-        fontFamily:AppFonts.INTER_MEDIUM
+        fontFamily:AppFonts.INTER_MEDIUM,
+        textAlign:'auto'
       }
 })

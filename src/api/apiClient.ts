@@ -2,6 +2,7 @@ import axios, {AxiosRequestConfig} from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import AppStrings from '../constants/AppStrings';
 import { Alert } from 'react-native';
+import { showToast } from '../constants/commonUtils';
 
 let BASE_URL = 'https://next-level.prompttechdemohosting.com/api/';
 
@@ -26,8 +27,15 @@ export const apiClient = async (
   );
   return response;
 } catch (error) {
-  // Handle errors here
-  Alert.alert('API request failed:', error.message);
+  if (error.response) {
+    // Update UI accordingly
+    showToast(error.response.data.message);
+    console.log(error.response.data, error.response.status);
+  } else if (error.request) {
+    showToast(error.request);
+  } else {
+    showToast(`Error message: ${error.message}`);
+  }
   throw error; // Rethrow the error to propagate it to the calling code
 }
 };
@@ -49,10 +57,16 @@ export const SimpleApiClient = async (
     });
     return response;
   } catch (error) {
-    console.log(error)
-    // Handle errors here
-    Alert.alert('API request failed:', error.message);
-    throw error; // Rethrow the error to propagate it to the calling code
+    if (error.response) {
+      // Update UI accordingly
+      showToast(error.response.data.message);
+      console.log(error.response.data, error.response.status);
+    } else if (error.request) {
+      showToast(error.request);
+    } else {
+      showToast(`Error message: ${error.message}`);
+    }
+    throw error;
   }
 };
 
@@ -77,8 +91,15 @@ export const ApiFormData = async (
   );
   return response;
 } catch (error) {
-  // Handle errors here
-  Alert.alert('API request failed:', error.message);
+  if (error.response) {
+    // Update UI accordingly
+    showToast(error.response.data.message);
+    console.log(error.response.data, error.response.status);
+  } else if (error.request) {
+    showToast(error.request);
+  } else {
+    showToast(`Error message: ${error.message}`);
+  }
   throw error; // Rethrow the error to propagate it to the calling code
 }
 };

@@ -6,6 +6,7 @@ export type LoginResponse = {
   message: string;
   error: string;
   token: string;
+  verified? : any;
 }
 
 export type LoginCreateState = {
