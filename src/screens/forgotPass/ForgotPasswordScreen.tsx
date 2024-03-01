@@ -69,7 +69,7 @@ const ForgotPasswordScreen: React.FC<Props> = () => {
     let request = JSON.stringify({
       email: email,
     });
-    dispatch(sendOtp({requestBody: request}))
+    dispatch(sendOtp({requestBody: request, url: 'forgot-password'}))
       .then(() => {
         dispatch(reset());
       })

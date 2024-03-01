@@ -1,12 +1,15 @@
 export type VariableState = {
     IsNetConnected: Boolean;
+    type: string;
   };
   
   const initialState: VariableState = {
     IsNetConnected: false,
+    type: 'user'
   };
   
   const SET_NET_CONNECTION = 'SET_NET_CONNECTION';
+  const SET_TYPE = 'SET_TYPE';
   
   const GlobalVariables = (
     state = initialState,
@@ -17,6 +20,12 @@ export type VariableState = {
         return {
           ...state,
           IsNetConnected: action.payload,
+        };
+
+        case SET_TYPE:
+        return {
+          ...state,
+          type: action.payload,
         };
   
       default:

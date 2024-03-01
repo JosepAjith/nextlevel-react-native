@@ -3,12 +3,14 @@ import {
   SimpleApiClient,
   apiClient,
 } from './apiClient';
+import { CarResponse } from './car/CarCreateSlice';
 import { SendOtpResponse } from './forgotPassword/SendOtpSlice';
 import { VerifyOtpResponse } from './forgotPassword/VerifyOtpSlice';
 import { LoginResponse } from './login/LoginCreateSlice';
 import { ChangePasswordResponse } from './password/ChangePasswordSlice';
+import { ProfileDetails } from './profile/ProfileDetailsSlice';
 import { RegisterResponse } from './register/RegisterCreateSlice';
-import { TripListResponse } from './trip/TripListResponse';
+import { TripDetailsResponse, TripListResponse } from './trip/TripListResponse';
 
 type ResponseKind = 'success' | 'failure';
 
@@ -89,15 +91,15 @@ export const editProfile = async (
   } else {
     return {
       kind: 'failure',
-    };
+    }
   }
 };
 
 // API FOR SENDING OTP
 export const sendOtp = async (
-  requestBody: any,
+  requestBody: any, url: any
 ): Promise<NetworkResponse<SendOtpResponse | null>> => {
-  const response = await apiClient('forgot-password', 'POST', requestBody);
+  const response = await apiClient(url, 'POST', requestBody);
 
   if (response.status) {
     const json = await response.data;
@@ -130,7 +132,7 @@ export const otpVerify = async (
     };
   }
 };
-//API FOR TRAVEL LIST
+//API FOR TRIP LIST
 export const fetchTripList = async (
   requestBody: any,
 ): Promise<NetworkResponse<TripListResponse[]>> => {
@@ -149,11 +151,49 @@ export const fetchTripList = async (
   }
 };
 
+//API FOR TRIP DETAILS
+export const fetchTripDetails = async (
+  requestBody: any,
+): Promise<NetworkResponse<TripDetailsResponse>> => {
+  const response = await apiClient('trip/show', 'POST', requestBody);
+
+  if (response.status) {
+    const json = await response.data;
+    return {
+      kind: 'success',
+      body: json,
+    };
+  } else {
+    return {
+      kind: 'failure',
+    };
+  }
+};
+
 //API FOR PROFILE DETAILS
 export const fetchProfileDetails = async (
   requestBody: any
 ): Promise<NetworkResponse<ProfileDetails | null>> => {
-  const response = await apiClient('get/profile', 'POST', requestBody);
+  const response = await apiClient('user-profile', 'POST', requestBody);
+
+  if (response.status) {
+    const json = await response.data;
+    return {
+      kind: 'success',
+      body: json,
+    };
+  } else {
+    return {
+      kind: 'failure',
+    };
+  }
+};
+
+//API FOR CREATING CAR
+export const createCar = async (
+  requestBody: any
+): Promise<NetworkResponse<CarResponse>> => {
+  const response = await apiClient('car/save', 'POST', requestBody);
 
   if (response.status) {
     const json = await response.data;

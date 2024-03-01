@@ -79,7 +79,7 @@ const VerificationScreen: React.FC<Props> = ({route}: any) => {
     let request = JSON.stringify({
       email: email,
     });
-    dispatch(sendOtp({requestBody: request}))
+    dispatch(sendOtp({requestBody: request, url: 'resend-otp'}))
       .then(() => {
         dispatch(reset());
       })

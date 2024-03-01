@@ -1,3 +1,8 @@
+export type TripDetailsResponse ={
+    status: number;
+    data: TripListResponse
+}
+
 export type TripListResponse = {
     id:                 number;
     title:              string;

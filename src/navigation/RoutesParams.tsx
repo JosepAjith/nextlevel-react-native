@@ -14,7 +14,7 @@ export type RootStackParams = {
   MyTripScreen: undefined;
   AddTripScreen: undefined;
   ProfileScreen: undefined;
-  TripDetails: undefined;
+  TripDetails: {id:any};
   SettingsScreen: undefined;
   AboutScreen: undefined;
   EditProfile: undefined;

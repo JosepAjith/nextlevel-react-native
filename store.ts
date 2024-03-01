@@ -7,6 +7,9 @@ import SendOtpSlice from './src/api/forgotPassword/SendOtpSlice';
 import VerifyOtpSlice from './src/api/forgotPassword/VerifyOtpSlice';
 import ChangePasswordSlice from './src/api/password/ChangePasswordSlice';
 import TriplListSlice from './src/api/trip/TriplListSlice';
+import TripDetailsSlice from './src/api/trip/TripDetailsSlice';
+import ProfileDetailsSlice from './src/api/profile/ProfileDetailsSlice';
+import CarCreateSlice from './src/api/car/CarCreateSlice';
 
 
 const rootReducer = combineReducers({
@@ -17,7 +20,10 @@ const rootReducer = combineReducers({
   SendOtp: SendOtpSlice,
   VerifyOtp: VerifyOtpSlice,
   ChangePassword: ChangePasswordSlice,
-  TripList: TriplListSlice
+  TripList: TriplListSlice,
+  TripDetails: TripDetailsSlice,
+  ProfileDetails: ProfileDetailsSlice,
+  CarCreate: CarCreateSlice
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

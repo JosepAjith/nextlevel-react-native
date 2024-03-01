@@ -51,53 +51,11 @@ interface Props {}
 
 const HomeScreen: React.FC<Props> = () => {
   const navigation = useNavigation<HomeScreenNavigationProps>();
+  const [expandedItems, setExpandedItems] = useState([]);
   const dispatch: ThunkDispatch<RootState, any, AnyAction> = useDispatch();
   const {trip, loadingTrip, tripError} = useSelector(
     (state: RootState) => state.TripList,
   );
-  const [expandedItems, setExpandedItems] = useState([]);
-  const [data, setData] = useState([
-    {
-      img: AppImages.HOME1,
-      title: 'Mud & Glory Safari',
-      data: '22-04-24',
-      time: '06:00 AM',
-      capacity: 4,
-      position: 'newbie',
-      status: 'Live',
-      id: 1,
-    },
-    {
-      img: AppImages.HOME2,
-      title: 'Wilderness Roamer Rally',
-      data: '22-04-24',
-      time: '06:00 AM',
-      capacity: 5,
-      position: 'newbie',
-      status: 'Live',
-      id: 2,
-    },
-    {
-      img: AppImages.HOME1,
-      title: 'Rugged Horizon Quest',
-      data: '22-04-24',
-      time: '06:00 AM',
-      capacity: 4,
-      position: 'newbie',
-      status: 'Live',
-      id: 3,
-    },
-    {
-      img: AppImages.HOME2,
-      title: 'Offbeat Overland Voyage',
-      data: '22-04-24',
-      time: '06:00 AM',
-      capacity: 5,
-      position: 'newbie',
-      status: 'Live',
-      id: 4,
-    },
-  ]);
 
   useEffect(() => {
     let request = JSON.stringify({
@@ -158,7 +116,7 @@ const HomeScreen: React.FC<Props> = () => {
         renderItem={({item, index}) => {
           return (
             <TouchableOpacity
-              onPress={() => navigation.navigate(RouteNames.TripDetails)}>
+              onPress={() => navigation.navigate(RouteNames.TripDetails,{id:item.id})}>
               <View style={styles.view}>
                 <ImageBackground
                   source={
@@ -223,7 +181,7 @@ const HomeScreen: React.FC<Props> = () => {
                   <View row right flex centerV>
                     <Text style={styles.text1}>Status</Text>
                     <View style={styles.statusView}>
-                      <Text style={styles.statusText}>{item.trip_status}</Text>
+                      <Text style={styles.statusText}>{item.trip_status == 'active' && 'Live'}</Text>
                     </View>
                   </View>
                 </View>

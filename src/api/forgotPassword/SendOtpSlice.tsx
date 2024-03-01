@@ -20,10 +20,10 @@ const initialState: SendOtpState = {
 
 export const sendOtp = createAsyncThunk<
   {sendOtpData: SendOtpResponse | null},
-  {requestBody: any}
->('sendOtp', async ({requestBody}) => {
+  {requestBody: any, url: any}
+>('sendOtp', async ({requestBody, url}) => {
   if (requestBody != null) {
-    const response = await apiInterface.sendOtp(requestBody);
+    const response = await apiInterface.sendOtp(requestBody, url);
     
     if (response.kind == 'success') {
       return {

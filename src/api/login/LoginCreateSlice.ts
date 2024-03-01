@@ -7,7 +7,34 @@ export type LoginResponse = {
   error: string;
   token: string;
   verified? : any;
+  user: User;
 }
+
+export type User = {
+  id:                number;
+  name:              string;
+  email:             string;
+  email_verified_at: Date;
+  created_at:        Date;
+  updated_at:        Date;
+  nick_name:         string;
+  phone:             string;
+  image:             string;
+  type:              string;
+  dob:               null;
+  gender:            null;
+  location:          null;
+  emirates:          null;
+  nationality:       null;
+  occupation:        null;
+  interest:          null;
+  referred_by:       null;
+  user_delete:       number;
+  level:             string;
+  is_admin:          string;
+  fcm_token:         string;
+}
+
 
 export type LoginCreateState = {
   LoginData: LoginResponse | null;

@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import HomeScreen from '../home/HomeScreen';
 import MyTripScreen from '../mytrip/MyTripScreen';
 import AddTripScreen from '../addtrip/AddTripScreen';
@@ -18,6 +18,8 @@ import AppFonts from '../../constants/AppFonts';
 import TripFilter from '../mytrip/TripFilter';
 import {useDispatch, useSelector} from 'react-redux';
 import {RootState} from '../../../store';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import AppStrings from '../../constants/AppStrings';
 
 if (Platform.OS === 'android') {
   if (UIManager.setLayoutAnimationEnabledExperimental) {
@@ -29,6 +31,21 @@ const BottomTabs = () => {
   const [activeTab, setActiveTab] = useState('Home');
   const {openFilter} = useSelector((state: RootState) => state.TripReducer);
   const dispatch = useDispatch();
+  const {type} = useSelector((state: RootState) => state.GlobalVariables);
+
+  useEffect(() => {
+    fetchAsyncValue();
+  });
+
+  const fetchAsyncValue = async () => {
+    const type = await AsyncStorage.getItem(AppStrings.TYPE);
+    if (type != null) {
+      dispatch({
+        type: 'SET_TYPE',
+        payload: type,
+      });
+    }
+  };
 
   const FilterClose = () => {
     dispatch({type: 'IS_FILTER', payload: false});
@@ -89,7 +106,7 @@ const BottomTabs = () => {
       <View style={styles.tabBar} backgroundColor={AppColors.Black}>
         {renderTab('Home', AppImages.HOME)}
         {renderTab('My Trips', AppImages.JEEP)}
-        {renderTab('Add Trip', AppImages.ADDTRIP)}
+        {type == 'marshal' && renderTab('Add Trip', AppImages.ADDTRIP)}
         {renderTab('Profile', AppImages.PROFILE)}
       </View>
       {openFilter && <TripFilter close={FilterClose} />}

@@ -98,6 +98,10 @@ const LoginScreen: React.FC<Props> = () => {
           AppStrings.IS_LOGIN,
           'true'
         );
+        AsyncStorage.setItem(
+          AppStrings.TYPE,
+          LoginData.user.type
+        );
         navigation.replace(RouteNames.BottomTabs);
       } else {
         if (LoginData.verified == 0) {

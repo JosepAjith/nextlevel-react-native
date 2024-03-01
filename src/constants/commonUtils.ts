@@ -39,6 +39,10 @@ export const roundValueAsNumber = (value: number): number => {
   return Math.round(value * multiplier) / multiplier;
 };
 
+export const formattedTime = (value: moment.MomentInput) => { 
+  return moment(value, 'HH:mm:ss').format('hh:mm A');
+}
+
 export const roundValueAsString = (value: number): string => {
   const multiplier: number = Math.pow(10, 2);
   const roundedNumber: number = Math.round(value * multiplier) / multiplier;

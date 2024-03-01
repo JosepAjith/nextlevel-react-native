@@ -1,95 +1,58 @@
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
 import * as apiInterface from '../apiInterface';
+import { TripDetailsResponse } from './TripListResponse';
 
-export type TravelDetails = {
-    status: number;
-    data:   TravelDetailsData;
-}
-
-export type TravelDetailsData = {
-  id:           number;
-    user_id:      number;
-    city_id_from: number;
-    city_id_to:   number;
-    date:         Date;
-    time:         string;
-    allow_weight: number;
-    note:         string;
-    note_arabic: string;
-    created_at:   Date;
-    updated_at:   Date;
-    user:         User;
-}
-
-export type User = {
-  id:                number;
-  name:              string;
-  email:             string;
-  phone:             any;
-  email_verified_at: null;
-  type:              string;
-  image:             string;
-  created_at:        Date;
-  updated_at:        Date;
-  rating:            Rating;
-}
-
-export type Rating = {
-  user_id:     number;
-  avg_ratting: number;
-}
-
-export type TravelDetailsState = {
-  travelDetails: TravelDetails | null;
-  loadingTravelDetails: boolean;
-  travelDetailsError: boolean;
+export type TripDetailsState = {
+  tripDetails: TripDetailsResponse | null;
+  loadingTripDetails: boolean;
+  tripDetailsError: boolean;
 };
 
-const initialState: TravelDetailsState = {
-    travelDetails: null,
-    loadingTravelDetails: false,
-    travelDetailsError: false,
+const initialState: TripDetailsState = {
+  tripDetails: null,
+  loadingTripDetails: false,
+  tripDetailsError: false,
 };
 
-export const fetchTravelDetails = createAsyncThunk<
-  {travelDetails: TravelDetails | null},
+export const fetchTripDetails = createAsyncThunk<
+  {tripDetails: TripDetailsResponse | null},
   {requestBody: any}
->('fetchTravelDetails', async ({requestBody}) => {
-  const response = await apiInterface.fetchTravelDetails(requestBody);
+>('fetchTripDetails', async ({requestBody}) => {
+  const response = await apiInterface.fetchTripDetails(requestBody);
   
 
   if (response.kind == 'success') {
     return {
-        travelDetails: response.body ?? null,
+      tripDetails: response.body ?? null,
     };
   } else {
     throw 'Error fetching customers';
   }
 });
 
-const TravelDetailsSlice = createSlice({
-  name: 'TravelDetails',
+const TripDetailsSlice = createSlice({
+  name: 'TripDetails',
   initialState: initialState,
   reducers: {},
   extraReducers: builder => {
     builder
-      .addCase(fetchTravelDetails.pending, state => {
-        state.loadingTravelDetails = true;
-        state.travelDetailsError = false;
-        state.travelDetails = initialState.travelDetails;
+      .addCase(fetchTripDetails.pending, state => {
+        state.loadingTripDetails = true;
+        state.tripDetailsError = false;
+        state.tripDetails = initialState.tripDetails;
       })
-      .addCase(fetchTravelDetails.fulfilled, (state, action) => {
-        state.travelDetails = initialState.travelDetails;
-        state.travelDetails = action.payload.travelDetails;
-        state.travelDetailsError = false;
-        state.loadingTravelDetails = false;
+      .addCase(fetchTripDetails.fulfilled, (state, action) => {
+        state.tripDetails = initialState.tripDetails;
+        state.tripDetails = action.payload.tripDetails;
+        state.tripDetailsError = false;
+        state.loadingTripDetails = false;
       })
-      .addCase(fetchTravelDetails.rejected, state => {
-        state.travelDetailsError = true;
-        state.loadingTravelDetails = false;
-        state.travelDetails = initialState.travelDetails;
+      .addCase(fetchTripDetails.rejected, state => {
+        state.tripDetailsError = true;
+        state.loadingTripDetails = false;
+        state.tripDetails = initialState.tripDetails;
       });
   },
 });
 
-export default TravelDetailsSlice.reducer;
+export default TripDetailsSlice.reducer;

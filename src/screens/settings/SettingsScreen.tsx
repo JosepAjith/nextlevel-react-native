@@ -9,6 +9,8 @@ import {styles} from './styles';
 import AppImages from '../../constants/AppImages';
 import {ScrollView, TouchableOpacity} from 'react-native';
 import {Header} from '../../components/Header';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import AppStrings from '../../constants/AppStrings';
 
 const {TextField} = Incubator;
 
@@ -27,6 +29,13 @@ interface Props {}
 const SettingsScreen: React.FC<Props> = () => {
   const navigation = useNavigation<SettingsScreenNavigationProps>();
   const [isPersonal, setPersonal] = useState(false);
+
+  const Logout = async () => {
+    await AsyncStorage.removeItem(AppStrings.ACCESS_TOKEN);
+    await AsyncStorage.removeItem(AppStrings.IS_LOGIN);
+    await AsyncStorage.removeItem(AppStrings.TYPE);
+    navigation.replace(RouteNames.LoginScreen);
+  };
 
   const renderOption = (image: any, text: string, onPress: () => void) => (
     <TouchableOpacity onPress={onPress} style={styles.view}>
@@ -94,7 +103,7 @@ const SettingsScreen: React.FC<Props> = () => {
           <Text style={styles.title}>Login</Text>
         </View>
         {renderOption(AppImages.DELETE, 'Delete Account', () => {})}
-        {renderOption(AppImages.LOGOUT, 'Log out', () => {})}
+        {renderOption(AppImages.LOGOUT, 'Log out', () => {Logout()})}
       </View>
     </ScrollView>
   );

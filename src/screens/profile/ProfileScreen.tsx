@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   Button,
   Checkbox,
@@ -8,7 +8,7 @@ import {
   View,
 } from 'react-native-ui-lib';
 import {RootStackParams, RouteNames} from '../../navigation';
-import {RouteProp} from '@react-navigation/native';
+import {RouteProp, useFocusEffect} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {useNavigation} from '@react-navigation/native';
 import AppColors from '../../constants/AppColors';
@@ -19,8 +19,12 @@ import {ScrollView, TouchableOpacity} from 'react-native';
 import {Header} from '../../components/Header';
 import AppFonts from '../../constants/AppFonts';
 import Personal from './Personal';
-import MyTrips from './MyTrips';
 import Activities from './Activities';
+import { AnyAction, ThunkDispatch } from '@reduxjs/toolkit';
+import { RootState } from '../../../store';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchProfileDetails } from '../../api/profile/ProfileDetailsSlice';
+import MyCars from './MyCars';
 
 const {TextField} = Incubator;
 
@@ -39,6 +43,20 @@ interface Props {}
 const ProfileScreen: React.FC<Props> = () => {
   const navigation = useNavigation<ProfileScreenNavigationProps>();
   const [tab, setTab] = useState('personal');
+  const dispatch: ThunkDispatch<RootState, any, AnyAction> = useDispatch();
+  const {profileDetails, loadingProfileDetails, profileDetailsError} = useSelector(
+    (state: RootState) => state.ProfileDetails,
+  );
+
+  useFocusEffect(
+    React.useCallback(() => {
+      dispatch(fetchProfileDetails({requestBody: ''}));
+
+      return () => {
+        setTab('personal');
+      };
+    }, []),
+  );
 
   return (
     <ScrollView style={{backgroundColor:AppColors.Black}}>
@@ -48,19 +66,19 @@ const ProfileScreen: React.FC<Props> = () => {
         <View row marginV-20>
           <View flex>
             <View marginB-10 style={styles.imageView}>
-              <Image
-                source={AppImages.MAN}
+              {/* <Image
+                source={profileDetails?.user.image ? {uri:profileDetails.user.image} : AppImages.MAN}
                 width={70}
                 height={70}
                 style={{borderRadius: 35}}
-              />
+              /> */}
             </View>
-            <Text style={styles.name}>Omar Kentar</Text>
+            <Text style={styles.name}>{profileDetails?.user.name}</Text>
             <View row marginV-10>
               <Text style={styles.rank}>Rank</Text>
               <View row centerV marginL-20>
                 <Text style={[styles.rank, {color: AppColors.Orange}]}>
-                  Marshal
+                  {profileDetails?.user.level}
                 </Text>
                 <Image
                   source={AppImages.STAR}
@@ -93,12 +111,12 @@ const ProfileScreen: React.FC<Props> = () => {
             </View>
           </TouchableOpacity>
 
-          <TouchableOpacity onPress={() => setTab('trips')}>
+          <TouchableOpacity onPress={() => setTab('cars')}>
             <View
-              backgroundColor={tab == 'trips' ? AppColors.Orange : 'white'}
+              backgroundColor={tab == 'cars' ? AppColors.Orange : 'white'}
               style={styles.inner}>
               <Text
-                color={tab == 'trips' ? 'white' : AppColors.Black}
+                color={tab == 'cars' ? 'white' : AppColors.Black}
                 style={styles.tabText}>
                 My Cars
               </Text>
@@ -118,9 +136,9 @@ const ProfileScreen: React.FC<Props> = () => {
           </TouchableOpacity>
         </View>
 
-        {tab == 'personal' && <Personal />}
-        {tab == 'trips' && <MyTrips navigation={navigation}/>}
-        {tab == 'activity' && <Activities navigation={navigation}/>}
+        {tab == 'personal' && profileDetails?.status && <Personal data={profileDetails?.user}/>}
+        {tab == 'cars' && profileDetails?.status && <MyCars navigation={navigation} data={profileDetails.user.car}/>}
+        {tab == 'activity' && profileDetails?.status && <Activities navigation={navigation} data={profileDetails.trip_status_counts}/>}
       </View>
     </ScrollView>
   );
