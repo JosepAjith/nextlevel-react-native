@@ -19,7 +19,7 @@ const Activities = ({navigation, data}: Props) => {
 
   const renderData = () => {
     return Object.entries(data).map(([title, value], index, array) => (
-      <View row style={[index === array.length - 1 ? {padding:20} : styles.divider]}>
+      <View row key={index} style={[index === array.length - 1 ? {padding:20} : styles.divider]}>
           <Text style={styles.text}>{title.charAt(0).toUpperCase() + title.slice(1)}</Text>
           <View flex right>
             <Text style={[styles.text, {opacity: 0.8}]}>{value}</Text>

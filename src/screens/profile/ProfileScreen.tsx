@@ -58,6 +58,7 @@ const ProfileScreen: React.FC<Props> = () => {
     }, []),
   );
 
+
   return (
     <ScrollView style={{backgroundColor:AppColors.Black}}>
       <View flex backgroundColor={AppColors.Black} padding-20>
@@ -137,7 +138,7 @@ const ProfileScreen: React.FC<Props> = () => {
         </View>
 
         {tab == 'personal' && profileDetails?.status && <Personal data={profileDetails?.user}/>}
-        {tab == 'cars' && profileDetails?.status && <MyCars navigation={navigation} data={profileDetails.user.car}/>}
+        {tab == 'cars' && profileDetails?.status && <MyCars navigation={navigation} data={profileDetails.user.cars}/>}
         {tab == 'activity' && profileDetails?.status && <Activities navigation={navigation} data={profileDetails.trip_status_counts}/>}
       </View>
     </ScrollView>

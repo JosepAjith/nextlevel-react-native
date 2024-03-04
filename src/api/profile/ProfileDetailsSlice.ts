@@ -31,7 +31,7 @@ export type User = {
   level:             string;
   is_admin:          string;
   fcm_token:         string;
-  car:               Car;
+  cars:               Car[];
 }
 
 export type Car = {

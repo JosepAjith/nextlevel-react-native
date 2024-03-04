@@ -10,6 +10,7 @@ import TriplListSlice from './src/api/trip/TriplListSlice';
 import TripDetailsSlice from './src/api/trip/TripDetailsSlice';
 import ProfileDetailsSlice from './src/api/profile/ProfileDetailsSlice';
 import CarCreateSlice from './src/api/car/CarCreateSlice';
+import CarDeleteSlice from './src/api/car/CarDeleteSlice';
 
 
 const rootReducer = combineReducers({
@@ -23,7 +24,8 @@ const rootReducer = combineReducers({
   TripList: TriplListSlice,
   TripDetails: TripDetailsSlice,
   ProfileDetails: ProfileDetailsSlice,
-  CarCreate: CarCreateSlice
+  CarCreate: CarCreateSlice,
+  CarDelete: CarDeleteSlice
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

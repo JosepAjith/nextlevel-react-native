@@ -20,10 +20,10 @@ const initialState: CarCreateState = {
 
 export const createCar = createAsyncThunk<
   {CarData: CarResponse | null},
-  {requestBody: any}
->('createCar', async ({requestBody}) => {
+  {requestBody: any, uri: any}
+>('createCar', async ({requestBody, uri}) => {
   if (requestBody != null) {
-    const response = await apiInterface.createCar(requestBody);
+    const response = await apiInterface.createCar(requestBody, uri);
     if (response.kind == 'success') {
       return {
         CarData: response.body ?? null,

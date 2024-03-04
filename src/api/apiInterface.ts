@@ -191,9 +191,28 @@ export const fetchProfileDetails = async (
 
 //API FOR CREATING CAR
 export const createCar = async (
-  requestBody: any
+  requestBody: any, uri: any
 ): Promise<NetworkResponse<CarResponse>> => {
-  const response = await apiClient('car/save', 'POST', requestBody);
+  const response = await ApiFormData(uri, 'POST', requestBody);
+
+  if (response.status) {
+    const json = await response.data;
+    return {
+      kind: 'success',
+      body: json,
+    };
+  } else {
+    return {
+      kind: 'failure',
+    };
+  }
+};
+
+//API FOR DELETING CAR
+export const deleteCar = async (
+  requestBody: any,
+): Promise<NetworkResponse<CarResponse>> => {
+  const response = await apiClient('car/delete', 'POST', requestBody);
 
   if (response.status) {
     const json = await response.data;

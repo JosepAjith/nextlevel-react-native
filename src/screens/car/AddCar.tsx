@@ -17,15 +17,20 @@ import ButtonView from '../../components/ButtonView';
 import {ScrollView, TouchableOpacity} from 'react-native';
 import {Header} from '../../components/Header';
 import AppFonts from '../../constants/AppFonts';
-import { styles } from '../addtrip/styles';
-import { CarRequest } from '../../api/car/CarRequest';
-import { CarValidation } from '../../api/car/CarValidation';
-import DocumentPicker from 'react-native-document-picker'
-import { AnyAction, ThunkDispatch } from '@reduxjs/toolkit';
-import { RootState } from '../../../store';
-import { useDispatch, useSelector } from 'react-redux';
-import { createCar, reset } from '../../api/car/CarCreateSlice';
-import { showToast } from '../../constants/commonUtils';
+import {styles} from '../addtrip/styles';
+import {CarRequest} from '../../api/car/CarRequest';
+import {CarValidation} from '../../api/car/CarValidation';
+import DocumentPicker from 'react-native-document-picker';
+import {AnyAction, ThunkDispatch} from '@reduxjs/toolkit';
+import {RootState} from '../../../store';
+import {useDispatch, useSelector} from 'react-redux';
+import {createCar, reset} from '../../api/car/CarCreateSlice';
+import {
+  getCurrentDateDb,
+  getUserDate,
+  showToast,
+} from '../../constants/commonUtils';
+import moment from 'moment';
 
 const {TextField} = Incubator;
 
@@ -34,15 +39,13 @@ export type AddCarNavigationProps = NativeStackNavigationProp<
   'AddCar'
 >;
 
-export type AddCarRouteProps = RouteProp<
-  RootStackParams,
-  'AddCar'
->;
+export type AddCarRouteProps = RouteProp<RootStackParams, 'AddCar'>;
 
 interface Props {}
 
-const AddCar: React.FC<Props> = () => {
+const AddCar: React.FC<Props> = ({route}: any) => {
   const navigation = useNavigation<AddCarNavigationProps>();
+  const id = route.params.id;
   const dispatch: ThunkDispatch<RootState, any, AnyAction> = useDispatch();
   const {CarData, loadingCar, CarError} = useSelector(
     (state: RootState) => state.CarCreate,
@@ -51,19 +54,50 @@ const AddCar: React.FC<Props> = () => {
   const [carValidate, setValidate] = useState<CarValidation>(
     new CarValidation(),
   );
+  const {profileDetails} = useSelector(
+    (state: RootState) => state.ProfileDetails,
+  );
+
+  useEffect(() => {
+    if (id !== 0 && profileDetails) {
+      // Find the car details based on the id from profileDetails
+      const carDetails = profileDetails.user.cars.find(
+        (car: any) => car.id === id,
+      );
+      if (carDetails) {
+        // Set the car details into carInput
+        setCar({
+          ...carInput,
+          id: id,
+          model_name: carDetails.model_name,
+          purchased_year: getUserDate(carDetails.purchased_year),
+          make: carDetails.make,
+          trim: carDetails.trim,
+          model_series: carDetails.model_series,
+          image: {
+            uri: carDetails.image,
+            type: 'image/png',
+            name: 'image.png',
+            size: '',
+            fileCopyUri: '',
+          },
+        });
+      }
+    }
+  }, [id, profileDetails]);
 
   const imagePicker = async () => {
     try {
       const pickerResult = await DocumentPicker.pickSingle({
-        presentationStyle: 'fullScreen'
-      })
+        presentationStyle: 'fullScreen',
+      });
       setCar({...carInput, image: [pickerResult][0]});
       setValidate({...carValidate, InvalidImage: false});
     } catch (err) {
-        console.warn(err)
-      }
-  }
-console.log(carInput)
+      showToast(err);
+    }
+  };
+
   function isValidate(): boolean {
     if (carInput.image.uri == '') {
       setValidate({
@@ -119,18 +153,29 @@ console.log(carInput)
 
   const addingCar = async () => {
     let formData = new FormData();
+    if (id != 0) {
+      formData.append('id', carInput.id);
+    }
     formData.append('model_name', carInput.model_name);
     formData.append('image', {
       uri: carInput.image.uri,
       name: carInput.image.name,
       type: carInput.image.type,
     });
-    formData.append('purchased_year', carInput.purchased_year);
+    formData.append(
+      'purchased_year',
+      moment(carInput.purchased_year, 'DD-MM-YYYY', true).format('YYYY-MM-DD'),
+    );
     formData.append('make', carInput.make);
     formData.append('trim', carInput.trim);
     formData.append('model_series', carInput.model_series);
-    console.log(formData,'00000')
-    dispatch(createCar({requestBody: formData}))
+
+    dispatch(
+      createCar({
+        requestBody: formData,
+        uri: id == 0 ? 'car/save' : 'car/update',
+      }),
+    )
       .then(() => {
         dispatch(reset());
       })
@@ -139,9 +184,9 @@ console.log(carInput)
 
   useEffect(() => {
     if (CarData != null) {
-      console.log(CarData)
       if (!loadingCar && !CarError && CarData.status) {
         showToast(CarData.message);
+        navigation.goBack();
       } else {
         showToast(CarData.message);
       }
@@ -149,121 +194,134 @@ console.log(carInput)
   }, [CarData]);
 
   return (
-    <ScrollView style={{backgroundColor:AppColors.Black}}>
-    <View flex backgroundColor={AppColors.Black} padding-20>
-      <Header title="Add Car"/>
+    <ScrollView style={{backgroundColor: AppColors.Black}}>
+      <View flex backgroundColor={AppColors.Black} padding-20>
+        <Header title={id == 0 ? 'Add Car' : 'Update Car'} />
 
-<TouchableOpacity onPress={imagePicker}>
-      <View center style={styles.imageView}>
-        {carInput.image.uri ? 
-        <Image source={{uri:carInput.image.uri}} style={{width:'100%',height:'100%',borderRadius:20}}/>
-      :
-        <>
-        <Image source={AppImages.GALLERY} width={34} height={30}/>
-        <Text style={styles.add}>+ Add Photos</Text>
-        <Text style={styles.click}>(Click From camera or browse to upload)</Text>
-        <Text red10>{carValidate.InvalidImage ? '*Required' : ''}</Text>
-        </>
-}
-      </View>
-      </TouchableOpacity>
+        <TouchableOpacity onPress={imagePicker}>
+          <View center style={styles.imageView}>
+            {carInput.image.uri ? (
+              <Image
+                source={{uri: carInput.image.uri}}
+                style={{width: '100%', height: '100%', borderRadius: 20}}
+              />
+            ) : (
+              <>
+                <Image source={AppImages.GALLERY} width={34} height={30} />
+                <Text style={styles.add}>+ Add Photos</Text>
+                <Text style={styles.click}>
+                  (Click From camera or browse to upload)
+                </Text>
+                <Text red10>{carValidate.InvalidImage ? '*Required' : ''}</Text>
+              </>
+            )}
+          </View>
+        </TouchableOpacity>
 
-      <TextField
-        fieldStyle={styles.field}
-        label={'Model Name'}
-        placeholder={'Enter Model Name'}
-        placeholderTextColor={'#999999'}
-        labelStyle={styles.label}
-        style={styles.text}
-        paddingH-20
-        marginB-20
-        onChangeText={(text: any) => {
-          setCar({...carInput, model_name: text});
-          setValidate({...carValidate, InvalidName: false});
-        }}
-        trailingAccessory={
-          <Text red10>{carValidate.InvalidName ? '*Required' : ''}</Text>
-        }
-      />
-
-      <TextField
-        fieldStyle={styles.field}
-        label={'Purchase Year'}
-        placeholder={'Enter Purchase Year'}
-        placeholderTextColor={'#999999'}
-        labelStyle={styles.label}
-        style={styles.text}
-        paddingH-20
-        marginB-20
-        onChangeText={(text: any) => {
-          setCar({...carInput, purchased_year: text});
-          setValidate({...carValidate, InvalidYear: false});
-        }}
-        trailingAccessory={
-          <Text red10>{carValidate.InvalidYear ? '*Required' : ''}</Text>
-        }
-      />
-
-<TextField
-        fieldStyle={styles.field}
-        label={'Make'}
-        placeholder={'Enter make details'}
-        placeholderTextColor={'#999999'}
-        labelStyle={styles.label}
-        style={styles.text}
-        paddingH-20
-        marginB-20
-        onChangeText={(text: any) => {
-          setCar({...carInput, make: text});
-          setValidate({...carValidate, InvalidMake: false});
-        }}
-        trailingAccessory={
-          <Text red10>{carValidate.InvalidMake ? '*Required' : ''}</Text>
-        }
-      />
-
-<TextField
-        fieldStyle={styles.field}
-        label={'Trim'}
-        placeholder={'Enter trim details'}
-        placeholderTextColor={'#999999'}
-        labelStyle={styles.label}
-        style={styles.text}
-        paddingH-20
-        marginB-20
-        onChangeText={(text: any) => {
-          setCar({...carInput, trim: text});
-          setValidate({...carValidate, InvalidTrim: false});
-        }}
-        trailingAccessory={
-          <Text red10>{carValidate.InvalidTrim ? '*Required' : ''}</Text>
-        }
-      />
-
-<TextField
-        fieldStyle={styles.field}
-        label={'Model Series'}
-        placeholder={'Enter modal'}
-        placeholderTextColor={'#999999'}
-        labelStyle={styles.label}
-        style={styles.text}
-        paddingH-20
-        marginB-20
-        onChangeText={(text: any) => {
-          setCar({...carInput, model_series: text});
-          setValidate({...carValidate, InvalidSeries: false});
-        }}
-        trailingAccessory={
-          <Text red10>{carValidate.InvalidSeries ? '*Required' : ''}</Text>
-        }
-      />
-
-      <ButtonView title='Add Car'  onPress={() => {
-          if (isValidate()) {
-            addingCar();
+        <TextField
+          fieldStyle={styles.field}
+          label={'Model Name'}
+          placeholder={'Enter Model Name'}
+          placeholderTextColor={'#999999'}
+          labelStyle={styles.label}
+          style={styles.text}
+          paddingH-20
+          marginB-20
+          value={carInput.model_name}
+          onChangeText={(text: any) => {
+            setCar({...carInput, model_name: text});
+            setValidate({...carValidate, InvalidName: false});
+          }}
+          trailingAccessory={
+            <Text red10>{carValidate.InvalidName ? '*Required' : ''}</Text>
           }
-        }}/>
-    </View>
+        />
+
+        <TextField
+          fieldStyle={styles.field}
+          label={'Purchase Date'}
+          placeholder={'DD-MM-YYYY'}
+          placeholderTextColor={'#999999'}
+          labelStyle={styles.label}
+          style={styles.text}
+          paddingH-20
+          marginB-20
+          value={carInput.purchased_year}
+          onChangeText={(text: any) => {
+            setCar({...carInput, purchased_year: text});
+            setValidate({...carValidate, InvalidYear: false});
+          }}
+          trailingAccessory={
+            <Text red10>{carValidate.InvalidYear ? '*Required' : ''}</Text>
+          }
+        />
+
+        <TextField
+          fieldStyle={styles.field}
+          label={'Make'}
+          placeholder={'Enter make details'}
+          placeholderTextColor={'#999999'}
+          labelStyle={styles.label}
+          style={styles.text}
+          paddingH-20
+          marginB-20
+          value={carInput.make}
+          onChangeText={(text: any) => {
+            setCar({...carInput, make: text});
+            setValidate({...carValidate, InvalidMake: false});
+          }}
+          trailingAccessory={
+            <Text red10>{carValidate.InvalidMake ? '*Required' : ''}</Text>
+          }
+        />
+
+        <TextField
+          fieldStyle={styles.field}
+          label={'Trim'}
+          placeholder={'Enter trim details'}
+          placeholderTextColor={'#999999'}
+          labelStyle={styles.label}
+          style={styles.text}
+          paddingH-20
+          marginB-20
+          value={carInput.trim}
+          onChangeText={(text: any) => {
+            setCar({...carInput, trim: text});
+            setValidate({...carValidate, InvalidTrim: false});
+          }}
+          trailingAccessory={
+            <Text red10>{carValidate.InvalidTrim ? '*Required' : ''}</Text>
+          }
+        />
+
+        <TextField
+          fieldStyle={styles.field}
+          label={'Model Series'}
+          placeholder={'Enter modal'}
+          placeholderTextColor={'#999999'}
+          labelStyle={styles.label}
+          style={styles.text}
+          paddingH-20
+          marginB-20
+          value={carInput.model_series}
+          onChangeText={(text: any) => {
+            setCar({...carInput, model_series: text});
+            setValidate({...carValidate, InvalidSeries: false});
+          }}
+          trailingAccessory={
+            <Text red10>{carValidate.InvalidSeries ? '*Required' : ''}</Text>
+          }
+        />
+
+        <ButtonView
+          title={id == 0 ? 'Add Car' : 'Update Car'}
+          onPress={() => {
+            if (isValidate()) {
+              addingCar();
+            }
+          }}
+        />
+      </View>
     </ScrollView>
   );
 };

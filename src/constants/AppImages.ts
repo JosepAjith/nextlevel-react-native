@@ -46,6 +46,7 @@ DEADLINE: require('../images/deadline.png'),
 CANCEL: require('../images/cancel.png'),
 UPDATE: require('../images/update.png'),
 LOADER: require('../images/Steerwheel.gif'),
+PENCIL: require('../images/pencil.png'),
 }
 
 export default AppImages;

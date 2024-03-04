@@ -18,7 +18,7 @@ export type RootStackParams = {
   SettingsScreen: undefined;
   AboutScreen: undefined;
   EditProfile: undefined;
-  AddCar: undefined;
+  AddCar: {id: any};
   MarshalList: undefined;
   UserList: undefined;
   TripMembers: undefined;
