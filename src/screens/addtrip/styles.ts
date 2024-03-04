@@ -39,4 +39,18 @@ export const styles = StyleSheet.create({
         fontFamily:AppFonts.LATO_SEMIBOLD,
         marginVertical:5
     },
+    dropdownContainer: {
+        position: 'absolute',
+        top: '100%', // Position dropdown below the text field
+        left: 20, // Adjust the left position according to your UI
+        backgroundColor: '#fff',
+        borderWidth: 1,
+        borderColor: '#ccc',
+        borderRadius: 5,
+        padding: 10,
+        zIndex: 1,
+      },
+      dropdownItem: {
+        padding: 8,
+      },
 });

@@ -20,7 +20,21 @@ color:'white'
         fontSize:16,
         fontFamily: AppFonts.MEDIUM,
         color:'white'
-    }
+    },
+    modal: {
+        width: '100%',
+        position: 'absolute',
+        bottom: 0,
+        backgroundColor: 'white',
+        borderTopLeftRadius: 20,
+        borderTopRightRadius: 20,
+        elevation:10,
+      },
+      text:{
+        fontSize:16,
+        fontFamily: AppFonts.REGULAR,
+        color:'black'
+    },
 });
 
 export default AppStyles;

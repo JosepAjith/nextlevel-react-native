@@ -3,7 +3,7 @@ import * as apiInterface from '../apiInterface';
 
 export type EditProfileResponse = {
   status: any;
-  data:   {message: any};
+  message: any;
 }
 
 export type EditProfileState = {

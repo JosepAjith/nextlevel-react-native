@@ -41,7 +41,7 @@ const SuccessScreen: React.FC<Props> = ({route}: any) => {
       <Header title="Success" />
 
       <View center marginT-50 marginB-30>
-        <Image source={AppImages.SUCCESS} width={95} height={95}/>
+        <Image source={AppImages.SUCCESS} width={95} height={95} />
       </View>
 
       <View marginB-50 center>
@@ -54,11 +54,19 @@ const SuccessScreen: React.FC<Props> = ({route}: any) => {
             lineHeight: 24,
             width: '70%',
           }}>
-          Your password has been successfully {from == 'change' ? 'Changed' : 'Reset'} !
+          Your password has been successfully{' '}
+          {from == 'change' ? 'Changed' : 'Reset'} !
         </Text>
       </View>
 
-      <ButtonView title="Login" onPress={() => {navigation.navigate(RouteNames.LoginScreen)}} />
+      <ButtonView
+        title={from == 'change' ? 'Login' : 'Settings'}
+        onPress={() => {
+          from == 'change'
+            ? navigation.navigate(RouteNames.LoginScreen)
+            : navigation.navigate(RouteNames.SettingsScreen);
+        }}
+      />
     </View>
   );
 };

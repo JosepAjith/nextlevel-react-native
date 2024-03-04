@@ -1,6 +1,6 @@
 import React, {useRef, useState, useEffect} from 'react';
 import {Chip, Text, View} from 'react-native-ui-lib';
-import {Animated, Dimensions, FlatList, PanResponder, ScrollView} from 'react-native';
+import {Animated, Dimensions, Easing, FlatList, PanResponder, ScrollView} from 'react-native';
 import {styles} from './styles';
 import ButtonView from '../../components/ButtonView';
 import AppColors from '../../constants/AppColors';
@@ -37,12 +37,14 @@ const TripFilter = (props: {close: any}) => {
   };
 
   const closeModal = () => {
-    close();
     Animated.timing(modalY, {
       toValue: 300,
       duration: 100,
+      easing: Easing.linear,
       useNativeDriver: true,
-    }).start();
+    }).start(() => {
+      close();
+    });
   };
 
   const panResponder = useRef(

@@ -11,6 +11,7 @@ import {ScrollView, TouchableOpacity} from 'react-native';
 import {Header} from '../../components/Header';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import AppStrings from '../../constants/AppStrings';
+import AccountDelete from './AccountDelete';
 
 const {TextField} = Incubator;
 
@@ -29,6 +30,7 @@ interface Props {}
 const SettingsScreen: React.FC<Props> = () => {
   const navigation = useNavigation<SettingsScreenNavigationProps>();
   const [isPersonal, setPersonal] = useState(false);
+  const [isDelete, setDelete] = useState(false);
 
   const Logout = async () => {
     await AsyncStorage.removeItem(AppStrings.ACCESS_TOKEN);
@@ -57,8 +59,9 @@ const SettingsScreen: React.FC<Props> = () => {
   );
 
   return (
-    <ScrollView style={{backgroundColor: AppColors.Black}}>
-      <View flex backgroundColor={AppColors.Black} padding-20>
+      <View flex backgroundColor={AppColors.Black}>
+        <ScrollView>
+          <View padding-20>
         <Header title="Account Settings" />
         <View marginV-20>
           <Text style={styles.title}>Your Account Details</Text>
@@ -84,7 +87,9 @@ const SettingsScreen: React.FC<Props> = () => {
         </Text>
         {isPersonal && (
           <View>
-            {renderOption(AppImages.EDIT, 'Edit Profile', () => {navigation.navigate(RouteNames.EditProfile)})}
+            {renderOption(AppImages.EDIT, 'Edit Profile', () => {
+              navigation.navigate(RouteNames.EditProfile);
+            })}
             {renderOption(AppImages.KEY, 'Reset Password', () =>
               navigation.navigate(RouteNames.ResetPasswordScreen),
             )}
@@ -102,10 +107,18 @@ const SettingsScreen: React.FC<Props> = () => {
         <View marginV-20>
           <Text style={styles.title}>Login</Text>
         </View>
-        {renderOption(AppImages.DELETE, 'Delete Account', () => {})}
-        {renderOption(AppImages.LOGOUT, 'Log out', () => {Logout()})}
+        {renderOption(AppImages.DELETE, 'Delete Account', () => {
+          setDelete(!isDelete);
+        })}
+        {renderOption(AppImages.LOGOUT, 'Log out', () => {
+          Logout();
+        })}  
+        </View>
+        </ScrollView>
+         {isDelete && <AccountDelete close={() => setDelete(false)} navigation={navigation}/>}
       </View>
-    </ScrollView>
+   
+   
   );
 };
 

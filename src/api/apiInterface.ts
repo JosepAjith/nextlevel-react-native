@@ -1,3 +1,4 @@
+import { DeleteResponse } from './accountDelete/AccountDeleteSlice';
 import {
   ApiFormData,
   SimpleApiClient,
@@ -80,7 +81,7 @@ export const changePassword = async (
 export const editProfile = async (
   requestBody: any,
 ): Promise<NetworkResponse<EditProfileResponse | null>> => {
-  const response = await ApiFormData('update/profile', 'POST', requestBody);
+  const response = await ApiFormData('update-profile', 'POST', requestBody);
 
   if (response.status) {
     const json = await response.data;
@@ -213,6 +214,25 @@ export const deleteCar = async (
   requestBody: any,
 ): Promise<NetworkResponse<CarResponse>> => {
   const response = await apiClient('car/delete', 'POST', requestBody);
+
+  if (response.status) {
+    const json = await response.data;
+    return {
+      kind: 'success',
+      body: json,
+    };
+  } else {
+    return {
+      kind: 'failure',
+    };
+  }
+};
+
+//API FOR DELETING ACCOUNT
+export const deleteAccount = async (
+  requestBody: any,
+): Promise<NetworkResponse<DeleteResponse>> => {
+  const response = await apiClient('account-delete', 'POST', requestBody);
 
   if (response.status) {
     const json = await response.data;

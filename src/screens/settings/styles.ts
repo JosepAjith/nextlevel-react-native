@@ -26,6 +26,29 @@ export const styles = StyleSheet.create({
         justifyContent:'center',
         alignItems:'center',
         marginBottom:20
-    }
+    },
+    modal: {
+        width: '100%',
+        position: 'absolute',
+        bottom: 0,
+        backgroundColor: 'white',
+        borderTopLeftRadius: 20,
+        borderTopRightRadius: 20,
+        elevation:10,
+      },
+      divider:{
+        borderBottomColor:'rgba(0,0,0,0.5)',
+        borderBottomWidth:1,
+      },
+      alertTitle:{
+        fontSize:16,
+        fontFamily:AppFonts.BOLD,
+        color:'black'
+    },
+    alert:{
+        fontSize:14,
+        fontFamily:AppFonts.MEDIUM,
+        color:'black'
+    },
 });
 
