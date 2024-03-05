@@ -6,5 +6,6 @@ export class CarValidation {
     InvalidTrim: boolean = false;
     InvalidSeries: boolean = false;
     error: string = '';
+    isDatePickerVisible: boolean = false;
   }
   

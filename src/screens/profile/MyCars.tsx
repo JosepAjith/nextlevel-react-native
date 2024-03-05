@@ -65,7 +65,7 @@ const MyCars = ({navigation, data}: Props) => {
                   <Image source={AppImages.PENCIL} width={25} height={25} />
                 </TouchableOpacity>
               </View>
-              {/* <Image source={data.image == null ? AppImages.JEEP :{uri:data.image}} width={300} height={250} /> */}
+              <Image source={data.image == null ? AppImages.JEEP :{uri:data.image}} width={300} height={250} />
 
               <Text style={styles.carTitle}>
                 {item.model_name.toUpperCase()}

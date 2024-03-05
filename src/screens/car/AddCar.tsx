@@ -31,6 +31,8 @@ import {
   showToast,
 } from '../../constants/commonUtils';
 import moment from 'moment';
+import ImageSelector from '../../components/ImageSelector';
+import DateTimePickerModal from 'react-native-modal-datetime-picker';
 
 const {TextField} = Incubator;
 
@@ -46,6 +48,7 @@ interface Props {}
 const AddCar: React.FC<Props> = ({route}: any) => {
   const navigation = useNavigation<AddCarNavigationProps>();
   const id = route.params.id;
+  const [isImageClick, setImageClick] = useState(false);
   const dispatch: ThunkDispatch<RootState, any, AnyAction> = useDispatch();
   const {CarData, loadingCar, CarError} = useSelector(
     (state: RootState) => state.CarCreate,
@@ -86,17 +89,6 @@ const AddCar: React.FC<Props> = ({route}: any) => {
     }
   }, [id, profileDetails]);
 
-  const imagePicker = async () => {
-    try {
-      const pickerResult = await DocumentPicker.pickSingle({
-        presentationStyle: 'fullScreen',
-      });
-      setCar({...carInput, image: [pickerResult][0]});
-      setValidate({...carValidate, InvalidImage: false});
-    } catch (err) {
-      showToast(err);
-    }
-  };
 
   function isValidate(): boolean {
     if (carInput.image.uri == '') {
@@ -193,12 +185,29 @@ const AddCar: React.FC<Props> = ({route}: any) => {
     }
   }, [CarData]);
 
+  const showDatePicker = () => {
+    setValidate({...carValidate, isDatePickerVisible: true});
+  };
+
+  const hideDatePicker = () => {
+    setValidate({...carValidate, isDatePickerVisible: false});
+  };
+
+  const handleConfirm = (date: any) => {
+    setCar({...carInput, purchased_year: getUserDate(date)});
+    setValidate({...carValidate, InvalidYear: false});
+    hideDatePicker();
+  };
+
   return (
-    <ScrollView style={{backgroundColor: AppColors.Black}}>
-      <View flex backgroundColor={AppColors.Black} padding-20>
+      <View flex backgroundColor={AppColors.Black}>
+        <ScrollView>
+          <View padding-20>
+
+     
         <Header title={id == 0 ? 'Add Car' : 'Update Car'} />
 
-        <TouchableOpacity onPress={imagePicker}>
+        <TouchableOpacity onPress={() => setImageClick(!isImageClick)}>
           <View center style={styles.imageView}>
             {carInput.image.uri ? (
               <Image
@@ -237,6 +246,7 @@ const AddCar: React.FC<Props> = ({route}: any) => {
           }
         />
 
+<TouchableOpacity onPress={showDatePicker}>
         <TextField
           fieldStyle={styles.field}
           label={'Purchase Date'}
@@ -244,17 +254,21 @@ const AddCar: React.FC<Props> = ({route}: any) => {
           placeholderTextColor={'#999999'}
           labelStyle={styles.label}
           style={styles.text}
+          editable={false}
           paddingH-20
           marginB-20
           value={carInput.purchased_year}
-          onChangeText={(text: any) => {
-            setCar({...carInput, purchased_year: text});
-            setValidate({...carValidate, InvalidYear: false});
-          }}
           trailingAccessory={
             <Text red10>{carValidate.InvalidYear ? '*Required' : ''}</Text>
           }
         />
+         <DateTimePickerModal
+              isVisible={carValidate.isDatePickerVisible}
+              mode="date"
+              onConfirm={handleConfirm}
+              onCancel={hideDatePicker}
+            />
+        </TouchableOpacity>
 
         <TextField
           fieldStyle={styles.field}
@@ -321,8 +335,20 @@ const AddCar: React.FC<Props> = ({route}: any) => {
             }
           }}
         />
+             </View>
+        </ScrollView>
+
+        {isImageClick && (
+        <ImageSelector
+          close={() => setImageClick(false)}
+          isItem={(item: any) => {
+            setCar({...carInput, image: item});
+            setValidate({...carValidate, InvalidImage: false});
+          }}
+        />
+      )}
       </View>
-    </ScrollView>
+
   );
 };
 export default AddCar;

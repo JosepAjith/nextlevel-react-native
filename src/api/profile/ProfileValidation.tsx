@@ -11,5 +11,6 @@ export class ProfileValidation {
     InvalidInterest: boolean = false;
     InvalidRefer: boolean = false;
     error: string = '';
+    isDatePickerVisible: boolean = false;
   }
   

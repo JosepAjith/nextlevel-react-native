@@ -16,9 +16,9 @@ const initialState: TripListState = {
 
 export const fetchTripList = createAsyncThunk<
   {trip: TripListResponse[]},
-  {requestBody: any}
->('fetchTripList', async ({requestBody}) => {
-  const response = await apiInterface.fetchTripList(requestBody);
+  {requestBody: any, uri: any}
+>('fetchTripList', async ({requestBody, uri}) => {
+  const response = await apiInterface.fetchTripList(requestBody, uri);
   
 
   if (response.kind == 'success') {

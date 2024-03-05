@@ -59,9 +59,10 @@ const HomeScreen: React.FC<Props> = () => {
 
   useEffect(() => {
     let request = JSON.stringify({
-      status: 'active',
+      //upcoming, ongoing, completed
+      status: ['upcoming', 'ongoing'],
     });
-    dispatch(fetchTripList({requestBody: request}));
+    dispatch(fetchTripList({requestBody: request, uri: 'trip/list'}));
   }, []);
 
   const [arrowRotation, setArrowRotation] = useState(new Animated.Value(0));
@@ -181,7 +182,7 @@ const HomeScreen: React.FC<Props> = () => {
                   <View row right flex centerV>
                     <Text style={styles.text1}>Status</Text>
                     <View style={styles.statusView}>
-                      <Text style={styles.statusText}>{item.trip_status == 'active' && 'Live'}</Text>
+                      <Text style={styles.statusText}>{item.trip_status}</Text>
                     </View>
                   </View>
                 </View>
@@ -194,7 +195,7 @@ const HomeScreen: React.FC<Props> = () => {
 
                     <View row marginB-10>
                       <Text style={styles.rightText}>Meeting Time</Text>
-                      <Text style={styles.leftText}>{item.start_time}</Text>
+                      <Text style={styles.leftText}>{item.meeting_time}</Text>
                     </View>
 
                     <View row marginB-10>

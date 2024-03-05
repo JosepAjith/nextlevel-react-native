@@ -35,7 +35,7 @@ const BottomTabs = () => {
 
   useEffect(() => {
     fetchAsyncValue();
-  });
+  }, []);
 
   const fetchAsyncValue = async () => {
     const type = await AsyncStorage.getItem(AppStrings.TYPE);
@@ -106,7 +106,7 @@ const BottomTabs = () => {
       <View style={styles.tabBar} backgroundColor={AppColors.Black}>
         {renderTab('Home', AppImages.HOME)}
         {renderTab('My Trips', AppImages.JEEP)}
-        {type == 'marshal' && renderTab('Add Trip', AppImages.ADDTRIP)}
+        {(type == 'Explorer' || type == 'Marshal' || type == 'Super Marshal') && renderTab('Add Trip', AppImages.ADDTRIP)}
         {renderTab('Profile', AppImages.PROFILE)}
       </View>
       {openFilter && <TripFilter close={FilterClose} />}

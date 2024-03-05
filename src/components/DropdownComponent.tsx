@@ -8,11 +8,13 @@ import AppFonts from '../constants/AppFonts';
 
 interface Props {
     data: any;
+    item: any;
     label: string;
     value: string;
+    onChange: any
 }
 
-const DropdownComponent = ({data, label, value}: Props) => {
+const DropdownComponent = ({data, item, label, value, onChange}: Props) => {
 
   return (
     <Dropdown
@@ -25,10 +27,11 @@ const DropdownComponent = ({data, label, value}: Props) => {
       maxHeight={300}
       labelField={label}
       valueField={value}
+      value={item}
       placeholder="Select item"
       searchPlaceholder="Search..."
       onChange={item => {
-        console.log(item.value);
+        onChange(item.type);
       }}
       renderRightIcon={() => (
         <Image

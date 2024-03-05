@@ -7,10 +7,13 @@ import {
 import { CarResponse } from './car/CarCreateSlice';
 import { SendOtpResponse } from './forgotPassword/SendOtpSlice';
 import { VerifyOtpResponse } from './forgotPassword/VerifyOtpSlice';
+import { TripJoinResponse } from './joinTrip/TripJoinSlice';
 import { LoginResponse } from './login/LoginCreateSlice';
 import { ChangePasswordResponse } from './password/ChangePasswordSlice';
+import { EditProfileResponse } from './profile/EditProfileSlice';
 import { ProfileDetails } from './profile/ProfileDetailsSlice';
 import { RegisterResponse } from './register/RegisterCreateSlice';
+import { AddTripResponse } from './trip/TripCreateSlice';
 import { TripDetailsResponse, TripListResponse } from './trip/TripListResponse';
 
 type ResponseKind = 'success' | 'failure';
@@ -135,9 +138,9 @@ export const otpVerify = async (
 };
 //API FOR TRIP LIST
 export const fetchTripList = async (
-  requestBody: any,
+  requestBody: any,uri: any
 ): Promise<NetworkResponse<TripListResponse[]>> => {
-  const response = await apiClient('trip/list', 'POST', requestBody);
+  const response = await apiClient(uri, 'POST', requestBody);
 
   if (response.status) {
     const json = await response.data.data;
@@ -233,6 +236,44 @@ export const deleteAccount = async (
   requestBody: any,
 ): Promise<NetworkResponse<DeleteResponse>> => {
   const response = await apiClient('account-delete', 'POST', requestBody);
+
+  if (response.status) {
+    const json = await response.data;
+    return {
+      kind: 'success',
+      body: json,
+    };
+  } else {
+    return {
+      kind: 'failure',
+    };
+  }
+};
+
+//API FOR CREATING Trip
+export const createTrip = async (
+  requestBody: any, uri: any
+): Promise<NetworkResponse<AddTripResponse>> => {
+  const response = await ApiFormData(uri, 'POST', requestBody);
+
+  if (response.status) {
+    const json = await response.data;
+    return {
+      kind: 'success',
+      body: json,
+    };
+  } else {
+    return {
+      kind: 'failure',
+    };
+  }
+};
+
+//API FOR JOINING TRIP
+export const joinTrip = async (
+  requestBody: any,
+): Promise<NetworkResponse<TripJoinResponse>> => {
+  const response = await apiClient('booking/trip-booking', 'POST', requestBody);
 
   if (response.status) {
     const json = await response.data;

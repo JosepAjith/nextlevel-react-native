@@ -19,6 +19,7 @@ import MarshalList from '../screens/marshal/MarshalList';
 import UserList from '../screens/user/UserList';
 import TripMembers from '../screens/members/TripMembers';
 import SplashScreen from '../screens/SplashScreen/SplashScreen';
+import JoinTrip from '../screens/join/JoinTrip';
 
 const Stack = createNativeStackNavigator();
 
@@ -67,6 +68,7 @@ const AppStack = () => {
       <Stack.Screen name={RouteNames.MarshalList} component={MarshalList} />
       <Stack.Screen name={RouteNames.UserList} component={UserList} />
       <Stack.Screen name={RouteNames.TripMembers} component={TripMembers} />
+      <Stack.Screen name={RouteNames.JoinTrip} component={JoinTrip} />
     </Stack.Navigator>
   );
 };

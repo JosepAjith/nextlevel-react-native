@@ -16,8 +16,10 @@ import { showToast } from '../constants/commonUtils';
 import DocumentPicker from 'react-native-document-picker';
 const deviceHeight = Dimensions.get('window').height;
 
-const ImageSelector = (props: {close: any}) => {
+const ImageSelector = (props: {close: any,isItem: any, multi?: any}) => {
   const close = props.close;
+  const isItem = props.isItem;
+  const multi = props.multi;
 
   useEffect(() => {
     openModal();
@@ -69,11 +71,22 @@ const ImageSelector = (props: {close: any}) => {
 
   const handleImagePicker = async () => {
     try {
-      const pickerResult = await DocumentPicker.pickSingle({
+      let pickerResult;
+      if(multi == true) {
+        pickerResult = await DocumentPicker.pick({
+          presentationStyle: 'fullScreen',
+          allowMultiSelection: true
+        });
+      }
+      else{
+      pickerResult = await DocumentPicker.pickSingle({
         presentationStyle: 'fullScreen',
       });
+    }
+      isItem(pickerResult)
+      closeModal();
     } catch (err) {
-      showToast(err);
+      showToast('User canceled directory picker');
     }
   };
 
@@ -93,7 +106,16 @@ const ImageSelector = (props: {close: any}) => {
       } else if (response.error) {
         showToast('ImagePicker Error: ', response.error);
       } else {
-        console.log(response); // Set the selected image URI
+        const responses = response.assets[0]
+        const selectedImage = {
+          fileCopyUri: null,
+          name: responses.fileName,
+          size: responses.fileSize,
+          type: responses.type,
+          uri: responses.uri,
+        };
+        isItem([selectedImage]); // Set the selected image URI
+        closeModal();
       }
     });
   };

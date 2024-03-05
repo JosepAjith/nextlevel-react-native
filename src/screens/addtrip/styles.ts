@@ -26,7 +26,7 @@ export const styles = StyleSheet.create({
         borderColor:'white',
         height:160,
         borderRadius:20,
-        marginVertical:20
+        marginVertical:20,
     },
     click:{
         color:'white',
@@ -53,4 +53,13 @@ export const styles = StyleSheet.create({
       dropdownItem: {
         padding: 8,
       },
+      forgot:{
+        fontSize:12,
+        fontFamily:AppFonts.INTER_REGULAR,
+        color:AppColors.Orange
+    },
+    lineText:{
+        textDecorationLine:'underline',
+        color:AppColors.Orange
+    },
 });

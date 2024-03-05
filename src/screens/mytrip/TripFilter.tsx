@@ -1,6 +1,13 @@
 import React, {useRef, useState, useEffect} from 'react';
 import {Chip, Text, View} from 'react-native-ui-lib';
-import {Animated, Dimensions, Easing, FlatList, PanResponder, ScrollView} from 'react-native';
+import {
+  Animated,
+  Dimensions,
+  Easing,
+  FlatList,
+  PanResponder,
+  ScrollView,
+} from 'react-native';
 import {styles} from './styles';
 import ButtonView from '../../components/ButtonView';
 import AppColors from '../../constants/AppColors';
@@ -11,15 +18,17 @@ const TripFilter = (props: {close: any}) => {
   const [chip, setChip] = useState<number>(null);
   const [filter, setFilter] = useState([
     {id: 1, status: 'First Join'},
-    {id: 2, status: 'Newbie'},
-    {id: 3, status: 'Newbie +'},
-    {id: 4, status: 'Intermediate'},
-    {id: 5, status: 'Advanced'},
-    {id: 6, status: 'Marshal'},
-    {id: 7, status: 'Explorer'},
-    {id: 8, status: 'Super Marshal'},
-    {id: 9, status: 'Intermediate Exam'},
-    {id: 10, status: 'Advance Exam'},
+    {id: 2, status: 'newbie'},
+    {id: 3, status: 'newbie+'},
+    {id: 4, status: 'Intermediate Exam'},
+    {id: 5, status: 'Intermediate Exam'},
+    {id: 6, status: 'Intermediate+'},
+    {id: 7, status: 'Advance Exam'},
+    {id: 8, status: 'Advanced'},
+    {id: 9, status: 'Explorer'},
+    {id: 10, status: 'Marshal'},
+    {id: 11, status: 'Super Marshal'},
+    {id: 12, status: 'Get To Gether'},
   ]);
 
   useEffect(() => {
@@ -78,29 +87,34 @@ const TripFilter = (props: {close: any}) => {
         <Text style={[styles.statusText, {fontSize: 16}]}>Filter</Text>
       </View>
 
-      <View style={{    flexDirection: 'row',
-    flexWrap: 'wrap',marginHorizontal:20, marginTop:20}}>
+      <View
+        style={{
+          flexDirection: 'row',
+          flexWrap: 'wrap',
+          marginHorizontal: 20,
+          marginTop: 20,
+        }}>
         {filter.map((item, index) => (
-           <Chip
-           key={index}
-           label={item.status}
-           onPress={() => setChip(index)}
-           labelStyle={[
-             styles.chipLabel,
-             {color: chip == index ? 'white' : 'black'},
-           ]}
-           containerStyle={[
-             styles.chip,
-             {
-               backgroundColor:
-                 chip == index ? AppColors.Orange : 'transparent',
-               borderColor: chip == index ? AppColors.Orange : 'black',
-               marginRight:10,
-               marginBottom:10,
-               padding:5
-             },
-           ]}
-         />
+          <Chip
+            key={index}
+            label={item.status}
+            onPress={() => setChip(index)}
+            labelStyle={[
+              styles.chipLabel,
+              {color: chip == index ? 'white' : 'black'},
+            ]}
+            containerStyle={[
+              styles.chip,
+              {
+                backgroundColor:
+                  chip == index ? AppColors.Orange : 'transparent',
+                borderColor: chip == index ? AppColors.Orange : 'black',
+                marginRight: 10,
+                marginBottom: 10,
+                padding: 5,
+              },
+            ]}
+          />
         ))}
       </View>
 

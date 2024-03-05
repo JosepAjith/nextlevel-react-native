@@ -1,51 +1,46 @@
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
 import * as apiInterface from '../apiInterface';
 
-export type travelResponse = {
+export type AddTripResponse = {
   status: any;
-  data:   Data;
-}
-
-export type Data = {
   message: string;
-  data:[]
 }
 
-export type TravelCreateState = {
-  TravelData: travelResponse | null;
-  loadingTravel: boolean;
-  TravelError: boolean;
+export type TripCreateState = {
+  addTripData: AddTripResponse | null;
+  loadingAddTrip: boolean;
+  addTripError: boolean;
 };
 
-const initialState: TravelCreateState = {
-    TravelData: null,
-    loadingTravel: false,
-    TravelError: false,
+const initialState: TripCreateState = {
+  addTripData: null,
+  loadingAddTrip: false,
+  addTripError: false,
 };
 
-export const createTravel = createAsyncThunk<
-  {TravelData: travelResponse | null},
-  {requestBody: any}
->('createTravel', async ({requestBody}) => {
+export const createTrip = createAsyncThunk<
+  {addTripData: AddTripResponse | null},
+  {requestBody: any, uri: any}
+>('createTrip', async ({requestBody, uri}) => {
   if (requestBody != null) {
-    const response = await apiInterface.createTravel(requestBody);
+    const response = await apiInterface.createTrip(requestBody, uri);
     
     if (response.kind == 'success') {
       return {
-        TravelData: response.body ?? null,
+        addTripData: response.body ?? null,
       };
     } else {
       throw 'Error while creating';
     }
   } else {
     return {
-      TravelData: initialState.TravelData,
+      addTripData: initialState.addTripData,
     };
   }
 });
 
-const TravelCreateSlice = createSlice({
-  name: 'TravelCreate',
+const TripCreateSlice = createSlice({
+  name: 'TripCreate',
   initialState: initialState,
   reducers: {
     reset: state => {
@@ -55,23 +50,23 @@ const TravelCreateSlice = createSlice({
 
   extraReducers: builder => {
     builder
-      .addCase(createTravel.pending, state => {
-        state.TravelData = initialState.TravelData;
-        state.loadingTravel = true;
-        state.TravelError = false;
+      .addCase(createTrip.pending, state => {
+        state.addTripData = initialState.addTripData;
+        state.loadingAddTrip = true;
+        state.addTripError = false;
       })
-      .addCase(createTravel.fulfilled, (state, action) => {
-        state.TravelData = action.payload.TravelData;
-        state.TravelError = false;
-        state.loadingTravel = false;
+      .addCase(createTrip.fulfilled, (state, action) => {
+        state.addTripData = action.payload.addTripData;
+        state.addTripError = false;
+        state.loadingAddTrip = false;
       })
-      .addCase(createTravel.rejected, state => {
-        state.TravelError = true;
-        state.loadingTravel = false;
-        state.TravelData = initialState.TravelData;
+      .addCase(createTrip.rejected, state => {
+        state.addTripError = true;
+        state.loadingAddTrip = false;
+        state.addTripData = initialState.addTripData;
       });
   },
 });
 
-export const {reset} = TravelCreateSlice.actions;
-export default TravelCreateSlice.reducer;
+export const {reset} = TripCreateSlice.actions;
+export default TripCreateSlice.reducer;

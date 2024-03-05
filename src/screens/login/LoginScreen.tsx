@@ -100,7 +100,7 @@ const LoginScreen: React.FC<Props> = () => {
         );
         AsyncStorage.setItem(
           AppStrings.TYPE,
-          LoginData.user.type
+          LoginData.user.level
         );
         navigation.replace(RouteNames.BottomTabs);
       } else {

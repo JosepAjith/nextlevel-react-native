@@ -37,6 +37,7 @@ interface Props {}
 const TripDetails: React.FC<Props> = ({route}: any) => {
   const navigation = useNavigation<TripDetailsNavigationProps>();
   const id = route.params.id;
+  const {type} = useSelector((state: RootState) => state.GlobalVariables);
   const dispatch: ThunkDispatch<RootState, any, AnyAction> = useDispatch();
   const {tripDetails, loadingTripDetails, tripDetailsError} = useSelector(
     (state: RootState) => state.TripDetails,
@@ -65,7 +66,7 @@ const TripDetails: React.FC<Props> = ({route}: any) => {
                   <Text style={styles.title}>{tripDetails.data.title}</Text>
                   <View style={styles.statusView}>
                     <Text style={styles.statusText}>
-                      {tripDetails.data.trip_status == 'active' && 'Live'}
+                      {tripDetails.data.trip_status == 'upcoming'}
                     </Text>
                   </View>
                 </View>
@@ -127,7 +128,7 @@ const TripDetails: React.FC<Props> = ({route}: any) => {
                 <View row marginB-10>
                   <Text style={styles.rightText}>Meeting Time</Text>
                   <Text style={styles.leftText}>
-                    {formattedTime(tripDetails.data.start_time)}
+                    {formattedTime(tripDetails.data.meeting_time)}
                   </Text>
                 </View>
 
@@ -172,13 +173,21 @@ const TripDetails: React.FC<Props> = ({route}: any) => {
                 </View>
               </View>
 
-              {moment(new Date(), 'DD-MM-YYYY h:mm A').isBefore(
-                moment(tripDetails.data.joining_deadline, 'DD-MM-YYYY h:mm A'),
+              {moment(new Date()).isBefore(
+                moment(tripDetails.data.joining_deadline),
               ) && (
                 <View row>
+                  <TouchableOpacity onPress={()=>navigation.navigate(RouteNames.JoinTrip)}>
                   <View style={styles.yellowButton}>
-                    <Text style={styles.text2}>Support Sign in</Text>
+                    <Text style={styles.text2}>
+                      {type == 'Explorer' ||
+                      type == 'Marshal' ||
+                      type == 'Super Marshal'
+                        ? 'Support Sign in'
+                        : 'Sign in'}
+                    </Text>
                   </View>
+                  </TouchableOpacity>
 
                   <View style={styles.whiteButton}>
                     <Text style={[styles.text2, {color: 'black'}]}>Maybe</Text>
@@ -186,12 +195,7 @@ const TripDetails: React.FC<Props> = ({route}: any) => {
                 </View>
               )}
 
-              <Attendance
-                deadline={moment(
-                  tripDetails.data.joining_deadline,
-                  'DD-MM-YYYY h:mm A',
-                )}
-              />
+              <Attendance deadline={tripDetails.data.joining_deadline} />
             </View>
           </ScrollView>
         </View>

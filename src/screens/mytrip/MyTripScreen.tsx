@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   Button,
   Checkbox,
@@ -26,7 +26,10 @@ import {
   UIManager,
 } from 'react-native';
 import {Header} from '../../components/Header';
-import { useDispatch } from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
+import {AnyAction, ThunkDispatch} from '@reduxjs/toolkit';
+import {RootState} from '../../../store';
+import {fetchTripList} from '../../api/trip/TriplListSlice';
 
 const {TextField} = Incubator;
 
@@ -47,51 +50,25 @@ interface Props {}
 
 const MyTripScreen: React.FC<Props> = () => {
   const navigation = useNavigation<MyTripScreenNavigationProps>();
-  const dispatch = useDispatch();
   const [chip, setChip] = useState(1);
   const [expandedItems, setExpandedItems] = useState([]);
-  const [data, setData] = useState([
-    {
-      img: AppImages.HOME1,
-      title: 'Mud & Glory Safari',
-      data: '22-04-24',
-      time: '06:00 AM',
-      capacity: 4,
-      position: 'newbie',
-      status: 'Live',
-      id: 1,
-    },
-    {
-      img: AppImages.HOME2,
-      title: 'Wilderness Roamer Rally',
-      data: '22-04-24',
-      time: '06:00 AM',
-      capacity: 5,
-      position: 'newbie',
-      status: 'Live',
-      id: 2,
-    },
-    {
-      img: AppImages.HOME1,
-      title: 'Rugged Horizon Quest',
-      data: '22-04-24',
-      time: '06:00 AM',
-      capacity: 4,
-      position: 'newbie',
-      status: 'Live',
-      id: 3,
-    },
-    {
-      img: AppImages.HOME2,
-      title: 'Offbeat Overland Voyage',
-      data: '22-04-24',
-      time: '06:00 AM',
-      capacity: 5,
-      position: 'newbie',
-      status: 'Live',
-      id: 4,
-    },
-  ]);
+  const dispatch: ThunkDispatch<RootState, any, AnyAction> = useDispatch();
+  const {trip, loadingTrip, tripError} = useSelector(
+    (state: RootState) => state.TripList,
+  );
+  const {type} = useSelector((state: RootState) => state.GlobalVariables);
+
+  useEffect(() => {
+    let request = JSON.stringify({
+         //title
+    name:"",
+    //by level
+    filter:[],
+    //My Trips,Created,Closed
+    tab_menu:chip == 2 ? 'Created' : chip == 3 ? 'Closed' : 'My Trips'
+    });
+    dispatch(fetchTripList({requestBody: request, uri:'trip/trip-by-user'}));
+  }, [chip]);
 
   const [arrowRotation, setArrowRotation] = useState(new Animated.Value(0));
 
@@ -110,7 +87,6 @@ const MyTripScreen: React.FC<Props> = () => {
       useNativeDriver: true, // Set to true if possible, it improves performance
     }).start();
   };
-
 
   return (
     <View flex backgroundColor={AppColors.Black} padding-20>
@@ -138,8 +114,9 @@ const MyTripScreen: React.FC<Props> = () => {
         </View>
 
         <View style={{flex: 0.3}} right>
-          <TouchableOpacity onPress={()=>dispatch({type: 'IS_FILTER', payload: true})}>
-          <Image source={AppImages.FILTER} width={50} height={50} />
+          <TouchableOpacity
+            onPress={() => dispatch({type: 'IS_FILTER', payload: true})}>
+            <Image source={AppImages.FILTER} width={50} height={50} />
           </TouchableOpacity>
         </View>
       </View>
@@ -154,15 +131,19 @@ const MyTripScreen: React.FC<Props> = () => {
             chip == 1 && {backgroundColor: 'white'},
           ]}
         />
-        <Chip
-          label={'Created Trips'}
-          onPress={() => setChip(2)}
-          labelStyle={[styles.chipLabel, chip == 2 && {color: 'black'}]}
-          containerStyle={[
-            styles.chip,
-            chip == 2 && {backgroundColor: 'white'},
-          ]}
-        />
+        {(type == 'Explorer' ||
+          type == 'Marshal' ||
+          type == 'Super Marshal') && (
+          <Chip
+            label={'Created Trips'}
+            onPress={() => setChip(2)}
+            labelStyle={[styles.chipLabel, chip == 2 && {color: 'black'}]}
+            containerStyle={[
+              styles.chip,
+              chip == 2 && {backgroundColor: 'white'},
+            ]}
+          />
+        )}
         <Chip
           label={'Closed Trips'}
           onPress={() => setChip(3)}
@@ -175,15 +156,23 @@ const MyTripScreen: React.FC<Props> = () => {
       </View>
 
       <FlatList
-        data={data}
+        data={trip}
         showsVerticalScrollIndicator={false}
         renderItem={({item, index}) => {
           return (
             <TouchableOpacity
-              onPress={() => navigation.navigate(RouteNames.TripDetails)}>
+              onPress={() =>
+                navigation.navigate(RouteNames.TripDetails, {id: item.id})
+              }>
               <View style={styles.view}>
                 <ImageBackground
-                  source={item.img}
+                  source={
+                    item.trip_images.length != 0 &&
+                    item.trip_images[0].image != ''
+                      ? {uri: item.trip_images[0].image}
+                      : AppImages.HOME1
+                  }
+                  // source={AppImages.HOME1}
                   style={{width: '100%', height: 150}}
                   imageStyle={{
                     borderTopLeftRadius: 10,
@@ -192,8 +181,8 @@ const MyTripScreen: React.FC<Props> = () => {
                   <View row margin-20>
                     <Text style={styles.viewText}>{item.title}</Text>
                     <View flex right>
-                      <Text style={styles.date}>{item.data}</Text>
-                      <Text style={styles.date}>{item.time}</Text>
+                      <Text style={styles.date}>{item.date}</Text>
+                      <Text style={styles.date}>{item.start_time}</Text>
                     </View>
                   </View>
 
@@ -222,22 +211,26 @@ const MyTripScreen: React.FC<Props> = () => {
                   </TouchableOpacity>
                 </ImageBackground>
                 <View row padding-15>
-                  <View row left flex>
-                    <Text style={styles.text1}>{item.position}</Text>
+                  <View row left centerV flex>
+                    <Text style={styles.text1}>{item.level}</Text>
                     <View></View>
                   </View>
 
                   <View row flex center>
                     <Text style={styles.text1}>Capacity</Text>
                     <View style={styles.capView}>
-                      <Text style={styles.capty}>{item.capacity}/10</Text>
+                      <Text style={styles.capty}>
+                        {item.passenger}/{item.capacity}
+                      </Text>
                     </View>
                   </View>
 
                   <View row right flex centerV>
                     <Text style={styles.text1}>Status</Text>
                     <View style={styles.statusView}>
-                      <Text style={styles.statusText}>{item.status}</Text>
+                      <Text style={styles.statusText}>
+                        {item.trip_status == 'upcoming' && 'Live'}
+                      </Text>
                     </View>
                   </View>
                 </View>
@@ -245,32 +238,36 @@ const MyTripScreen: React.FC<Props> = () => {
                   <View style={styles.bottomView}>
                     <View row marginB-10>
                       <Text style={styles.rightText}>Organizer</Text>
-                      <Text style={styles.leftText}>David</Text>
+                      <Text style={styles.leftText}>{item.user.name}</Text>
                     </View>
 
                     <View row marginB-10>
                       <Text style={styles.rightText}>Meeting Time</Text>
-                      <Text style={styles.leftText}>06:00 AM</Text>
+                      <Text style={styles.leftText}>{item.start_time}</Text>
                     </View>
 
                     <View row marginB-10>
                       <Text style={styles.rightText}>Trip Date</Text>
-                      <Text style={styles.leftText}>19-March-2024</Text>
+                      <Text style={styles.leftText}>
+                        {item.joining_start_date}
+                      </Text>
                     </View>
 
                     <View row marginB-10>
                       <Text style={styles.rightText}>City</Text>
-                      <Text style={styles.leftText}>Abu Dhabi</Text>
+                      <Text style={styles.leftText}>{item.city}</Text>
                     </View>
 
                     <View row marginB-10>
                       <Text style={styles.rightText}>Area</Text>
-                      <Text style={styles.leftText}>Sweihan</Text>
+                      <Text style={styles.leftText}>{item.area_details}</Text>
                     </View>
 
                     <View row marginB-10>
                       <Text style={styles.rightText}>Joining deadline</Text>
-                      <Text style={styles.leftText}>22-June-2024 11:00 AM</Text>
+                      <Text style={styles.leftText}>
+                        {item.joining_deadline}
+                      </Text>
                     </View>
                   </View>
                 )}
@@ -279,8 +276,6 @@ const MyTripScreen: React.FC<Props> = () => {
           );
         }}
       />
-
-      
     </View>
   );
 };

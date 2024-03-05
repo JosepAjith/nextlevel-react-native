@@ -13,13 +13,15 @@ interface Props {
 }
 
 const Attendance = ({deadline}: Props) => {
-  const currentDate = moment(new Date(), 'DD-MM-YYYY h:mm A')
+  const currentDate = moment();
+  const deadlineDate = moment(deadline);
   const [mark, setMark] = useState(false);
   const {type} = useSelector((state: RootState) => state.GlobalVariables);
+
   return (
     <>
-      {type == 'user' ? (
-        (currentDate.isAfter(deadline)) ?
+      {(type != 'Super Marshal' || type != 'Marshal' || type != 'Explorer') ? (
+        (currentDate.isAfter(deadlineDate)) ?
         <View style={styles.deadline}>
           <View row center marginH-20>
             <Image

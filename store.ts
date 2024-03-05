@@ -13,6 +13,8 @@ import CarCreateSlice from './src/api/car/CarCreateSlice';
 import CarDeleteSlice from './src/api/car/CarDeleteSlice';
 import AccountDeleteSlice from './src/api/accountDelete/AccountDeleteSlice';
 import EditProfileSlice from './src/api/profile/EditProfileSlice';
+import TripCreateSlice from './src/api/trip/TripCreateSlice';
+import TripJoinSlice from './src/api/joinTrip/TripJoinSlice';
 
 
 const rootReducer = combineReducers({
@@ -29,7 +31,9 @@ const rootReducer = combineReducers({
   CarCreate: CarCreateSlice,
   CarDelete: CarDeleteSlice,
   AccountDelete: AccountDeleteSlice,
-  EditProfile: EditProfileSlice
+  EditProfile: EditProfileSlice,
+  TripCreate: TripCreateSlice,
+  TripJoin: TripJoinSlice
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

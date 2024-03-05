@@ -27,6 +27,7 @@ export type TripListResponse = {
     updated_at:         string;
     trip_status:        string;
     user:               User;
+    meeting_time:       string;
     trip_images:        TripImage[];
 }
 
