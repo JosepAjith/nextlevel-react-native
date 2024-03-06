@@ -20,10 +20,10 @@ const initialState: TripJoinState = {
 
 export const joinTrip = createAsyncThunk<
   {joinData: TripJoinResponse | null},
-  {requestBody: any}
->('joinTrip', async ({requestBody}) => {
+  {requestBody: any, uri: any}
+>('joinTrip', async ({requestBody, uri}) => {
   if (requestBody != null) {
-    const response = await apiInterface.joinTrip(requestBody);
+    const response = await apiInterface.joinTrip(requestBody, uri);
     
     if (response.kind == 'success') {
       return {

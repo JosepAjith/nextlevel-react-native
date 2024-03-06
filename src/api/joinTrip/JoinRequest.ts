@@ -1,5 +1,4 @@
 export class JoinRequest {
-    trip_id: string = '';
     application_status: string = '';
     name: string = '';
     gender: string = '';

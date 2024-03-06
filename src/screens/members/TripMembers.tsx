@@ -9,7 +9,7 @@ import {
   View,
 } from 'react-native-ui-lib';
 import {RootStackParams, RouteNames} from '../../navigation';
-import {RouteProp} from '@react-navigation/native';
+import {RouteProp, useFocusEffect} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {useNavigation} from '@react-navigation/native';
 import AppColors from '../../constants/AppColors';
@@ -28,6 +28,10 @@ import {
 import {Header} from '../../components/Header';
 import {styles} from '../mytrip/styles';
 import TripFilter from '../mytrip/TripFilter';
+import { useDispatch, useSelector } from 'react-redux';
+import { AnyAction, ThunkDispatch } from '@reduxjs/toolkit';
+import { RootState } from '../../../store';
+import { fetchMemberList } from '../../api/member/MemberListSlice';
 
 const {TextField} = Incubator;
 
@@ -44,54 +48,30 @@ const TripMembers: React.FC<Props> = () => {
   const navigation = useNavigation<TripMembersNavigationProps>();
   const windowWidth = Dimensions.get('window').width;
   const itemWidth = (windowWidth - 50) / 2;
-  const [data, setData] = useState([
-    {
-      img: AppImages.USER1,
-      name: 'Mud Maverick',
-      email: 'maverick.44x@gmail.com',
-      role: 'Newbie',
-      car:'Bronco',
-      contact: '87676574',
-      id: 1,
-    },
-    {
-      img: AppImages.USER2,
-      name: 'Mud Maverick',
-      email: 'maverick.44x@gmail.com',
-      role: 'Intermediate',
-      car:'Bronco',
-      contact: '87676574',
-      id: 2,
-    },
-    {
-      img: AppImages.USER1,
-      name: 'Mud Maverick',
-      email: 'maverick.44x@gmail.com',
-      role: 'Intermediate+',
-      car:'Bronco',
-      contact: '87676574',
-      id: 3,
-    },
-    {
-      img: AppImages.USER2,
-      name: 'Mud Maverick',
-      email: 'maverick.44x@gmail.com',
-      role: 'First join',
-      car:'Jeep Wrangler',
-      contact: '87676574',
-      id: 4,
-    },
-  ]);
-  
+  const dispatch: ThunkDispatch<RootState, any, AnyAction> = useDispatch();
+  const {members, loadingMembers, membersError} = useSelector(
+    (state: RootState) => state.MemberList,
+  );
+
+  useFocusEffect(
+    React.useCallback(() => {
+      let request = JSON.stringify({
+        trip_id:5,
+        application_status:"",
+      });
+      dispatch(fetchMemberList({requestBody: request}));
+
+      return () => {};
+    }, []),
+  );
   
 
   return (
     <View flex backgroundColor={AppColors.Black} padding-20>
       <Header title="Trip Members" rightIcon={AppImages.REFRESH} />
 
-
-      <FlatList
-        data={data}
+      {/* <FlatList
+        data={members}
         numColumns={2}
         contentContainerStyle={{marginTop:20}}
         renderItem={({item, index}) => {
@@ -123,7 +103,7 @@ const TripMembers: React.FC<Props> = () => {
             </View>
           );
         }}
-      />
+      /> */}
     </View>
   );
 };

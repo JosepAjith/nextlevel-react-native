@@ -349,7 +349,8 @@ const EditProfile: React.FC<Props> = () => {
           <Text style={styles.label}>Gender</Text>
           <DropdownComponent data={Gender} item={profileInput.gender} label="type" value="id" onChange={(item: any)=>{
             setProfile({...profileInput, gender: item});
-              setValidate({...profileValidate, InvalidGender: false});}}/>
+              setValidate({...profileValidate, InvalidGender: false});}}
+              error={profileValidate.InvalidGender}/>
 
           <TextField
             fieldStyle={styles.field}
@@ -374,7 +375,8 @@ const EditProfile: React.FC<Props> = () => {
 
           <Text style={styles.label}>Emirate</Text>
           <DropdownComponent data={Emirates} item={profileInput.emirates}  label="type" value="id" onChange={(item: any)=>{setProfile({...profileInput, emirates: item});
-              setValidate({...profileValidate, InvalidEmirates: false});}}/>
+              setValidate({...profileValidate, InvalidEmirates: false});}}
+              error={profileValidate.InvalidEmirates}/>
 
           <TextField
             fieldStyle={styles.field}

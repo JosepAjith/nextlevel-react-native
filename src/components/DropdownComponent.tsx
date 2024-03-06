@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { StyleSheet } from 'react-native';
 import { Dropdown } from 'react-native-element-dropdown';
-import { Image } from 'react-native-ui-lib';
+import { Image, Text, View } from 'react-native-ui-lib';
 import AppImages from '../constants/AppImages';
 import AppColors from '../constants/AppColors';
 import AppFonts from '../constants/AppFonts';
@@ -11,10 +11,11 @@ interface Props {
     item: any;
     label: string;
     value: string;
-    onChange: any
+    onChange: any;
+    error: any;
 }
 
-const DropdownComponent = ({data, item, label, value, onChange}: Props) => {
+const DropdownComponent = ({data, item, label, value, onChange, error}: Props) => {
 
   return (
     <Dropdown
@@ -34,12 +35,15 @@ const DropdownComponent = ({data, item, label, value, onChange}: Props) => {
         onChange(item.type);
       }}
       renderRightIcon={() => (
+        <View row centerV>
+          <Text red10>{error ? '*required' : ''}</Text>
         <Image
         source={AppImages.DOWN}
         tintColor="#3F4E59"
         width={11}
         height={6}
       />
+      </View>
       )}
     />
   );

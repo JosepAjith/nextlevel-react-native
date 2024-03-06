@@ -9,15 +9,18 @@ import {
   View,
 } from 'react-native-ui-lib';
 import {RootStackParams, RouteNames} from '../../navigation';
-import {RouteProp} from '@react-navigation/native';
+import {RouteProp, useFocusEffect} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {useNavigation} from '@react-navigation/native';
 import AppColors from '../../constants/AppColors';
 import AppImages from '../../constants/AppImages';
 import {Dimensions, FlatList} from 'react-native';
 import {Header} from '../../components/Header';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {styles} from '../mytrip/styles';
+import { AnyAction, ThunkDispatch } from '@reduxjs/toolkit';
+import { RootState } from '../../../store';
+import { fetchUserList } from '../../api/user/UserListSlice';
 
 const {TextField} = Incubator;
 
@@ -30,41 +33,37 @@ export type MarshalListRouteProps = RouteProp<RootStackParams, 'MarshalList'>;
 
 interface Props {}
 
+const Marshals =  ['Marshal','Super Marshal','Get To Gether']
+
 const MarshalList: React.FC<Props> = () => {
   const navigation = useNavigation<MarshalListNavigationProps>();
   const windowWidth = Dimensions.get('window').width;
   const itemWidth = (windowWidth - 50) / 2;
-  const [data, setData] = useState([
-    {
-      img: AppImages.USER1,
-      name: 'Mud Maverick',
-      email: 'maverick.44x@gmail.com',
-      role: 'Marshal',
-      id: 1,
-    },
-    {
-      img: AppImages.USER2,
-      name: 'Mud Maverick',
-      email: 'maverick.44x@gmail.com',
-      role: 'Marshal',
-      id: 2,
-    },
-    {
-      img: AppImages.USER1,
-      name: 'Mud Maverick',
-      email: 'maverick.44x@gmail.com',
-      role: 'Marshal',
-      id: 3,
-    },
-    {
-      img: AppImages.USER2,
-      name: 'Mud Maverick',
-      email: 'maverick.44x@gmail.com',
-      role: 'Marshal',
-      id: 4,
-    },
-    
-  ]);
+  const dispatch: ThunkDispatch<RootState, any, AnyAction> = useDispatch();
+  const {users, loadingUsers, usersError} = useSelector(
+    (state: RootState) => state.UserList,
+  );
+  const [search, setSearch] = useState('');
+
+
+  useFocusEffect(
+    React.useCallback(() => {
+      let request = JSON.stringify({
+        level: Marshals,
+      });
+      dispatch(fetchUserList({requestBody: request}));
+
+      return () => {
+        
+      };
+    }, []),
+  );
+
+  const SearchedMarshal = users.filter((item) =>
+  item.name.toLowerCase().includes(search.toLowerCase()) ||
+  item.email.toLowerCase().includes(search.toLowerCase()) ||
+  item.level.toLowerCase().includes(search.toLowerCase())
+);
 
   return (
     <View flex backgroundColor={AppColors.Black} padding-20>
@@ -78,13 +77,15 @@ const MarshalList: React.FC<Props> = () => {
         paddingH-20
         marginT-25
         marginB-20
+        value={search}
+        onChangeText={(text)=> setSearch(text)}
         leadingAccessory={
           <Image source={AppImages.SEARCH} width={20} height={20} marginR-10 />
         }
       />
 
       <FlatList
-        data={data}
+        data={SearchedMarshal}
         numColumns={2}
         renderItem={({item, index}) => {
           const isEvenIndex = index % 2 === 0;
@@ -93,7 +94,7 @@ const MarshalList: React.FC<Props> = () => {
             <View style={{alignItems: alignmentStyle, flex: 1}}>
               <View center style={[styles.marshalView, {width: itemWidth}]}>
                 <Image
-                  source={item.img}
+                  source={item.image?{uri:item.image}:AppImages.USER1}
                   style={{
                     width: '100%',
                     height: 100,
@@ -104,7 +105,7 @@ const MarshalList: React.FC<Props> = () => {
                 <Text style={styles.name}>{item.name}</Text>
                 <Text style={styles.email}>{item.email}</Text>
                 <View row center>
-                  <Text style={styles.email}>{item.role}</Text>
+                  <Text style={styles.email}>{item.level}</Text>
                   <View row marginL-5>
                     <Image source={AppImages.STAR} width={10} height={10} />
                     <Image source={AppImages.STAR} width={10} height={10} marginH-5/>

@@ -354,6 +354,7 @@ console.log(formData)
               setTrip({...tripInput, city: item});
               setValidate({...tripValidate, InvalidCity: false});
             }}
+            error={tripValidate.InvalidCity}
           />
 
           <TextField
@@ -404,6 +405,7 @@ console.log(formData)
               setTrip({...tripInput, level: item});
               setValidate({...tripValidate, InvalidLevel: false});
             }}
+            error={tripValidate.InvalidLevel}
           />
 
           <TextField

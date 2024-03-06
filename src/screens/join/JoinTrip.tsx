@@ -17,17 +17,14 @@ import ButtonView from '../../components/ButtonView';
 import {ScrollView, TouchableOpacity} from 'react-native';
 import {Header} from '../../components/Header';
 import {styles} from '../addtrip/styles';
-import {
-  getUserDate,
-  showToast,
-} from '../../constants/commonUtils';
+import {getUserDate, showToast} from '../../constants/commonUtils';
 import {AnyAction, ThunkDispatch} from '@reduxjs/toolkit';
 import {RootState} from '../../../store';
 import {useDispatch, useSelector} from 'react-redux';
 import DropdownComponent from '../../components/DropdownComponent';
-import { JoinRequest } from '../../api/joinTrip/JoinRequest';
-import { JoinValidation } from '../../api/joinTrip/JoinValidation';
-import { joinTrip, reset } from '../../api/joinTrip/TripJoinSlice';
+import {JoinRequest} from '../../api/joinTrip/JoinRequest';
+import {JoinValidation} from '../../api/joinTrip/JoinValidation';
+import {joinTrip, reset} from '../../api/joinTrip/TripJoinSlice';
 
 const {TextField} = Incubator;
 
@@ -46,31 +43,44 @@ const Gender = [
   {type: 'Other', id: 'Other'},
 ];
 
-const JoinTrip: React.FC<Props> = () => {
+const JoinTrip: React.FC<Props> = ({route}: any) => {
   const navigation = useNavigation<JoinTripNavigationProps>();
+  const id = route.params.id;
+  const status = route.params.status;
+  const type = route.params.type;
+  const [agree, setAgree] = useState(false);
   const dispatch: ThunkDispatch<RootState, any, AnyAction> = useDispatch();
   const {joinData, loadingJoin, joinError} = useSelector(
     (state: RootState) => state.TripJoin,
   );
-  const [joinInput, setJoin] = useState<JoinRequest>(
-    new JoinRequest(),
-  );
+  const [joinInput, setJoin] = useState<JoinRequest>(new JoinRequest());
   const [joinValidate, setValidate] = useState<JoinValidation>(
     new JoinValidation(),
   );
+  const {tripDetails} = useSelector(
+    (state: RootState) => state.TripDetails,
+  );
 
-//   useEffect(() => {
-//     if (profileDetails && typeof profileDetails.user === 'object') {
-//       const item = profileDetails.user;
+  useEffect(() => {
+    setJoin({...joinInput, application_status: status});
+  }, []);
 
-//       setJoin({
-//         ...joinInput,
-//         name: item.name,
-//         phone: item.phone,
-//         gender: item.gender,
-//       });
-//     }
-//   }, [profileDetails]);
+    useEffect(() => {
+      if (type == 'edit') {
+      if (tripDetails && typeof tripDetails.data.trip_book === 'object') {
+        const item = tripDetails.data.trip_book;
+
+        setJoin({
+          ...joinInput,
+          name: item.name,
+          phone: item.phone,
+          gender: item.gender,
+          vehicle: item.vehicle,
+          passenger: item.passenger.toString()
+        });
+      }
+    }
+    }, [type == 'edit']);
 
   function isValidate(): boolean {
     if (joinInput.name == '') {
@@ -114,14 +124,33 @@ const JoinTrip: React.FC<Props> = () => {
       return false;
     }
 
+    if (!agree) {
+      showToast('Agree to your policy to register');
+      return false;
+    }
+
     return true;
   }
 
   const joiningTrip = async () => {
+    let request = {};
+    if (type === 'edit') {
+      //for editing ride
+      request = {
+        trip_booking_id: id,
+        ...joinInput,
+      };
+    } else {
+      request = {
+        trip_id: id,
+        ...joinInput,
+      };
+    }
 
     dispatch(
       joinTrip({
-        requestBody: joinInput,
+        requestBody: request,
+        uri: type == 'edit' ? 'booking/trip-book-update' : 'booking/trip-booking'
       }),
     )
       .then(() => {
@@ -131,7 +160,7 @@ const JoinTrip: React.FC<Props> = () => {
   };
 
   useEffect(() => {
-    if (joinData!= null) {
+    if (joinData != null) {
       if (!loadingJoin && !joinError && joinData.status) {
         showToast(joinData.message);
         navigation.goBack();
@@ -141,13 +170,11 @@ const JoinTrip: React.FC<Props> = () => {
     }
   }, [joinData]);
 
-
   return (
     <View flex backgroundColor={AppColors.Black}>
       <ScrollView>
         <View padding-20>
-          <Header title="Join Ride" />
-
+          <Header title={type == 'edit' ? 'Edit Ride' : 'Join Ride'} />
 
           <TextField
             fieldStyle={styles.field}
@@ -164,17 +191,22 @@ const JoinTrip: React.FC<Props> = () => {
               setValidate({...joinValidate, InvalidName: false});
             }}
             trailingAccessory={
-              <Text red10>
-                {joinValidate.InvalidName ? '*Required' : ''}
-              </Text>
+              <Text red10>{joinValidate.InvalidName ? '*Required' : ''}</Text>
             }
           />
 
-<Text style={styles.label}>Gender</Text>
-          <DropdownComponent data={Gender} item={joinInput.gender} label="type" value="id" onChange={(item: any)=>{
-            setJoin({...joinInput, gender: item});
-              setValidate({...joinValidate, InvalidGender: false});}}/>
-
+          <Text style={styles.label}>Gender</Text>
+          <DropdownComponent
+            data={Gender}
+            item={joinInput.gender}
+            label="type"
+            value="id"
+            onChange={(item: any) => {
+              setJoin({...joinInput, gender: item});
+              setValidate({...joinValidate, InvalidGender: false});
+            }}
+            error={joinValidate.InvalidGender}
+          />
 
           <TextField
             fieldStyle={styles.field}
@@ -192,13 +224,11 @@ const JoinTrip: React.FC<Props> = () => {
               setValidate({...joinValidate, InvalidPhone: false});
             }}
             trailingAccessory={
-              <Text red10>
-                {joinValidate.InvalidPhone ? '*Required' : ''}
-              </Text>
+              <Text red10>{joinValidate.InvalidPhone ? '*Required' : ''}</Text>
             }
           />
 
-<TextField
+          <TextField
             fieldStyle={styles.field}
             label={'Vehicle'}
             placeholder={'Enter vehicle name'}
@@ -220,7 +250,7 @@ const JoinTrip: React.FC<Props> = () => {
             }
           />
 
-<TextField
+          <TextField
             fieldStyle={styles.field}
             label={'Passengers'}
             placeholder={'Enter passengers count'}
@@ -242,27 +272,31 @@ const JoinTrip: React.FC<Props> = () => {
             }
           />
 
-<View row centerV marginV-30>
-          <Checkbox
-            // value={agree}
-            label={
-              <Text style={[styles.forgot, {color: 'white', lineHeight: 20}]}>
-                I have read and agree to the club indemnity{' '}
-                <Text style={styles.lineText}>You must accept club indemnity to continue.</Text>
-              </Text>
-            }
-            color={AppColors.Orange}
-            style={{borderColor: 'white'}}
-            // onValueChange={value => setAgree(value)}
-          />
-        </View>
-         
+          <View row centerV marginB-20>
+            <Checkbox
+              value={agree}
+              label={
+                <Text style={[styles.forgot, {color: 'white', lineHeight: 20}]}>
+                  I have read and agree to the club indemnity{' '}
+                  <Text style={styles.lineText}>
+                    You must accept club indemnity to continue.
+                  </Text>
+                </Text>
+              }
+              color={AppColors.Orange}
+              style={{borderColor: 'white'}}
+              onValueChange={value => setAgree(value)}
+            />
+          </View>
 
-          <ButtonView title="Update Profile" onPress={() => {
-            if (isValidate()) {
-              joiningTrip();
-            }
-          }} />
+          <ButtonView
+            title={type == 'edit' ? 'Update' : 'Join'}
+            onPress={() => {
+              if (isValidate()) {
+                joiningTrip();
+              }
+            }}
+          />
         </View>
       </ScrollView>
     </View>

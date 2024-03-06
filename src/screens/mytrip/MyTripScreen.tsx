@@ -9,7 +9,7 @@ import {
   View,
 } from 'react-native-ui-lib';
 import {RootStackParams, RouteNames} from '../../navigation';
-import {RouteProp} from '@react-navigation/native';
+import {RouteProp, useFocusEffect} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {useNavigation} from '@react-navigation/native';
 import AppColors from '../../constants/AppColors';
@@ -51,24 +51,45 @@ interface Props {}
 const MyTripScreen: React.FC<Props> = () => {
   const navigation = useNavigation<MyTripScreenNavigationProps>();
   const [chip, setChip] = useState(1);
+  const [search, setSearch] = useState('');
   const [expandedItems, setExpandedItems] = useState([]);
   const dispatch: ThunkDispatch<RootState, any, AnyAction> = useDispatch();
   const {trip, loadingTrip, tripError} = useSelector(
     (state: RootState) => state.TripList,
   );
   const {type} = useSelector((state: RootState) => state.GlobalVariables);
+  const {filterValue,openFilter} = useSelector((state: RootState) => state.TripReducer);
 
-  useEffect(() => {
-    let request = JSON.stringify({
-         //title
-    name:"",
-    //by level
-    filter:[],
-    //My Trips,Created,Closed
-    tab_menu:chip == 2 ? 'Created' : chip == 3 ? 'Closed' : 'My Trips'
-    });
-    dispatch(fetchTripList({requestBody: request, uri:'trip/trip-by-user'}));
-  }, [chip]);
+  useFocusEffect(
+    React.useCallback(() => {
+      dispatch({ type: 'SET_FILTER_VALUE', payload: '' });
+
+      return () => {
+        
+      };
+    }, []),
+  );
+
+  useFocusEffect(
+    React.useCallback(() => {
+      let request = JSON.stringify({
+          //title
+        name: search,
+          //by level
+        filter: filterValue === '' ? [] : [filterValue],
+         //My Trips,Created,Closed
+        tab_menu: chip === 2 ? 'Created' : chip === 3 ? 'Closed' : 'My Trips'
+      });
+      
+      dispatch(fetchTripList({ requestBody: request, uri: 'trip/trip-by-user' }));
+
+      // Clean-up function
+      return () => {
+      };
+    }, [chip, search, filterValue]) 
+  );
+
+
 
   const [arrowRotation, setArrowRotation] = useState(new Animated.Value(0));
 
@@ -102,6 +123,8 @@ const MyTripScreen: React.FC<Props> = () => {
             paddingH-20
             marginT-25
             marginB-20
+            value={search}
+            onChangeText={(text: any) => {setSearch(text)}}
             leadingAccessory={
               <Image
                 source={AppImages.SEARCH}
@@ -220,7 +243,7 @@ const MyTripScreen: React.FC<Props> = () => {
                     <Text style={styles.text1}>Capacity</Text>
                     <View style={styles.capView}>
                       <Text style={styles.capty}>
-                        {item.passenger}/{item.capacity}
+                        {item.trip_book_count}/{item.capacity}
                       </Text>
                     </View>
                   </View>
@@ -229,7 +252,7 @@ const MyTripScreen: React.FC<Props> = () => {
                     <Text style={styles.text1}>Status</Text>
                     <View style={styles.statusView}>
                       <Text style={styles.statusText}>
-                        {item.trip_status == 'upcoming' && 'Live'}
+                        {item.trip_status}
                       </Text>
                     </View>
                   </View>

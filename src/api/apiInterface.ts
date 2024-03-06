@@ -7,14 +7,17 @@ import {
 import { CarResponse } from './car/CarCreateSlice';
 import { SendOtpResponse } from './forgotPassword/SendOtpSlice';
 import { VerifyOtpResponse } from './forgotPassword/VerifyOtpSlice';
+import { TripCancelResponse } from './joinTrip/TripCancelSlice';
 import { TripJoinResponse } from './joinTrip/TripJoinSlice';
 import { LoginResponse } from './login/LoginCreateSlice';
+import { MemberListData } from './member/MemberListResponse';
 import { ChangePasswordResponse } from './password/ChangePasswordSlice';
 import { EditProfileResponse } from './profile/EditProfileSlice';
 import { ProfileDetails } from './profile/ProfileDetailsSlice';
 import { RegisterResponse } from './register/RegisterCreateSlice';
 import { AddTripResponse } from './trip/TripCreateSlice';
 import { TripDetailsResponse, TripListResponse } from './trip/TripListResponse';
+import { UserListData } from './user/UserListResponse';
 
 type ResponseKind = 'success' | 'failure';
 
@@ -271,12 +274,69 @@ export const createTrip = async (
 
 //API FOR JOINING TRIP
 export const joinTrip = async (
-  requestBody: any,
+  requestBody: any, uri: any
 ): Promise<NetworkResponse<TripJoinResponse>> => {
-  const response = await apiClient('booking/trip-booking', 'POST', requestBody);
+  const response = await apiClient(uri, 'POST', requestBody);
 
   if (response.status) {
     const json = await response.data;
+    return {
+      kind: 'success',
+      body: json,
+    };
+  } else {
+    return {
+      kind: 'failure',
+    };
+  }
+};
+
+//API FOR CANCELING TRIP
+export const cancelTrip = async (
+  requestBody: any
+): Promise<NetworkResponse<TripCancelResponse>> => {
+  const response = await apiClient('booking/sign-out-trip', 'POST', requestBody);
+
+  if (response.status) {
+    const json = await response.data;
+    return {
+      kind: 'success',
+      body: json,
+    };
+  } else {
+    return {
+      kind: 'failure',
+    };
+  }
+};
+
+//API FOR USER AnD MARSHALS LIST
+export const fetchUserList = async (
+  requestBody: any
+): Promise<NetworkResponse<UserListData[]>> => {
+  const response = await apiClient('level-user-wise', 'POST', requestBody);
+
+  if (response.status) {
+    const json = await response.data.data;
+    return {
+      kind: 'success',
+      body: json,
+    };
+  } else {
+    return {
+      kind: 'failure',
+    };
+  }
+};
+
+//API FOR USER AnD MARSHALS LIST
+export const fetchMemberList = async (
+  requestBody: any
+): Promise<NetworkResponse<MemberListData>> => {
+  const response = await apiClient('trip/trip-users', 'POST', requestBody);
+
+  if (response.status) {
+    const json = await response.data.data;
     return {
       kind: 'success',
       body: json,

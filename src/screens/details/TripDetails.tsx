@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {Image, Incubator, Text, View} from 'react-native-ui-lib';
 import {RootStackParams, RouteNames} from '../../navigation';
-import {RouteProp} from '@react-navigation/native';
+import {RouteProp, useFocusEffect} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {useNavigation} from '@react-navigation/native';
 import AppColors from '../../constants/AppColors';
@@ -20,8 +20,10 @@ import {
   getDateTime,
   getUserDate,
   getUserTime,
+  showToast,
 } from '../../constants/commonUtils';
 import moment from 'moment';
+import { cancelTrip, reset } from '../../api/joinTrip/TripCancelSlice';
 
 const {TextField} = Incubator;
 
@@ -42,13 +44,52 @@ const TripDetails: React.FC<Props> = ({route}: any) => {
   const {tripDetails, loadingTripDetails, tripDetailsError} = useSelector(
     (state: RootState) => state.TripDetails,
   );
+  const {cancelData, loadingCancel, cancelError} = useSelector(
+    (state: RootState) => state.TripCancel,
+  );
+
+  useFocusEffect(
+    React.useCallback(() => {
+      let request = JSON.stringify({
+        id: id,
+      });
+      dispatch(fetchTripDetails({requestBody: request}));
+
+      // Clean-up function
+      return () => {};
+    }, [cancelData]),
+  );
+
+  const cancelingTrip = async (book_id: number) => {
+    let request = {
+        trip_booking_id: book_id}
+    dispatch(
+      cancelTrip({
+        requestBody: request
+      }),
+    )
+      .then(() => {
+        dispatch(reset());
+      })
+      .catch((err: any) => console.log(err));
+  };
 
   useEffect(() => {
-    let request = JSON.stringify({
-      id: id,
-    });
-    dispatch(fetchTripDetails({requestBody: request}));
-  }, []);
+    if (cancelData != null) {
+      if (!loadingCancel && !cancelError && cancelData.status) {
+        showToast(cancelData.message);
+      } else {
+        showToast(cancelData.message);
+      }
+    }
+  }, [cancelData]);
+
+  const renderDetails = (label: string, value: string) => (
+    <View row marginB-10>
+      <Text style={styles.rightText}>{label}</Text>
+      <Text style={styles.leftText}>{value}</Text>
+    </View>
+  );
 
   return (
     <View flex backgroundColor={AppColors.Black}>
@@ -66,7 +107,7 @@ const TripDetails: React.FC<Props> = ({route}: any) => {
                   <Text style={styles.title}>{tripDetails.data.title}</Text>
                   <View style={styles.statusView}>
                     <Text style={styles.statusText}>
-                      {tripDetails.data.trip_status == 'upcoming'}
+                      {tripDetails.data.trip_status}
                     </Text>
                   </View>
                 </View>
@@ -87,7 +128,8 @@ const TripDetails: React.FC<Props> = ({route}: any) => {
                   <Text style={styles.text1}>Capacity</Text>
                   <View style={styles.capView}>
                     <Text style={styles.capty}>
-                      {tripDetails.data.passenger}/{tripDetails.data.capacity}
+                      {tripDetails.data.trip_book_count}/
+                      {tripDetails.data.capacity}
                     </Text>
                   </View>
                 </View>
@@ -104,94 +146,131 @@ const TripDetails: React.FC<Props> = ({route}: any) => {
               </View>
 
               <View marginV-20>
-                <View row marginB-10>
-                  <Text style={styles.rightText}>Organized By</Text>
-                  <Text style={styles.leftText}>
-                    {tripDetails.data.user.name}
-                  </Text>
-                </View>
-
-                <View row marginB-10>
-                  <Text style={styles.rightText}>Trip Date</Text>
-                  <Text style={styles.leftText}>
-                    {getUserDate(tripDetails.data.date)}
-                  </Text>
-                </View>
-
-                <View row marginB-10>
-                  <Text style={styles.rightText}>Post Date</Text>
-                  <Text style={styles.leftText}>
-                    {getUserDate(tripDetails.data.created_at)}
-                  </Text>
-                </View>
-
-                <View row marginB-10>
-                  <Text style={styles.rightText}>Meeting Time</Text>
-                  <Text style={styles.leftText}>
-                    {formattedTime(tripDetails.data.meeting_time)}
-                  </Text>
-                </View>
-
-                <View row marginB-10>
-                  <Text style={styles.rightText}>Start Time</Text>
-                  <Text style={styles.leftText}>
-                    {formattedTime(tripDetails.data.start_time)}
-                  </Text>
-                </View>
-
-                <View row marginB-10>
-                  <Text style={styles.rightText}>Finish Time</Text>
-                  <Text style={styles.leftText}>
-                    {formattedTime(tripDetails.data.finish_time)}
-                  </Text>
-                </View>
-
-                <View row marginB-10>
-                  <Text style={styles.rightText}>City</Text>
-                  <Text style={styles.leftText}>{tripDetails.data.city}</Text>
-                </View>
-
-                <View row marginB-10>
-                  <Text style={styles.rightText}>Area</Text>
-                  <Text style={styles.leftText}>
-                    {tripDetails.data.area_details}
-                  </Text>
-                </View>
-
-                <View row marginB-10>
-                  <Text style={styles.rightText}>Joining start</Text>
-                  <Text style={styles.leftText}>
-                    {getDateTime(tripDetails.data.joining_start_date)}
-                  </Text>
-                </View>
-
-                <View row marginB-10>
-                  <Text style={styles.rightText}>Joining deadline</Text>
-                  <Text style={styles.leftText}>
-                    {getDateTime(tripDetails.data.joining_deadline)}
-                  </Text>
-                </View>
+                {renderDetails('Organized By', tripDetails.data.user.name)}
+                {renderDetails('Trip Date', getUserDate(tripDetails.data.date))}
+                {renderDetails(
+                  'Post Date',
+                  getUserDate(tripDetails.data.created_at),
+                )}
+                {renderDetails(
+                  'Meeting Time',
+                  formattedTime(tripDetails.data.meeting_time),
+                )}
+                {renderDetails(
+                  'Start Time',
+                  formattedTime(tripDetails.data.start_time),
+                )}
+                {renderDetails(
+                  'Finish Time',
+                  formattedTime(tripDetails.data.finish_time),
+                )}
+                {renderDetails('City', tripDetails.data.city)}
+                {renderDetails('Area', tripDetails.data.area_details)}
+                {renderDetails(
+                  'Joining start',
+                  getDateTime(tripDetails.data.joining_start_date),
+                )}
+                {renderDetails(
+                  'Joining deadline',
+                  getDateTime(tripDetails.data.joining_deadline),
+                )}
               </View>
 
               {moment(new Date()).isBefore(
                 moment(tripDetails.data.joining_deadline),
               ) && (
-                <View row>
-                  <TouchableOpacity onPress={()=>navigation.navigate(RouteNames.JoinTrip)}>
-                  <View style={styles.yellowButton}>
-                    <Text style={styles.text2}>
-                      {type == 'Explorer' ||
-                      type == 'Marshal' ||
-                      type == 'Super Marshal'
-                        ? 'Support Sign in'
-                        : 'Sign in'}
-                    </Text>
-                  </View>
-                  </TouchableOpacity>
+                <View row marginB-20>
+                  {tripDetails.data.trip_book && (tripDetails.data.trip_book.application_status ===
+                  'support' || tripDetails.data.trip_book.application_status ===
+                  'joined') ? (
+                    <>
+                      <TouchableOpacity
+                        onPress={() =>
+                          navigation.navigate(RouteNames.JoinTrip, {
+                            id: tripDetails.data.trip_book.id,
+                            status: 'support',
+                            type: 'edit',
+                          })
+                        }>
+                        <View style={styles.yellowButton}>
+                          <Text style={styles.text2}>Edit Ride</Text>
+                        </View>
+                      </TouchableOpacity>
 
-                  <View style={styles.whiteButton}>
-                    <Text style={[styles.text2, {color: 'black'}]}>Maybe</Text>
-                  </View>
+                      <TouchableOpacity  onPress={()=>cancelingTrip(tripDetails.data.trip_book.id)}>
+                        <View style={styles.whiteButton}>
+                          <Text style={[styles.text2, {color: 'black'}]}>
+                            Sign out
+                          </Text>
+                        </View>
+                      </TouchableOpacity>
+                    </>
+                  ) : tripDetails.data.trip_book && tripDetails.data.trip_book.application_status ===
+                    'may be' ? (
+                    <>
+                      <TouchableOpacity
+                        onPress={() =>
+                          navigation.navigate(RouteNames.JoinTrip, {
+                            id: tripDetails.data.trip_book.id,
+                            status: 'edit',
+                            type: 'edit',
+                          })
+                        }>
+                        <View style={styles.yellowButton}>
+                          <Text style={styles.text2}>Edit</Text>
+                        </View>
+                      </TouchableOpacity>
+
+                      <TouchableOpacity onPress={()=>cancelingTrip(tripDetails.data.trip_book.id)}>
+                        <View style={styles.whiteButton}>
+                          <Text style={[styles.text2, {color: 'black'}]}>
+                            Not Interested
+                          </Text>
+                        </View>
+                      </TouchableOpacity>
+                    </>
+                  ) : (
+                    <>
+                      <TouchableOpacity
+                        onPress={() =>
+                          navigation.navigate(RouteNames.JoinTrip, {
+                            id: tripDetails.data.id,
+                            status:
+                              type == 'Explorer' ||
+                              type == 'Marshal' ||
+                              type == 'Super Marshal'
+                                ? 'support'
+                                : '',
+                            type: 'join'
+                          })
+                        }>
+                        <View style={styles.yellowButton}>
+                          <Text style={styles.text2}>
+                            {type == 'Explorer' ||
+                            type == 'Marshal' ||
+                            type == 'Super Marshal'
+                              ? 'Support Sign in'
+                              : 'Sign in'}
+                          </Text>
+                        </View>
+                      </TouchableOpacity>
+
+                      <TouchableOpacity
+                        onPress={() =>
+                          navigation.navigate(RouteNames.JoinTrip, {
+                            id: tripDetails.data.id,
+                            status: 'may be',
+                            type: 'join',
+                          })
+                        }>
+                        <View style={styles.whiteButton}>
+                          <Text style={[styles.text2, {color: 'black'}]}>
+                            Maybe
+                          </Text>
+                        </View>
+                      </TouchableOpacity>
+                    </>
+                  )}
                 </View>
               )}
 

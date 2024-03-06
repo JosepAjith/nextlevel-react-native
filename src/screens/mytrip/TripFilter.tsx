@@ -11,11 +11,14 @@ import {
 import {styles} from './styles';
 import ButtonView from '../../components/ButtonView';
 import AppColors from '../../constants/AppColors';
+import {useDispatch} from 'react-redux';
 const deviceHeight = Dimensions.get('window').height;
 
 const TripFilter = (props: {close: any}) => {
+  const dispatch = useDispatch();
   const close = props.close;
   const [chip, setChip] = useState<number>(null);
+  const [selected, setSelected] = useState('');
   const [filter, setFilter] = useState([
     {id: 1, status: 'First Join'},
     {id: 2, status: 'newbie'},
@@ -79,6 +82,11 @@ const TripFilter = (props: {close: any}) => {
     }),
   ).current;
 
+  const SaveFilter = () => {
+    dispatch({type: 'SET_FILTER_VALUE', payload: selected});
+    close();
+  };
+
   return (
     <Animated.View
       style={[styles.modal, {transform: [{translateY: modalY}]}]}
@@ -98,7 +106,10 @@ const TripFilter = (props: {close: any}) => {
           <Chip
             key={index}
             label={item.status}
-            onPress={() => setChip(index)}
+            onPress={() => {
+              setChip(index);
+              setSelected(item.status);
+            }}
             labelStyle={[
               styles.chipLabel,
               {color: chip == index ? 'white' : 'black'},
@@ -119,7 +130,7 @@ const TripFilter = (props: {close: any}) => {
       </View>
 
       <View padding-20>
-        <ButtonView title="Save filter" onPress={() => close()} black={true} />
+        <ButtonView title="Save filter" onPress={SaveFilter} black={true} />
       </View>
     </Animated.View>
   );

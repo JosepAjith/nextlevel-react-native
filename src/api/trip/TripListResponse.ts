@@ -28,7 +28,24 @@ export type TripListResponse = {
     trip_status:        string;
     user:               User;
     meeting_time:       string;
+    trip_book_count:    number;
     trip_images:        TripImage[];
+    trip_book:          TripBook
+}
+
+export type TripBook = {
+    id:                 number;
+    trip_id:            number;
+    user_id:            number;
+    application_status: string;
+    applied_date:       Date;
+    created_at:         Date;
+    updated_at:         Date;
+    name:               string;
+    gender:             string;
+    phone:              string;
+    vehicle:            string;
+    passenger:          number;
 }
 
 export type TripImage = {

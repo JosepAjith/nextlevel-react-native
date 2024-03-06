@@ -59,7 +59,7 @@ export const styles = StyleSheet.create({
         color:AppColors.Orange
     },
     lineText:{
-        textDecorationLine:'underline',
+        // textDecorationLine:'underline',
         color:AppColors.Orange
     },
 });

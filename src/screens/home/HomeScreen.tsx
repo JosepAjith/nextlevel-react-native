@@ -8,7 +8,7 @@ import {
   View,
 } from 'react-native-ui-lib';
 import {RootStackParams, RouteNames} from '../../navigation';
-import {RouteProp} from '@react-navigation/native';
+import {RouteProp, useFocusEffect} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {useNavigation} from '@react-navigation/native';
 import AppColors from '../../constants/AppColors';
@@ -56,14 +56,22 @@ const HomeScreen: React.FC<Props> = () => {
   const {trip, loadingTrip, tripError} = useSelector(
     (state: RootState) => state.TripList,
   );
+  const [search, setSearch] = useState('');
 
-  useEffect(() => {
-    let request = JSON.stringify({
-      //upcoming, ongoing, completed
-      status: ['upcoming', 'ongoing'],
-    });
-    dispatch(fetchTripList({requestBody: request, uri: 'trip/list'}));
-  }, []);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      let request = JSON.stringify({
+        //upcoming, ongoing, completed
+        status: ['upcoming', 'ongoing'],
+      });
+      dispatch(fetchTripList({requestBody: request, uri: 'trip/list'}));
+
+      return () => {
+        
+      };
+    }, []),
+  );
 
   const [arrowRotation, setArrowRotation] = useState(new Animated.Value(0));
 
@@ -82,6 +90,10 @@ const HomeScreen: React.FC<Props> = () => {
       useNativeDriver: true, // Set to true if possible, it improves performance
     }).start();
   };
+
+  const filteredTrip = trip.filter((item) =>
+  item.title.toLowerCase().includes(search.toLowerCase())
+);
 
   return (
     <View flex backgroundColor={AppColors.Black} padding-20>
@@ -106,13 +118,15 @@ const HomeScreen: React.FC<Props> = () => {
         paddingH-20
         marginT-25
         marginB-20
+        value={search}
+        onChangeText={(text:any) => setSearch(text)}
         leadingAccessory={
           <Image source={AppImages.SEARCH} width={20} height={20} marginR-10 />
         }
       />
 
       <FlatList
-        data={trip}
+        data={filteredTrip}
         showsVerticalScrollIndicator={false}
         renderItem={({item, index}) => {
           return (
@@ -174,7 +188,7 @@ const HomeScreen: React.FC<Props> = () => {
                     <Text style={styles.text1}>Capacity</Text>
                     <View style={styles.capView}>
                       <Text style={styles.capty}>
-                        {item.passenger}/{item.capacity}
+                        {item.trip_book_count}/{item.capacity}
                       </Text>
                     </View>
                   </View>

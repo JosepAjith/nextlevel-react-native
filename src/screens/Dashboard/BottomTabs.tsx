@@ -29,7 +29,7 @@ if (Platform.OS === 'android') {
 
 const BottomTabs = () => {
   const [activeTab, setActiveTab] = useState('Home');
-  const {openFilter} = useSelector((state: RootState) => state.TripReducer);
+  const {openFilter,filterValue} = useSelector((state: RootState) => state.TripReducer);
   const dispatch = useDispatch();
   const {type} = useSelector((state: RootState) => state.GlobalVariables);
 
