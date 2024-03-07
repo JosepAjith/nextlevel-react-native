@@ -25,6 +25,7 @@ import DropdownComponent from '../../components/DropdownComponent';
 import {JoinRequest} from '../../api/joinTrip/JoinRequest';
 import {JoinValidation} from '../../api/joinTrip/JoinValidation';
 import {joinTrip, reset} from '../../api/joinTrip/TripJoinSlice';
+import BackgroundLoader from '../../components/BackgroundLoader';
 
 const {TextField} = Incubator;
 
@@ -57,16 +58,14 @@ const JoinTrip: React.FC<Props> = ({route}: any) => {
   const [joinValidate, setValidate] = useState<JoinValidation>(
     new JoinValidation(),
   );
-  const {tripDetails} = useSelector(
-    (state: RootState) => state.TripDetails,
-  );
+  const {tripDetails} = useSelector((state: RootState) => state.TripDetails);
 
   useEffect(() => {
     setJoin({...joinInput, application_status: status});
   }, []);
 
-    useEffect(() => {
-      if (type == 'edit') {
+  useEffect(() => {
+    if (type == 'edit') {
       if (tripDetails && typeof tripDetails.data.trip_book === 'object') {
         const item = tripDetails.data.trip_book;
 
@@ -76,11 +75,11 @@ const JoinTrip: React.FC<Props> = ({route}: any) => {
           phone: item.phone,
           gender: item.gender,
           vehicle: item.vehicle,
-          passenger: item.passenger.toString()
+          passenger: item.passenger.toString(),
         });
       }
     }
-    }, [type == 'edit']);
+  }, [type == 'edit']);
 
   function isValidate(): boolean {
     if (joinInput.name == '') {
@@ -146,7 +145,7 @@ const JoinTrip: React.FC<Props> = ({route}: any) => {
         ...joinInput,
       };
     }
-
+   
     dispatch(
       joinTrip({
         requestBody: request,
@@ -175,7 +174,7 @@ const JoinTrip: React.FC<Props> = ({route}: any) => {
       <ScrollView>
         <View padding-20>
           <Header title={type == 'edit' ? 'Edit Ride' : 'Join Ride'} />
-
+          {loadingJoin && <BackgroundLoader />}
           <TextField
             fieldStyle={styles.field}
             label={'Name'}

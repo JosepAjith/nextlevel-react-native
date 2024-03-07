@@ -20,10 +20,10 @@ import {Header} from '../../components/Header';
 import AppFonts from '../../constants/AppFonts';
 import Personal from './Personal';
 import Activities from './Activities';
-import { AnyAction, ThunkDispatch } from '@reduxjs/toolkit';
-import { RootState } from '../../../store';
-import { useDispatch, useSelector } from 'react-redux';
-import { fetchProfileDetails } from '../../api/profile/ProfileDetailsSlice';
+import {AnyAction, ThunkDispatch} from '@reduxjs/toolkit';
+import {RootState} from '../../../store';
+import {useDispatch, useSelector} from 'react-redux';
+import {fetchProfileDetails} from '../../api/profile/ProfileDetailsSlice';
 import MyCars from './MyCars';
 
 const {TextField} = Incubator;
@@ -38,19 +38,22 @@ export type ProfileScreenRouteProps = RouteProp<
   'ProfileScreen'
 >;
 
-interface Props {}
+interface Props {
+  isReplace?: any;
+}
 
-const ProfileScreen: React.FC<Props> = () => {
+const ProfileScreen: React.FC<Props> = ({isReplace}: Props) => {
   const navigation = useNavigation<ProfileScreenNavigationProps>();
   const [tab, setTab] = useState('personal');
   const dispatch: ThunkDispatch<RootState, any, AnyAction> = useDispatch();
-  const {profileDetails, loadingProfileDetails, profileDetailsError} = useSelector(
-    (state: RootState) => state.ProfileDetails,
-  );
-
+  const {profileDetails, loadingProfileDetails, profileDetailsError} =
+    useSelector((state: RootState) => state.ProfileDetails);
+  const {userId} = useSelector((state: RootState) => state.GlobalVariables);
+  console.log(userId, 'profile');
   useFocusEffect(
     React.useCallback(() => {
-      dispatch(fetchProfileDetails({requestBody: ''}));
+      let request = {id: userId};
+      dispatch(fetchProfileDetails({requestBody: userId == 0 ? '' : request}));
 
       return () => {
         setTab('personal');
@@ -58,11 +61,14 @@ const ProfileScreen: React.FC<Props> = () => {
     }, []),
   );
 
-
   return (
-    <ScrollView style={{backgroundColor:AppColors.Black}}>
+    <ScrollView style={{backgroundColor: AppColors.Black}}>
       <View flex backgroundColor={AppColors.Black} padding-20>
-        <Header leftIcon={false} title="Profile" />
+        {userId == 0 ? (
+          <Header leftIcon={false} title="Profile" />
+        ) : (
+          <Header title="Profile" />
+        )}
 
         <View row marginV-20>
           <View flex>
@@ -91,12 +97,14 @@ const ProfileScreen: React.FC<Props> = () => {
             </View>
           </View>
 
-          <View flex right>
-            <TouchableOpacity
-              onPress={() => navigation.navigate(RouteNames.SettingsScreen)}>
-              <Image source={AppImages.SETTINGS} width={30} height={30} />
-            </TouchableOpacity>
-          </View>
+          {userId == 0 && (
+            <View flex right>
+              <TouchableOpacity
+                onPress={() => navigation.navigate(RouteNames.SettingsScreen)}>
+                <Image source={AppImages.SETTINGS} width={30} height={30} />
+              </TouchableOpacity>
+            </View>
+          )}
         </View>
 
         <View style={styles.middle}>
@@ -137,9 +145,19 @@ const ProfileScreen: React.FC<Props> = () => {
           </TouchableOpacity>
         </View>
 
-        {tab == 'personal' && profileDetails?.status && <Personal data={profileDetails?.user}/>}
-        {tab == 'cars' && profileDetails?.status && <MyCars navigation={navigation} data={profileDetails.user.cars}/>}
-        {tab == 'activity' && profileDetails?.status && <Activities navigation={navigation} data={profileDetails.trip_status_counts}/>}
+        {tab == 'personal' && profileDetails?.status && (
+          <Personal data={profileDetails?.user} />
+        )}
+        {tab == 'cars' && profileDetails?.status && (
+          <MyCars navigation={navigation} data={profileDetails.user.cars} />
+        )}
+        {tab == 'activity' && profileDetails?.status && (
+          <Activities
+            navigation={navigation}
+            data={profileDetails.trip_status_counts}
+            isReplace={isReplace}
+          />
+        )}
       </View>
     </ScrollView>
   );

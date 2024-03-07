@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1096238675733",
+    "project_id": "next-level-33f65",
+    "storage_bucket": "next-level-33f65.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1096238675733:android:da1a46c3952f4643df5b1c",
+        "android_client_info": {
+          "package_name": "com.nextlevel"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDEgIHVv8eNykYiXdGGz8ifHyAlbLC2w78"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

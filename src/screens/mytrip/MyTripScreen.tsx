@@ -46,11 +46,12 @@ export type MyTripScreenNavigationProps = NativeStackNavigationProp<
 
 export type MyTripScreenRouteProps = RouteProp<RootStackParams, 'MyTripScreen'>;
 
-interface Props {}
+interface Props {
+  isReplace?: any;
+}
 
-const MyTripScreen: React.FC<Props> = () => {
+const MyTripScreen: React.FC<Props> = ({isReplace}:Props) => {
   const navigation = useNavigation<MyTripScreenNavigationProps>();
-  const [chip, setChip] = useState(1);
   const [search, setSearch] = useState('');
   const [expandedItems, setExpandedItems] = useState([]);
   const dispatch: ThunkDispatch<RootState, any, AnyAction> = useDispatch();
@@ -58,18 +59,8 @@ const MyTripScreen: React.FC<Props> = () => {
     (state: RootState) => state.TripList,
   );
   const {type} = useSelector((state: RootState) => state.GlobalVariables);
-  const {filterValue,openFilter} = useSelector((state: RootState) => state.TripReducer);
-
-  useFocusEffect(
-    React.useCallback(() => {
-      dispatch({ type: 'SET_FILTER_VALUE', payload: '' });
-
-      return () => {
-        
-      };
-    }, []),
-  );
-
+  const {filterValue,chip} = useSelector((state: RootState) => state.TripReducer);
+console.log(chip)
   useFocusEffect(
     React.useCallback(() => {
       let request = JSON.stringify({
@@ -85,11 +76,14 @@ const MyTripScreen: React.FC<Props> = () => {
 
       // Clean-up function
       return () => {
+        isReplace()
       };
     }, [chip, search, filterValue]) 
   );
 
-
+const setChip = (value: number) => {
+  dispatch({ type: 'SET_CHIP', payload: value });
+}
 
   const [arrowRotation, setArrowRotation] = useState(new Animated.Value(0));
 

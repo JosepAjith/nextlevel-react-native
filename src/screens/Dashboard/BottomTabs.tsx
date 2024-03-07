@@ -20,6 +20,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {RootState} from '../../../store';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import AppStrings from '../../constants/AppStrings';
+import { useFocusEffect, useRoute } from '@react-navigation/native';
 
 if (Platform.OS === 'android') {
   if (UIManager.setLayoutAnimationEnabledExperimental) {
@@ -28,10 +29,29 @@ if (Platform.OS === 'android') {
 }
 
 const BottomTabs = () => {
+  const route = useRoute();
   const [activeTab, setActiveTab] = useState('Home');
   const {openFilter,filterValue} = useSelector((state: RootState) => state.TripReducer);
   const dispatch = useDispatch();
   const {type} = useSelector((state: RootState) => state.GlobalVariables);
+  const [replace, setReplace] = useState(false)
+  useEffect(() => {
+    if (replace) {
+      setActiveTab('My Trips');
+    }
+  }, [replace]);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      dispatch({ type: 'SET_FILTER_VALUE', payload: '' });
+      dispatch({ type: 'SET_CHIP', payload: 1 });
+      dispatch({ type: 'SET_USER_ID', payload: 0 })
+      return () => {
+        
+      };
+    }, []),
+  );
+  
 
   useEffect(() => {
     fetchAsyncValue();
@@ -89,11 +109,11 @@ const BottomTabs = () => {
   const renderScreen = () => {
     switch (activeTab) {
       case 'My Trips':
-        return <MyTripScreen />;
+        return <MyTripScreen isReplace={()=>setReplace(false)}/>;
       case 'Add Trip':
         return <AddTripScreen />;
       case 'Profile':
-        return <ProfileScreen />;
+        return <ProfileScreen isReplace={()=>setReplace(true)}/>;
       case 'Home':
       default:
         return <HomeScreen />;

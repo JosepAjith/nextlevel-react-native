@@ -45,10 +45,10 @@ USER2: require('../images/user2.png'),
 DEADLINE: require('../images/deadline.png'),
 CANCEL: require('../images/cancel.png'),
 UPDATE: require('../images/update.png'),
-LOADER: require('../images/Steerwheel.gif'),
 PENCIL: require('../images/pencil.png'),
 CAMERA: require('../images/camera.png'),
 UPLOAD: require('../images/upload.png'),
+LOADER: require('../images/Loader.json'),
 }
 
 export default AppImages;

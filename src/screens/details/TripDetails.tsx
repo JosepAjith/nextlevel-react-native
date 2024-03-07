@@ -23,7 +23,8 @@ import {
   showToast,
 } from '../../constants/commonUtils';
 import moment from 'moment';
-import { cancelTrip, reset } from '../../api/joinTrip/TripCancelSlice';
+import {cancelTrip, reset} from '../../api/joinTrip/TripCancelSlice';
+import BackgroundLoader from '../../components/BackgroundLoader';
 
 const {TextField} = Incubator;
 
@@ -62,10 +63,11 @@ const TripDetails: React.FC<Props> = ({route}: any) => {
 
   const cancelingTrip = async (book_id: number) => {
     let request = {
-        trip_booking_id: book_id}
+      trip_booking_id: book_id,
+    };
     dispatch(
       cancelTrip({
-        requestBody: request
+        requestBody: request,
       }),
     )
       .then(() => {
@@ -96,6 +98,8 @@ const TripDetails: React.FC<Props> = ({route}: any) => {
       <View padding-20>
         <Header title="Trip Details" rightIcon={AppImages.REFRESH} />
       </View>
+
+      {(loadingTripDetails || loadingCancel) && <BackgroundLoader />}
       {tripDetails?.status && (
         <View flex>
           <CarouselView images={tripDetails.data.trip_images} />
@@ -180,9 +184,11 @@ const TripDetails: React.FC<Props> = ({route}: any) => {
                 moment(tripDetails.data.joining_deadline),
               ) && (
                 <View row marginB-20>
-                  {tripDetails.data.trip_book && (tripDetails.data.trip_book.application_status ===
-                  'support' || tripDetails.data.trip_book.application_status ===
-                  'joined') ? (
+                  {tripDetails.data.trip_book &&
+                  (tripDetails.data.trip_book.application_status ===
+                    'support' ||
+                    tripDetails.data.trip_book.application_status ===
+                      'joined') ? (
                     <>
                       <TouchableOpacity
                         onPress={() =>
@@ -197,7 +203,10 @@ const TripDetails: React.FC<Props> = ({route}: any) => {
                         </View>
                       </TouchableOpacity>
 
-                      <TouchableOpacity  onPress={()=>cancelingTrip(tripDetails.data.trip_book.id)}>
+                      <TouchableOpacity
+                        onPress={() =>
+                          cancelingTrip(tripDetails.data.trip_book.id)
+                        }>
                         <View style={styles.whiteButton}>
                           <Text style={[styles.text2, {color: 'black'}]}>
                             Sign out
@@ -205,8 +214,9 @@ const TripDetails: React.FC<Props> = ({route}: any) => {
                         </View>
                       </TouchableOpacity>
                     </>
-                  ) : tripDetails.data.trip_book && tripDetails.data.trip_book.application_status ===
-                    'may be' ? (
+                  ) : tripDetails.data.trip_book &&
+                    tripDetails.data.trip_book.application_status ===
+                      'may be' ? (
                     <>
                       <TouchableOpacity
                         onPress={() =>
@@ -221,7 +231,10 @@ const TripDetails: React.FC<Props> = ({route}: any) => {
                         </View>
                       </TouchableOpacity>
 
-                      <TouchableOpacity onPress={()=>cancelingTrip(tripDetails.data.trip_book.id)}>
+                      <TouchableOpacity
+                        onPress={() =>
+                          cancelingTrip(tripDetails.data.trip_book.id)
+                        }>
                         <View style={styles.whiteButton}>
                           <Text style={[styles.text2, {color: 'black'}]}>
                             Not Interested
@@ -241,7 +254,7 @@ const TripDetails: React.FC<Props> = ({route}: any) => {
                               type == 'Super Marshal'
                                 ? 'support'
                                 : '',
-                            type: 'join'
+                            type: 'join',
                           })
                         }>
                         <View style={styles.yellowButton}>

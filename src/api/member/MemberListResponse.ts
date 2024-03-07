@@ -1,24 +1,21 @@
 export type MemberListResponse = {
     status: number;
-    data:   MemberListData;
+    data:   MemberListData[];
 }
 
 export type MemberListData = {
-    "support": DATA[];
-    "joined":  DATA[];
-    "may be":  DATA[];
-    "waiting list": DATA[];
+    title: string;
+    data:  DatumDatum[];
 }
 
-
-export type DATA = {
+export type DatumDatum = {
     id:                number;
     name:              string;
     email:             string;
     email_verified_at: string;
     created_at:        string;
     updated_at:        string;
-    nick_name:         string;
+    nick_name:         null | string;
     phone:             string;
     image:             string;
     type:              string;
@@ -34,9 +31,25 @@ export type DATA = {
     level:             string;
     is_admin:          string;
     fcm_token:         string;
-    update_role_time:  string;
+    update_role_time:  number;
     google_id:         number;
     facebook_id:       number;
     attendance_id:     number;
     is_present:        boolean;
+    trip_book:         TripBook;
+}
+
+export type TripBook = {
+    id:                 number;
+    trip_id:            number;
+    user_id:            number;
+    application_status: string;
+    applied_date:       string;
+    created_at:         string;
+    updated_at:         string;
+    name:               string;
+    gender:             string;
+    phone:              string;
+    vehicle:            string;
+    passenger:          number;
 }

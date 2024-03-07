@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">NextLevel</string>
+    <string name="default_notification_channel_id">nxtlevel_channel_id</string>
 </resources>

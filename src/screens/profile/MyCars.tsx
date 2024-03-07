@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, {useEffect} from 'react';
 import {Button, Image, Text, View} from 'react-native-ui-lib';
 import {styles} from './styles';
 import AppImages from '../../constants/AppImages';
@@ -9,7 +9,7 @@ import {AnyAction, ThunkDispatch} from '@reduxjs/toolkit';
 import {RootState} from '../../../store';
 import {useDispatch, useSelector} from 'react-redux';
 import {deleteCar, reset} from '../../api/car/CarDeleteSlice';
-import { fetchProfileDetails } from '../../api/profile/ProfileDetailsSlice';
+import {fetchProfileDetails} from '../../api/profile/ProfileDetailsSlice';
 
 interface Props {
   navigation: any;
@@ -21,6 +21,7 @@ const MyCars = ({navigation, data}: Props) => {
   const {CarDeleteData, loadingCarDelete, CarDeleteError} = useSelector(
     (state: RootState) => state.CarDelete,
   );
+  const {userId} = useSelector((state: RootState) => state.GlobalVariables);
 
   const deletingCar = (id: any) => {
     dispatch(deleteCar({requestBody: {id: id}}))
@@ -49,23 +50,30 @@ const MyCars = ({navigation, data}: Props) => {
         renderItem={({item, index}) => {
           return (
             <View padding-20 center style={styles.view} marginB-10>
-              <View row absR absT marginR-10 marginT-10>
-                <TouchableOpacity onPress={() => deletingCar(item.id)}>
-                  <Image
-                    source={AppImages.DELETE}
-                    marginR-10
-                    width={25}
-                    height={25}
-                  />
-                </TouchableOpacity>
-                <TouchableOpacity
-                  onPress={() =>
-                    navigation.navigate(RouteNames.AddCar, {id: item.id})
-                  }>
-                  <Image source={AppImages.PENCIL} width={25} height={25} />
-                </TouchableOpacity>
-              </View>
-              <Image source={item.image ? {uri:item.image} : AppImages.JEEP} width={300} height={250} marginT-20/>
+              {userId == 0 && (
+                <View row absR absT marginR-10 marginT-10>
+                  <TouchableOpacity onPress={() => deletingCar(item.id)}>
+                    <Image
+                      source={AppImages.DELETE}
+                      marginR-10
+                      width={25}
+                      height={25}
+                    />
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={() =>
+                      navigation.navigate(RouteNames.AddCar, {id: item.id})
+                    }>
+                    <Image source={AppImages.PENCIL} width={25} height={25} />
+                  </TouchableOpacity>
+                </View>
+              )}
+              <Image
+                source={item.image ? {uri: item.image} : AppImages.JEEP}
+                width={300}
+                height={250}
+                marginT-20
+              />
 
               <Text style={styles.carTitle}>
                 {item.model_name.toUpperCase()}
@@ -88,18 +96,20 @@ const MyCars = ({navigation, data}: Props) => {
         }}
       />
 
-      <TouchableOpacity
-        onPress={() => navigation.navigate(RouteNames.AddCar, {id: 0})}>
-        <View row center style={styles.plus}>
-          <Text style={styles.car}>Add Car</Text>
-          <Image
-            source={AppImages.ADDTRIP}
-            width={14}
-            height={14}
-            tintColor="black"
-          />
-        </View>
-      </TouchableOpacity>
+      {userId == 0 && (
+        <TouchableOpacity
+          onPress={() => navigation.navigate(RouteNames.AddCar, {id: 0})}>
+          <View row center style={styles.plus}>
+            <Text style={styles.car}>Add Car</Text>
+            <Image
+              source={AppImages.ADDTRIP}
+              width={14}
+              height={14}
+              tintColor="black"
+            />
+          </View>
+        </TouchableOpacity>
+      )}
     </View>
   );
 };

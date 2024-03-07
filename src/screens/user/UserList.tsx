@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   Button,
   Checkbox,
@@ -32,6 +32,10 @@ import TripFilter from '../mytrip/TripFilter';
 import {AnyAction, ThunkDispatch} from '@reduxjs/toolkit';
 import {RootState} from '../../../store';
 import {fetchUserList} from '../../api/user/UserListSlice';
+import DropdownComponent from '../../components/DropdownComponent';
+import {Dropdown} from 'react-native-element-dropdown';
+import { reset, updateRole } from '../../api/levelUpdate/UpdateRoleSlice';
+import { showToast } from '../../constants/commonUtils';
 
 const {TextField} = Incubator;
 
@@ -55,6 +59,17 @@ const User = [
   'Explorer',
 ];
 
+const Level = [
+  {type: 'First Join', id: 'First Join'},
+  {type: 'newbie', id: 'newbie'},
+  {type: 'newbie+', id: 'newbie+'},
+  {type: 'Intermediate Exam', id: 'Intermediate Exam'},
+  {type: 'Intermediate', id: 'Intermediate'},
+  {type: 'Intermediate+', id: 'Intermediate+'},
+  {type: 'Advance Exam', id: 'Advance Exam'},
+  {type: 'Advanced', id: 'Advanced'},
+];
+
 const UserList: React.FC<Props> = () => {
   const navigation = useNavigation<UserListNavigationProps>();
   const [filter, setFilter] = useState(false);
@@ -64,9 +79,11 @@ const UserList: React.FC<Props> = () => {
   const {users, loadingUsers, usersError} = useSelector(
     (state: RootState) => state.UserList,
   );
+  const {updateRoleData, loadingRoleUpdate, roleUpdateError} = useSelector(
+    (state: RootState) => state.UpdateRole,
+  );
   const [search, setSearch] = useState('');
   const {filterValue} = useSelector((state: RootState) => state.TripReducer);
-  console.log(filterValue, 'users');
 
   useFocusEffect(
     React.useCallback(() => {
@@ -87,14 +104,37 @@ const UserList: React.FC<Props> = () => {
     }, [filterValue]),
   );
 
-
-
   const SearchedUsers = users.filter(
     item =>
       item.name.toLowerCase().includes(search.toLowerCase()) ||
       item.email.toLowerCase().includes(search.toLowerCase()) ||
       item.level.toLowerCase().includes(search.toLowerCase()),
   );
+
+  const updatingRole = async (id: number, level: string) => {
+    let request = {
+        id: id,
+      level:level}
+    dispatch(
+      updateRole({
+        requestBody: request
+      }),
+    )
+      .then(() => {
+        dispatch(reset());
+      })
+      .catch((err: any) => console.log(err));
+  };
+
+  useEffect(() => {
+    if (updateRoleData != null) {
+      if (!loadingRoleUpdate && !roleUpdateError && updateRoleData.status) {
+        showToast(updateRoleData.message);
+      } else {
+        showToast(updateRoleData.message);
+      }
+    }
+  }, [updateRoleData]);
 
   return (
     <View flex backgroundColor={AppColors.Black}>
@@ -139,26 +179,63 @@ const UserList: React.FC<Props> = () => {
             const alignmentStyle = isEvenIndex ? 'flex-start' : 'flex-end';
             return (
               <View style={{alignItems: alignmentStyle, flex: 1}}>
-                <View center style={[styles.marshalView, {width: itemWidth}]}>
-                  <Image
-                    source={item.image ? {uri: item.image} : AppImages.USER1}
-                    style={{
-                      width: '100%',
-                      height: 100,
-                      borderRadius: 5,
-                    }}
-                  />
-                  <View paddingV-10 center>
-                    <Text style={styles.name}>{item.name}</Text>
-                    <Text style={styles.email}>{item.email}</Text>
-                    <Text style={styles.email}>{item.level}</Text>
-
-                    <View style={styles.role}>
-                      <Text style={styles.roleText}>Update Role</Text>
-                      <Image source={AppImages.DOWN} marginL-10 />
+                <TouchableOpacity
+                  onPress={() => {
+                    dispatch({type: 'SET_USER_ID', payload: item.id});
+                    navigation.navigate(RouteNames.ProfileScreen);
+                  }}>
+                  <View center style={[styles.marshalView, {width: itemWidth}]}>
+                    <Image
+                      source={item.image ? {uri: item.image} : AppImages.USER1}
+                      style={{
+                        width: '100%',
+                        height: 100,
+                        borderRadius: 5,
+                      }}
+                    />
+                    <View paddingV-10>
+                      <View center>
+                        <Text style={styles.name}>{item.name}</Text>
+                        <Text style={styles.email}>{item.email}</Text>
+                        <Text style={styles.email}>{item.level}</Text>
+                      </View>
+                      {/* <View style={styles.role}>
+                        <Text style={styles.roleText}>Update Role</Text>
+                        <Image source={AppImages.DOWN} marginL-10 />
+                      </View> */}
+                      <View >
+                      <Dropdown
+                        style={styles.role}
+                        placeholderStyle={styles.roleText}
+                        selectedTextStyle={styles.roleText}
+                        inputSearchStyle={styles.roleText}
+                        itemTextStyle={{fontSize:12}}
+                        data={Level}
+                        search
+                        maxHeight={300}
+                        labelField={'type'}
+                        valueField={'id'}
+                        placeholder="Update Role"
+                        searchPlaceholder="Search..."
+                        onChange={items => {
+                          updatingRole(item.id, items.type)
+                        }}
+                        renderRightIcon={() => (
+                          <View row centerV>
+                            <Text red10></Text>
+                            <Image
+                              source={AppImages.DOWN}
+                              tintColor="#3F4E59"
+                              width={11}
+                              height={6}
+                            />
+                          </View>
+                        )}
+                      />
+                      </View>
                     </View>
                   </View>
-                </View>
+                </TouchableOpacity>
               </View>
             );
           }}

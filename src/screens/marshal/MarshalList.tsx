@@ -14,7 +14,7 @@ import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {useNavigation} from '@react-navigation/native';
 import AppColors from '../../constants/AppColors';
 import AppImages from '../../constants/AppImages';
-import {Dimensions, FlatList} from 'react-native';
+import {Dimensions, FlatList, TouchableOpacity} from 'react-native';
 import {Header} from '../../components/Header';
 import {useDispatch, useSelector} from 'react-redux';
 import {styles} from '../mytrip/styles';
@@ -90,8 +90,11 @@ const MarshalList: React.FC<Props> = () => {
         renderItem={({item, index}) => {
           const isEvenIndex = index % 2 === 0;
           const alignmentStyle = isEvenIndex ? 'flex-start' : 'flex-end';
+      
           return (
             <View style={{alignItems: alignmentStyle, flex: 1}}>
+              <TouchableOpacity onPress={()=>{dispatch({ type: 'SET_USER_ID', payload: item.id }) 
+              navigation.navigate(RouteNames.ProfileScreen)}}>
               <View center style={[styles.marshalView, {width: itemWidth}]}>
                 <Image
                   source={item.image?{uri:item.image}:AppImages.USER1}
@@ -114,6 +117,7 @@ const MarshalList: React.FC<Props> = () => {
                 </View>
                 </View>
               </View>
+              </TouchableOpacity>
             </View>
           );
         }}

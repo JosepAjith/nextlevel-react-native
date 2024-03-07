@@ -262,7 +262,7 @@ const AddTripScreen: React.FC<Props> = () => {
     );
     formData.append('description', tripInput.description);
     formData.append('passenger', tripInput.passenger);
-console.log(formData)
+
     dispatch(
       createTrip({
         requestBody: formData,

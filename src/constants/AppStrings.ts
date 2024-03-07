@@ -3,7 +3,8 @@ const AppStrings = {
     USER_NAME: 'USER_NAME',
     IS_ONBOARD: 'IS_ONBOARD',
     IS_LOGIN: 'IS_LOGIN',
-    TYPE: 'TYPE'
+    TYPE: 'TYPE',
+    FCM_TOKEN: 'FCM_TOKEN'
   };
   export default AppStrings;
   

@@ -9,6 +9,7 @@ import { SendOtpResponse } from './forgotPassword/SendOtpSlice';
 import { VerifyOtpResponse } from './forgotPassword/VerifyOtpSlice';
 import { TripCancelResponse } from './joinTrip/TripCancelSlice';
 import { TripJoinResponse } from './joinTrip/TripJoinSlice';
+import { UpdateRoleResponse } from './levelUpdate/UpdateRoleSlice';
 import { LoginResponse } from './login/LoginCreateSlice';
 import { MemberListData } from './member/MemberListResponse';
 import { ChangePasswordResponse } from './password/ChangePasswordSlice';
@@ -332,11 +333,30 @@ export const fetchUserList = async (
 //API FOR USER AnD MARSHALS LIST
 export const fetchMemberList = async (
   requestBody: any
-): Promise<NetworkResponse<MemberListData>> => {
+): Promise<NetworkResponse<MemberListData[]>> => {
   const response = await apiClient('trip/trip-users', 'POST', requestBody);
 
   if (response.status) {
     const json = await response.data.data;
+    return {
+      kind: 'success',
+      body: json,
+    };
+  } else {
+    return {
+      kind: 'failure',
+    };
+  }
+};
+
+//API FOR UPDATING ROLE
+export const updateRole = async (
+  requestBody: any
+): Promise<NetworkResponse<UpdateRoleResponse>> => {
+  const response = await apiClient('update-role', 'POST', requestBody);
+
+  if (response.status) {
+    const json = await response.data;
     return {
       kind: 'success',
       body: json,
