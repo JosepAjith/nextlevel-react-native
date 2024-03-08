@@ -34,6 +34,7 @@ import ImageSelector from '../../components/ImageSelector';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import { editProfile, reset } from '../../api/profile/EditProfileSlice';
 import moment from 'moment';
+import BackgroundLoader from '../../components/BackgroundLoader';
 
 const {TextField} = Incubator;
 
@@ -253,6 +254,8 @@ const EditProfile: React.FC<Props> = () => {
 
   return (
     <View flex backgroundColor={AppColors.Black}>
+
+      {loadingEditProfile && <BackgroundLoader/>}
       <ScrollView>
         <View padding-20>
           <Header title="Edit Profile" />

@@ -1,5 +1,6 @@
 interface UserData {
     user_id: number;
+    user_name: string;
     trip_id: number;
     is_present: number;
   }

@@ -1,20 +1,20 @@
-import React, {useEffect, useState} from 'react';
-import {Image, Incubator, Text, View} from 'react-native-ui-lib';
-import {RootStackParams, RouteNames} from '../../navigation';
-import {RouteProp, useFocusEffect} from '@react-navigation/native';
-import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {useNavigation} from '@react-navigation/native';
+import React, { useEffect, useState } from 'react';
+import { Image, Incubator, Text, View } from 'react-native-ui-lib';
+import { RootStackParams, RouteNames } from '../../navigation';
+import { RouteProp, useFocusEffect } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { useNavigation } from '@react-navigation/native';
 import AppColors from '../../constants/AppColors';
-import {styles} from './styles';
+import { styles } from './styles';
 import AppImages from '../../constants/AppImages';
-import {ScrollView, TouchableOpacity} from 'react-native';
-import {Header} from '../../components/Header';
+import { ScrollView, TouchableOpacity } from 'react-native';
+import { Header } from '../../components/Header';
 import CarouselView from '../../components/CarousalView';
 import Attendance from './Attendance';
-import {useDispatch, useSelector} from 'react-redux';
-import {RootState} from '../../../store';
-import {AnyAction, ThunkDispatch} from '@reduxjs/toolkit';
-import {fetchTripDetails} from '../../api/trip/TripDetailsSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../../../store';
+import { AnyAction, ThunkDispatch } from '@reduxjs/toolkit';
+import { fetchTripDetails } from '../../api/trip/TripDetailsSlice';
 import {
   formattedTime,
   getDateTime,
@@ -23,12 +23,12 @@ import {
   showToast,
 } from '../../constants/commonUtils';
 import moment from 'moment';
-import {cancelTrip, reset} from '../../api/joinTrip/TripCancelSlice';
+import { cancelTrip, reset } from '../../api/joinTrip/TripCancelSlice';
 import BackgroundLoader from '../../components/BackgroundLoader';
 import ButtonView from '../../components/ButtonView';
-import {deleteReset, deleteTrip} from '../../api/trip/TripDeleteSlice';
+import { deleteReset, deleteTrip } from '../../api/trip/TripDeleteSlice';
 
-const {TextField} = Incubator;
+const { TextField } = Incubator;
 
 export type TripDetailsNavigationProps = NativeStackNavigationProp<
   RootStackParams,
@@ -37,19 +37,19 @@ export type TripDetailsNavigationProps = NativeStackNavigationProp<
 
 export type TripDetailsRouteProps = RouteProp<RootStackParams, 'TripDetails'>;
 
-interface Props {}
+interface Props { }
 
-const TripDetails: React.FC<Props> = ({route}: any) => {
+const TripDetails: React.FC<Props> = ({ route }: any) => {
   const navigation = useNavigation<TripDetailsNavigationProps>();
   const id = route.params.id;
-  const {type, loginUserId} = useSelector(
+  const { type, loginUserId } = useSelector(
     (state: RootState) => state.GlobalVariables,
   );
   const dispatch: ThunkDispatch<RootState, any, AnyAction> = useDispatch();
-  const {tripDetails, loadingTripDetails, tripDetailsError} = useSelector(
+  const { tripDetails, loadingTripDetails, tripDetailsError } = useSelector(
     (state: RootState) => state.TripDetails,
   );
-  const {cancelData, loadingCancel, cancelError} = useSelector(
+  const { cancelData, loadingCancel, cancelError } = useSelector(
     (state: RootState) => state.TripCancel,
   );
 
@@ -58,10 +58,10 @@ const TripDetails: React.FC<Props> = ({route}: any) => {
       let request = JSON.stringify({
         id: id,
       });
-      dispatch(fetchTripDetails({requestBody: request}));
+      dispatch(fetchTripDetails({ requestBody: request }));
 
       // Clean-up function
-      return () => {};
+      return () => { };
     }, [cancelData]),
   );
 
@@ -121,7 +121,7 @@ const TripDetails: React.FC<Props> = ({route}: any) => {
                 </View>
 
                 <TouchableOpacity
-                  onPress={() => navigation.navigate(RouteNames.TripMembers,{id:tripDetails.data.id,userId: tripDetails.data.user.id})}
+                  onPress={() => navigation.navigate(RouteNames.TripMembers, { id: tripDetails.data.id, userId: tripDetails.data.user.id })}
                   style={{
                     backgroundColor: '#F99933',
                     padding: 10,
@@ -190,9 +190,9 @@ const TripDetails: React.FC<Props> = ({route}: any) => {
                 tripDetails.data.trip_status != 'expired' && (
                   <View row marginB-20>
                     {tripDetails.data.trip_book &&
-                    (tripDetails.data.trip_book.application_status ===
-                      'support' ||
-                      tripDetails.data.trip_book.application_status ===
+                      (tripDetails.data.trip_book.application_status ===
+                        'support' ||
+                        tripDetails.data.trip_book.application_status ===
                         'joined') ? (
                       <>
                         <TouchableOpacity
@@ -213,7 +213,7 @@ const TripDetails: React.FC<Props> = ({route}: any) => {
                             cancelingTrip(tripDetails.data.trip_book.id)
                           }>
                           <View style={styles.whiteButton}>
-                            <Text style={[styles.text2, {color: 'black'}]}>
+                            <Text style={[styles.text2, { color: 'black' }]}>
                               Sign out
                             </Text>
                           </View>
@@ -221,7 +221,7 @@ const TripDetails: React.FC<Props> = ({route}: any) => {
                       </>
                     ) : tripDetails.data.trip_book &&
                       tripDetails.data.trip_book.application_status ===
-                        'may be' ? (
+                      'may be' ? (
                       <>
                         <TouchableOpacity
                           onPress={() =>
@@ -241,7 +241,7 @@ const TripDetails: React.FC<Props> = ({route}: any) => {
                             cancelingTrip(tripDetails.data.trip_book.id)
                           }>
                           <View style={styles.whiteButton}>
-                            <Text style={[styles.text2, {color: 'black'}]}>
+                            <Text style={[styles.text2, { color: 'black' }]}>
                               Not Interested
                             </Text>
                           </View>
@@ -255,8 +255,8 @@ const TripDetails: React.FC<Props> = ({route}: any) => {
                               id: tripDetails.data.id,
                               status:
                                 type == 'Explorer' ||
-                                type == 'Marshal' ||
-                                type == 'Super Marshal'
+                                  type == 'Marshal' ||
+                                  type == 'Super Marshal'
                                   ? 'support'
                                   : '',
                               type: 'join',
@@ -265,8 +265,8 @@ const TripDetails: React.FC<Props> = ({route}: any) => {
                           <View style={styles.yellowButton}>
                             <Text style={styles.text2}>
                               {type == 'Explorer' ||
-                              type == 'Marshal' ||
-                              type == 'Super Marshal'
+                                type == 'Marshal' ||
+                                type == 'Super Marshal'
                                 ? 'Support Sign in'
                                 : 'Sign in'}
                             </Text>
@@ -282,7 +282,7 @@ const TripDetails: React.FC<Props> = ({route}: any) => {
                             })
                           }>
                           <View style={styles.whiteButton}>
-                            <Text style={[styles.text2, {color: 'black'}]}>
+                            <Text style={[styles.text2, { color: 'black' }]}>
                               Maybe
                             </Text>
                           </View>
@@ -292,14 +292,15 @@ const TripDetails: React.FC<Props> = ({route}: any) => {
                   </View>
                 )}
 
-                <Attendance
-                  deadline={tripDetails.data.joining_deadline}
-                  userId={tripDetails?.data.user.id}
-                  TripId={tripDetails.data.id}
-                  TripStatus={tripDetails.data.trip_status}
-                  navigation={navigation}
-                />
-       
+              <Attendance
+                startDate={tripDetails.data.joining_start_date}
+                deadline={tripDetails.data.joining_deadline}
+                userId={tripDetails?.data.user.id}
+                TripId={tripDetails.data.id}
+                TripStatus={tripDetails.data.trip_status}
+                navigation={navigation}
+              />
+
             </View>
           </ScrollView>
         </View>

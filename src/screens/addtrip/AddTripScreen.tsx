@@ -345,8 +345,16 @@ const AddTripScreen: React.FC<Props> = ({ route, id, initial }: Props) => {
     }
   }, [addTripData]);
 
+  const removeImage = (indexToRemove: number) => {
+    setTrip(prevTripInput => ({
+      ...prevTripInput,
+      image: prevTripInput.image.filter((_, index) => index !== indexToRemove),
+    }));
+  };
+console.log(tripInput)
   return (
     <View flex backgroundColor={AppColors.Black}>
+       {loadingAddTrip && <BackgroundLoader/>}
       <ScrollView>
         <View padding-20>
           {routeId == 0 ?
@@ -354,7 +362,7 @@ const AddTripScreen: React.FC<Props> = ({ route, id, initial }: Props) => {
         :
         <Header title="Update Trip" />}
 
-        {loadingAddTrip && <BackgroundLoader/>}
+       
 
           <TouchableOpacity onPress={() => setImageClick(!isImageClick)}>
             <View center style={styles.imageView}>
@@ -362,6 +370,7 @@ const AddTripScreen: React.FC<Props> = ({ route, id, initial }: Props) => {
                 <>
                   <ScrollView horizontal>
                     {tripInput.image.map((image, index) => (
+                      <View>
                       <Image
                         key={index}
                         source={{uri: image.uri}}
@@ -372,6 +381,12 @@ const AddTripScreen: React.FC<Props> = ({ route, id, initial }: Props) => {
                           marginRight: 10,
                         }}
                       />
+                      <View absT>
+                        <TouchableOpacity onPress={()=>removeImage(index)}>
+                        <Image source={AppImages.DELETE} width={25} height={25}/>
+                        </TouchableOpacity>
+                      </View>
+                      </View>
                     ))}
                   </ScrollView>
                   <Text style={styles.add}>+ Add Photos</Text>

@@ -14,6 +14,7 @@ import AppImages from '../constants/AppImages';
 import * as ImagePicker from 'react-native-image-picker';
 import { showToast } from '../constants/commonUtils';
 import DocumentPicker from 'react-native-document-picker';
+import ImageResizer from 'react-native-image-resizer';
 const deviceHeight = Dimensions.get('window').height;
 
 const ImageSelector = (props: {close: any,isItem: any, multi?: any}) => {
@@ -100,21 +101,34 @@ const ImageSelector = (props: {close: any,isItem: any, multi?: any}) => {
       },
     };
 
-    ImagePicker.launchCamera(options, (response) => {
+    ImagePicker.launchCamera(options, async (response) => {
       if (response.didCancel) {
         showToast('User cancelled image picker');
       } else if (response.error) {
         showToast('ImagePicker Error: ', response.error);
       } else {
-        const responses = response.assets[0]
-        const selectedImage = {
-          fileCopyUri: null,
-          name: responses.fileName,
-          size: responses.fileSize,
-          type: responses.type,
-          uri: responses.uri,
-        };
-        isItem([selectedImage]); // Set the selected image URI
+       const responses = response.assets[0];
+        ImageResizer.createResizedImage(
+          responses.uri,
+          800, // max width
+          800, // max height
+          'JPEG', // output format
+          80, // compression quality
+        )
+          .then(resizedImage => {
+            const selectedImage = {
+              fileCopyUri: null,
+              name: responses.fileName,
+              size: responses.fileSize,
+              type: responses.type,
+              uri: resizedImage.uri,
+            };
+            isItem([selectedImage]);
+          })
+          .catch(error => {
+            console.log('Image resizing error:', error);
+          });
+         // Set the selected image URI
         closeModal();
       }
     });
