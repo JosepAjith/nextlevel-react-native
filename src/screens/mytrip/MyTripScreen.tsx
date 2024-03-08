@@ -30,6 +30,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {AnyAction, ThunkDispatch} from '@reduxjs/toolkit';
 import {RootState} from '../../../store';
 import {fetchTripList} from '../../api/trip/TriplListSlice';
+import BackgroundLoader from '../../components/BackgroundLoader';
 
 const {TextField} = Incubator;
 
@@ -60,7 +61,7 @@ const MyTripScreen: React.FC<Props> = ({isReplace}:Props) => {
   );
   const {type} = useSelector((state: RootState) => state.GlobalVariables);
   const {filterValue,chip} = useSelector((state: RootState) => state.TripReducer);
-console.log(chip)
+
   useFocusEffect(
     React.useCallback(() => {
       let request = JSON.stringify({
@@ -106,6 +107,8 @@ const setChip = (value: number) => {
   return (
     <View flex backgroundColor={AppColors.Black} padding-20>
       <Header leftIcon={false} title="My Trips" rightIcon={AppImages.REFRESH} />
+
+      {loadingTrip && <BackgroundLoader/>}
 
       <View row centerV>
         <View flex>

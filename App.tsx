@@ -33,7 +33,6 @@ export default class App extends React.Component {
       invokeApp: true,
       // (optional) Called when Token is generated (iOS and Android)
       onRegister: async function (token: any) {
-        console.log(token)
         await AsyncStorage.setItem(AppStrings.FCM_TOKEN, token.token);
       },
 

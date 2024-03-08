@@ -19,6 +19,9 @@ import TripCancelSlice from './src/api/joinTrip/TripCancelSlice';
 import UserListSlice from './src/api/user/UserListSlice';
 import MemberListSlice from './src/api/member/MemberListSlice';
 import UpdateRoleSlice from './src/api/levelUpdate/UpdateRoleSlice';
+import TripDeleteSlice from './src/api/trip/TripDeleteSlice';
+import TripStatusChangeSlice from './src/api/trip/TripStatusChangeSlice';
+import MarkAttendanceSlice from './src/api/markAttendance/MarkAttendanceSlice';
 
 
 const rootReducer = combineReducers({
@@ -41,7 +44,10 @@ const rootReducer = combineReducers({
   TripCancel: TripCancelSlice,
   UserList: UserListSlice,
   MemberList: MemberListSlice,
-  UpdateRole: UpdateRoleSlice
+  UpdateRole: UpdateRoleSlice,
+  TripDelete: TripDeleteSlice,
+  TripStatusChange: TripStatusChangeSlice,
+  MarkAttendance: MarkAttendanceSlice
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

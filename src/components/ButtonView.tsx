@@ -7,12 +7,13 @@ interface Props {
     onPress: any;
     title: string;
     black?: any;
+    white?: any;
 }
 
-const ButtonView = ({onPress, title,black}: Props) => {
+const ButtonView = ({onPress, title,black,white}: Props) => {
     return(
-        <TouchableOpacity style={[AppStyles.button,black&&{backgroundColor:'black'}]} onPress={onPress}>
-        <Text style={AppStyles.buttonLabel}>{title}</Text>
+        <TouchableOpacity style={[AppStyles.button,black&&{backgroundColor:'black'}, white&&{backgroundColor:'white'}]} onPress={onPress}>
+        <Text style={[AppStyles.buttonLabel,white&&{color:'black'}]}>{title}</Text>
       </TouchableOpacity>
     )
 }

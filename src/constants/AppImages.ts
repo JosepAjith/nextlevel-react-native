@@ -49,6 +49,9 @@ PENCIL: require('../images/pencil.png'),
 CAMERA: require('../images/camera.png'),
 UPLOAD: require('../images/upload.png'),
 LOADER: require('../images/Loader.json'),
+CHAT: require('../images/chat.png'),
+BROADCAST: require('../images/broadcast.png'),
+NONOTIF: require('../images/noNotif.png'),
 }
 
 export default AppImages;

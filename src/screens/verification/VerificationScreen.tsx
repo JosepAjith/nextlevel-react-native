@@ -26,6 +26,7 @@ import {showToast} from '../../constants/commonUtils';
 import {reset, sendOtp} from '../../api/forgotPassword/SendOtpSlice';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import AppStrings from '../../constants/AppStrings';
+import BackgroundLoader from '../../components/BackgroundLoader';
 
 const {TextField} = Incubator;
 
@@ -136,6 +137,7 @@ const VerificationScreen: React.FC<Props> = ({route}: any) => {
     <View flex backgroundColor={AppColors.Black} padding-20>
       <Header title={'Verify Your Account'} />
 
+      {(loadingSendOtp || loadingVerifyOtp) && <BackgroundLoader />}
       <View marginT-40 marginB-20>
         <Text style={styles.heading}>Enter OTP</Text>
       </View>

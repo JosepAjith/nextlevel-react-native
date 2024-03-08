@@ -22,13 +22,14 @@ import {TripRequest} from '../../api/trip/TripRequest';
 import {TripValidation} from '../../api/trip/TripValidation';
 import ImageSelector from '../../components/ImageSelector';
 import DropdownComponent from '../../components/DropdownComponent';
-import {getDateTime, getUserDate, getUserTime, showToast} from '../../constants/commonUtils';
+import {formatTime, getDateTime, getUserDate, getUserTime, showToast} from '../../constants/commonUtils';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import {AnyAction, ThunkDispatch} from '@reduxjs/toolkit';
 import {RootState} from '../../../store';
 import {useDispatch, useSelector} from 'react-redux';
 import {createTrip, reset} from '../../api/trip/TripCreateSlice';
 import moment from 'moment';
+import BackgroundLoader from '../../components/BackgroundLoader';
 
 const {TextField} = Incubator;
 
@@ -42,7 +43,11 @@ export type AddTripScreenRouteProps = RouteProp<
   'AddTripScreen'
 >;
 
-interface Props {}
+interface Props {
+  route?: any; // or specify the type of route if available
+  id?: number; // Make id prop optional
+  initial?: any
+}
 
 const Emirates = [
   {type: 'Abu Dhabi', id: 'Abu Dhabi'},
@@ -64,8 +69,15 @@ const Level = [
   {type: 'Advanced', id: 'Advanced'},
 ];
 
-const AddTripScreen: React.FC<Props> = () => {
+const AddTripScreen: React.FC<Props> = ({ route, id, initial }: Props) => {
   const navigation = useNavigation<AddTripScreenNavigationProps>();
+  let routeId: number | any;
+  if (route && route.params) {
+    routeId = route.params.id;
+  } else {
+    routeId = id;
+  }
+
   const [isImageClick, setImageClick] = useState(false);
   const [tripInput, setTrip] = useState<TripRequest>(new TripRequest());
   const [tripValidate, setValidate] = useState<TripValidation>(
@@ -75,6 +87,44 @@ const AddTripScreen: React.FC<Props> = () => {
   const {addTripData, loadingAddTrip, addTripError} = useSelector(
     (state: RootState) => state.TripCreate,
   );
+  const {tripDetails} = useSelector(
+    (state: RootState) => state.TripDetails,
+  );
+
+  useEffect(() => {
+    if (routeId !== 0 && typeof tripDetails?.data === 'object') {
+        const item = tripDetails?.data;
+        setTrip({
+          ...tripInput,
+          title: item.title,
+          city: item.city,
+          area_details:item.area_details,
+          details_place: item.details_place,
+          level: item.level,
+          latitude: item.latitude,
+          longitude: item.longitude,
+          capacity: item.capacity,
+          date: getUserDate(item.date),
+          meeting_time: formatTime(item.meeting_time),
+          start_time: formatTime(item.start_time),
+          finish_time: formatTime(item.finish_time),
+          joining_start_date: getDateTime(item.joining_start_date),
+          joining_deadline: getDateTime(item.joining_deadline),
+          description: item.description,
+          passenger: String(item.passenger)
+        });
+        setTrip(prevTripInput => ({
+          ...prevTripInput,
+          image: item.trip_images.map(imageItem => ({
+            uri: imageItem.image,
+            type: 'image/png',
+            name: 'image.png',
+            size: '',
+            fileCopyUri: '',
+          })),
+        }));
+    }
+  }, [routeId, tripDetails]);
 
   function isValidate(): boolean {
     if (tripInput.image.length == 0) {
@@ -217,6 +267,9 @@ const AddTripScreen: React.FC<Props> = () => {
 
   const AddingTrip = async () => {
     let formData = new FormData();
+    if(routeId != 0){
+      formData.append('id', routeId);
+    }
     formData.append('title', tripInput.title);
     tripInput.image.forEach((image, index) => {
       formData.append(`image[]`, {
@@ -266,7 +319,7 @@ const AddTripScreen: React.FC<Props> = () => {
     dispatch(
       createTrip({
         requestBody: formData,
-        uri: 'trip/save',
+        uri: routeId == 0 ? 'trip/save' : 'trip/update',
       }),
     )
       .then(() => {
@@ -280,6 +333,12 @@ const AddTripScreen: React.FC<Props> = () => {
       if (!loadingAddTrip && !addTripError && addTripData.status) {
         showToast(addTripData.message);
         setTrip(new TripRequest());
+        if(routeId == 0){
+        initial();
+        }
+        else{
+          navigation.goBack();
+        }
       } else {
         showToast(addTripData.message);
       }
@@ -290,7 +349,12 @@ const AddTripScreen: React.FC<Props> = () => {
     <View flex backgroundColor={AppColors.Black}>
       <ScrollView>
         <View padding-20>
+          {routeId == 0 ?
           <Header leftIcon={false} title="Create Trip" />
+        :
+        <Header title="Update Trip" />}
+
+        {loadingAddTrip && <BackgroundLoader/>}
 
           <TouchableOpacity onPress={() => setImageClick(!isImageClick)}>
             <View center style={styles.imageView}>
@@ -698,7 +762,7 @@ const AddTripScreen: React.FC<Props> = () => {
             }
           />
 
-          <ButtonView title="Create Trip" onPress={() => {
+          <ButtonView title={routeId == 0 ? "Create Trip" : "Update Trip"} onPress={() => {
             if (isValidate()) {
               AddingTrip();
             }

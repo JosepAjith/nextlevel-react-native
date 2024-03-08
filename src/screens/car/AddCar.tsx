@@ -33,6 +33,7 @@ import {
 import moment from 'moment';
 import ImageSelector from '../../components/ImageSelector';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
+import BackgroundLoader from '../../components/BackgroundLoader';
 
 const {TextField} = Incubator;
 
@@ -206,6 +207,8 @@ const AddCar: React.FC<Props> = ({route}: any) => {
 
      
         <Header title={id == 0 ? 'Add Car' : 'Update Car'} />
+
+        {loadingCar && <BackgroundLoader/>}
 
         <TouchableOpacity onPress={() => setImageClick(!isImageClick)}>
           <View center style={styles.imageView}>

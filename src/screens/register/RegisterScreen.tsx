@@ -26,6 +26,7 @@ import AppStrings from '../../constants/AppStrings';
 import {RegisterRequest} from '../../api/register/RegisterRequest';
 import {showToast} from '../../constants/commonUtils';
 import {RegisterValidation} from '../../api/register/RegistorValidation';
+import BackgroundLoader from '../../components/BackgroundLoader';
 
 const {TextField} = Incubator;
 
@@ -157,6 +158,8 @@ const RegisterScreen: React.FC<Props> = () => {
     <ScrollView>
       <View flex backgroundColor={AppColors.Black} padding-20>
         <Header title={'Sign up'} />
+
+        {loadingRegister && <BackgroundLoader/>}
 
         <TextField
           fieldStyle={styles.field}

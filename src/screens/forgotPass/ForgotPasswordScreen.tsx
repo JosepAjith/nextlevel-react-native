@@ -22,6 +22,7 @@ import {RootState} from '../../../store';
 import {useDispatch, useSelector} from 'react-redux';
 import {showToast} from '../../constants/commonUtils';
 import {reset, sendOtp} from '../../api/forgotPassword/SendOtpSlice';
+import BackgroundLoader from '../../components/BackgroundLoader';
 
 const {TextField} = Incubator;
 
@@ -94,6 +95,8 @@ const ForgotPasswordScreen: React.FC<Props> = () => {
     <View flex backgroundColor={AppColors.Black} padding-20>
       <Header title={'Forgot Password'} />
 
+      {loadingSendOtp && <BackgroundLoader/>}
+      
       <View marginV-30>
         <Text style={styles.text}>
           Please provide the email address associated with your account, and we

@@ -29,7 +29,6 @@ if (Platform.OS === 'android') {
 }
 
 const BottomTabs = () => {
-  const route = useRoute();
   const [activeTab, setActiveTab] = useState('Home');
   const {openFilter,filterValue} = useSelector((state: RootState) => state.TripReducer);
   const dispatch = useDispatch();
@@ -59,10 +58,17 @@ const BottomTabs = () => {
 
   const fetchAsyncValue = async () => {
     const type = await AsyncStorage.getItem(AppStrings.TYPE);
+    const id = await AsyncStorage.getItem(AppStrings.LOGIN_USER_ID);
     if (type != null) {
       dispatch({
         type: 'SET_TYPE',
         payload: type,
+      });
+    }
+    if (id != null) {
+      dispatch({
+        type: 'SET_LOGIN_USER_ID',
+        payload: Number(id),
       });
     }
   };
@@ -111,7 +117,7 @@ const BottomTabs = () => {
       case 'My Trips':
         return <MyTripScreen isReplace={()=>setReplace(false)}/>;
       case 'Add Trip':
-        return <AddTripScreen />;
+        return <AddTripScreen id={0} initial={()=>setActiveTab('Home')}/>;
       case 'Profile':
         return <ProfileScreen isReplace={()=>setReplace(true)}/>;
       case 'Home':

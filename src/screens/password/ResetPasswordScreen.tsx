@@ -24,6 +24,7 @@ import { PasswordRequest } from '../../api/password/PasswordRequest';
 import { PasswordValidation } from '../../api/password/PasswordValidation';
 import { showToast } from '../../constants/commonUtils';
 import { changePassword, reset } from '../../api/password/ChangePasswordSlice';
+import BackgroundLoader from '../../components/BackgroundLoader';
 
 const {TextField} = Incubator;
 
@@ -103,6 +104,8 @@ const ResetPasswordScreen: React.FC<Props> = () => {
   return (
     <View flex backgroundColor={AppColors.Black} padding-20>
     <Header title="Reset Password" />
+
+    {loadingChangePassword && <BackgroundLoader/>}
 
     <TextField
       fieldStyle={styles.field}

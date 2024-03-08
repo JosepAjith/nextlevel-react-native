@@ -36,6 +36,7 @@ import DropdownComponent from '../../components/DropdownComponent';
 import {Dropdown} from 'react-native-element-dropdown';
 import { reset, updateRole } from '../../api/levelUpdate/UpdateRoleSlice';
 import { showToast } from '../../constants/commonUtils';
+import BackgroundLoader from '../../components/BackgroundLoader';
 
 const {TextField} = Incubator;
 
@@ -140,6 +141,8 @@ const UserList: React.FC<Props> = () => {
     <View flex backgroundColor={AppColors.Black}>
       <View padding-20>
         <Header title="User List" rightIcon={AppImages.REFRESH} />
+
+        {loadingUsers && <BackgroundLoader/>}
 
         <View row centerV>
           <View flex>

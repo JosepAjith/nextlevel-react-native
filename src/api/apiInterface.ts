@@ -11,13 +11,16 @@ import { TripCancelResponse } from './joinTrip/TripCancelSlice';
 import { TripJoinResponse } from './joinTrip/TripJoinSlice';
 import { UpdateRoleResponse } from './levelUpdate/UpdateRoleSlice';
 import { LoginResponse } from './login/LoginCreateSlice';
+import { MarkAttendanceResponse } from './markAttendance/MarkAttendanceSlice';
 import { MemberListData } from './member/MemberListResponse';
 import { ChangePasswordResponse } from './password/ChangePasswordSlice';
 import { EditProfileResponse } from './profile/EditProfileSlice';
 import { ProfileDetails } from './profile/ProfileDetailsSlice';
 import { RegisterResponse } from './register/RegisterCreateSlice';
 import { AddTripResponse } from './trip/TripCreateSlice';
+import { TripDeleteResponse } from './trip/TripDeleteSlice';
 import { TripDetailsResponse, TripListResponse } from './trip/TripListResponse';
+import { TripStatusChangeResponse } from './trip/TripStatusChangeSlice';
 import { UserListData } from './user/UserListResponse';
 
 type ResponseKind = 'success' | 'failure';
@@ -367,3 +370,62 @@ export const updateRole = async (
     };
   }
 };
+
+//API FOR DELETING CREATED TRIP
+export const deleteTrip = async (
+  requestBody: any
+): Promise<NetworkResponse<TripDeleteResponse>> => {
+  const response = await apiClient('trip/delete', 'POST', requestBody);
+
+  if (response.status) {
+    const json = await response.data;
+    return {
+      kind: 'success',
+      body: json,
+    };
+  } else {
+    return {
+      kind: 'failure',
+    };
+  }
+};
+
+//API FOR CHANGING STATUSOF CREATED TRIP
+export const changeTripStatus = async (
+  requestBody: any
+): Promise<NetworkResponse<TripStatusChangeResponse>> => {
+  const response = await apiClient('trip/change-trip-status', 'POST', requestBody);
+
+  if (response.status) {
+    const json = await response.data;
+    return {
+      kind: 'success',
+      body: json,
+    };
+  } else {
+    return {
+      kind: 'failure',
+    };
+  }
+};
+
+//API FOR MARKING ATTTENDANCE
+export const markAttendance = async (
+  requestBody: any, uri: any
+): Promise<NetworkResponse<MarkAttendanceResponse>> => {
+  const response = await apiClient(uri, 'POST', requestBody);
+
+  if (response.status) {
+    const json = await response.data;
+    return {
+      kind: 'success',
+      body: json,
+    };
+  } else {
+    return {
+      kind: 'failure',
+    };
+  }
+};
+
+

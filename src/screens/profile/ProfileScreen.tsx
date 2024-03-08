@@ -25,6 +25,7 @@ import {RootState} from '../../../store';
 import {useDispatch, useSelector} from 'react-redux';
 import {fetchProfileDetails} from '../../api/profile/ProfileDetailsSlice';
 import MyCars from './MyCars';
+import BackgroundLoader from '../../components/BackgroundLoader';
 
 const {TextField} = Incubator;
 
@@ -49,7 +50,7 @@ const ProfileScreen: React.FC<Props> = ({isReplace}: Props) => {
   const {profileDetails, loadingProfileDetails, profileDetailsError} =
     useSelector((state: RootState) => state.ProfileDetails);
   const {userId} = useSelector((state: RootState) => state.GlobalVariables);
-  console.log(userId, 'profile');
+
   useFocusEffect(
     React.useCallback(() => {
       let request = {id: userId};
@@ -69,6 +70,8 @@ const ProfileScreen: React.FC<Props> = ({isReplace}: Props) => {
         ) : (
           <Header title="Profile" />
         )}
+
+        {loadingProfileDetails && <BackgroundLoader/>}
 
         <View row marginV-20>
           <View flex>

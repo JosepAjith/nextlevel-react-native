@@ -37,37 +37,24 @@ export type TripMembersNavigationProps = NativeStackNavigationProp<
 export type TripMembersRouteProps = RouteProp<RootStackParams, 'TripMembers'>;
 
 interface Props {}
-const DATA = [
-  {
-    title: 'Main dishes',
-    data: ['Pizza', 'Burger', 'Risotto'],
-  },
-  {
-    title: 'Sides',
-    data: ['French Fries', 'Onion Rings', 'Fried Shrimps'],
-  },
-  {
-    title: 'Drinks',
-    data: ['Water', 'Coke', 'Beer'],
-  },
-  {
-    title: 'Desserts',
-    data: ['Cheese Cake', 'Ice Cream'],
-  },
-];
-const TripMembers: React.FC<Props> = () => {
+const TripMembers: React.FC<Props> = ({route}:any) => {
   const navigation = useNavigation<TripMembersNavigationProps>();
+  const id = route.params.id;
+  const userId = route.params.userId;
   const windowWidth = Dimensions.get('window').width;
   const itemWidth = (windowWidth - 50) / 2;
   const dispatch: ThunkDispatch<RootState, any, AnyAction> = useDispatch();
   const {members, loadingMembers, membersError} = useSelector(
     (state: RootState) => state.MemberList,
   );
+  const {loginUserId} = useSelector(
+    (state: RootState) => state.GlobalVariables,
+  );
 
   useFocusEffect(
     React.useCallback(() => {
       let request = JSON.stringify({
-        trip_id:5,
+        trip_id:id,
         application_status:"",
       });
       dispatch(fetchMemberList({requestBody: request}));
@@ -78,7 +65,11 @@ const TripMembers: React.FC<Props> = () => {
 
   return (
     <View flex backgroundColor={AppColors.Black} padding-20>
+      {userId == loginUserId ?
+      <Header title="Trip Members" rightIcon={AppImages.CHAT} />
+      :
       <Header title="Trip Members" rightIcon={AppImages.REFRESH} />
+}
 <View marginV-20/>
       <SectionList
       sections={members}

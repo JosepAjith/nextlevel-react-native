@@ -94,7 +94,7 @@ export const ApiFormData = async (
   if (error.response) {
     // Update UI accordingly
     showToast(error.response.data.message);
-    console.log(error.response.data, error.response.status);
+    console.log(error.response.data);
   } else if (error.request) {
     showToast(error.request);
   } else {

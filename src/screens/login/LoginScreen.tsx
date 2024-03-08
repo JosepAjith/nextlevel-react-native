@@ -26,6 +26,7 @@ import {showToast} from '../../constants/commonUtils';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import AppStrings from '../../constants/AppStrings';
 import Loader from '../../components/Loader';
+import BackgroundLoader from '../../components/BackgroundLoader';
 
 const {TextField} = Incubator;
 
@@ -102,6 +103,10 @@ const LoginScreen: React.FC<Props> = () => {
           AppStrings.TYPE,
           LoginData.user.level
         );
+        AsyncStorage.setItem(
+          AppStrings.LOGIN_USER_ID,
+          String(LoginData.user.id)
+        );
         navigation.replace(RouteNames.BottomTabs);
       } else {
         if (LoginData.verified == 0) {
@@ -120,6 +125,8 @@ const LoginScreen: React.FC<Props> = () => {
       <View center marginT-20 marginB-40>
         <Text style={styles.title}>Sign in</Text>
       </View>
+
+      {loadingLogin && <BackgroundLoader/>}
 
       <TextField
         fieldStyle={styles.field}

@@ -21,6 +21,7 @@ import {styles} from '../mytrip/styles';
 import { AnyAction, ThunkDispatch } from '@reduxjs/toolkit';
 import { RootState } from '../../../store';
 import { fetchUserList } from '../../api/user/UserListSlice';
+import BackgroundLoader from '../../components/BackgroundLoader';
 
 const {TextField} = Incubator;
 
@@ -68,6 +69,8 @@ const MarshalList: React.FC<Props> = () => {
   return (
     <View flex backgroundColor={AppColors.Black} padding-20>
       <Header title="Marshals" rightIcon={AppImages.REFRESH} />
+
+      {loadingUsers && <BackgroundLoader/>}
 
       <TextField
         fieldStyle={[styles.field, {width: '100%'}]}

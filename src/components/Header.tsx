@@ -26,7 +26,7 @@ export const Header = ({title, rightIcon, leftIcon}: Props) => {
       </View>
 
       <View style={{flex: 0.5}} right>
-        {rightIcon && <Image source={rightIcon} width={21} height={21} />}
+        {rightIcon && <Image source={rightIcon} width={24} height={24} />}
       </View>
     </View>
   );

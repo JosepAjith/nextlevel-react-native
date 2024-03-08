@@ -12,7 +12,7 @@ export type RootStackParams = {
   BottomTabs: undefined;
   HomeScreen: undefined;
   MyTripScreen: undefined;
-  AddTripScreen: undefined;
+  AddTripScreen: {id: any};
   ProfileScreen: undefined;
   TripDetails: {id:any};
   SettingsScreen: undefined;
@@ -21,6 +21,6 @@ export type RootStackParams = {
   AddCar: {id: any};
   MarshalList: undefined;
   UserList: undefined;
-  TripMembers: undefined;
+  TripMembers: {id: any,userId: any};
 JoinTrip: {id: any, status:any, type:any};
 };

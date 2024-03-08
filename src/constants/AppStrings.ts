@@ -4,7 +4,8 @@ const AppStrings = {
     IS_ONBOARD: 'IS_ONBOARD',
     IS_LOGIN: 'IS_LOGIN',
     TYPE: 'TYPE',
-    FCM_TOKEN: 'FCM_TOKEN'
+    FCM_TOKEN: 'FCM_TOKEN',
+    LOGIN_USER_ID: 'LOGIN_USER_ID'
   };
   export default AppStrings;
   
