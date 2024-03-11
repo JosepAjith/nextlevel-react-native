@@ -1,6 +1,8 @@
 export type TripDetailsResponse ={
     status: number;
-    data: TripListResponse
+    data: TripListResponse;
+    total_count: number;
+    total_page: number;
 }
 
 export type TripListResponse = {

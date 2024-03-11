@@ -351,7 +351,7 @@ const AddTripScreen: React.FC<Props> = ({ route, id, initial }: Props) => {
       image: prevTripInput.image.filter((_, index) => index !== indexToRemove),
     }));
   };
-console.log(tripInput)
+
   return (
     <View flex backgroundColor={AppColors.Black}>
        {loadingAddTrip && <BackgroundLoader/>}

@@ -8,9 +8,10 @@ interface Props {
   title: string;
   rightIcon?: any;
   leftIcon?: any;
+  rightOnpress?: any;
 }
 
-export const Header = ({title, rightIcon, leftIcon}: Props) => {
+export const Header = ({title, rightIcon, leftIcon, rightOnpress}: Props) => {
   const navigation = useNavigation();
   return (
     <View row centerV>
@@ -26,7 +27,9 @@ export const Header = ({title, rightIcon, leftIcon}: Props) => {
       </View>
 
       <View style={{flex: 0.5}} right>
-        {rightIcon && <Image source={rightIcon} width={24} height={24} />}
+        {rightIcon && 
+        <TouchableOpacity onPress={rightOnpress}>
+          <Image source={rightIcon} width={24} height={24} /></TouchableOpacity>}
       </View>
     </View>
   );

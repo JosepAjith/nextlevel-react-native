@@ -22,6 +22,9 @@ import UpdateRoleSlice from './src/api/levelUpdate/UpdateRoleSlice';
 import TripDeleteSlice from './src/api/trip/TripDeleteSlice';
 import TripStatusChangeSlice from './src/api/trip/TripStatusChangeSlice';
 import MarkAttendanceSlice from './src/api/markAttendance/MarkAttendanceSlice';
+import SendNotificationSlice from './src/api/notification/SendNotificationSlice';
+import GetNotificationSlice from './src/api/notification/GetNotificationSlice';
+import DeleteNotificationSlice from './src/api/notification/DeleteNotificationSlice';
 
 
 const rootReducer = combineReducers({
@@ -47,7 +50,10 @@ const rootReducer = combineReducers({
   UpdateRole: UpdateRoleSlice,
   TripDelete: TripDeleteSlice,
   TripStatusChange: TripStatusChangeSlice,
-  MarkAttendance: MarkAttendanceSlice
+  MarkAttendance: MarkAttendanceSlice,
+  SendNotification: SendNotificationSlice,
+  GetNotification: GetNotificationSlice,
+  DeleteNotification: DeleteNotificationSlice
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

@@ -15,8 +15,11 @@ import {
   changeTripStatus,
 } from '../../api/trip/TripStatusChangeSlice';
 import {fetchMemberList} from '../../api/member/MemberListSlice';
-import { AttendanceRequest } from '../../api/markAttendance/AttendanceRequest';
-import { markAttendance, reset } from '../../api/markAttendance/MarkAttendanceSlice';
+import {AttendanceRequest} from '../../api/markAttendance/AttendanceRequest';
+import {
+  markAttendance,
+  reset,
+} from '../../api/markAttendance/MarkAttendanceSlice';
 
 interface Props {
   startDate: any;
@@ -25,6 +28,8 @@ interface Props {
   TripId: any;
   TripStatus: any;
   navigation: any;
+  tripStartTime: any;
+  tripEndTime: any;
 }
 
 const Attendance = ({
@@ -34,16 +39,22 @@ const Attendance = ({
   TripId,
   navigation,
   TripStatus,
+  tripStartTime,
+  tripEndTime,
 }: Props) => {
   const currentDate = moment();
   const deadlineDate = moment(deadline);
   const StartDate = moment(startDate);
+  const TripStart = moment(tripStartTime);
+  const TripEnd = moment(tripEndTime);
   const [mark, setMark] = useState(false);
   const {loginUserId} = useSelector(
     (state: RootState) => state.GlobalVariables,
   );
   const dispatch: ThunkDispatch<RootState, any, AnyAction> = useDispatch();
-  const [AttendInput, setAttend] = useState<AttendanceRequest>(new AttendanceRequest());
+  const [AttendInput, setAttend] = useState<AttendanceRequest>(
+    new AttendanceRequest(),
+  );
   const {TripDeleteData, loadingTripDelete, TripDeleteError} = useSelector(
     (state: RootState) => state.TripDelete,
   );
@@ -98,34 +109,34 @@ const Attendance = ({
     }
   }, [TripStatusChangeData]);
 
-
-  useEffect(()=>{
+  useEffect(() => {
     let request = JSON.stringify({
       trip_id: TripId,
       application_status: '',
     });
     dispatch(fetchMemberList({requestBody: request}));
-  },[userId == loginUserId && TripStatus != 'expired'])
+  }, [userId == loginUserId && TripStatus != 'expired']);
 
   useEffect(() => {
     if (members && members.length > 0) {
       // Populate data array in AttendanceRequest
-      const userData = members.map((group) => {
-        if (group.title === "Joined") {
-          return group.data.map((member) => ({
-           
-            user_id: member.id, 
-            user_name: member.name,
-            trip_id: TripId,
-            is_present: member.is_present ? 1 : 0, 
-          }));
-        } else {
-          return [];
-        }
-      }).flat(); // Flatten the array of arrays
-  
+      const userData = members
+        .map(group => {
+          if (group.title === 'Joined') {
+            return group.data.map(member => ({
+              user_id: member.id,
+              user_name: member.name,
+              trip_id: TripId,
+              is_present: member.is_present ? 1 : 0,
+            }));
+          } else {
+            return [];
+          }
+        })
+        .flat(); // Flatten the array of arrays
+
       // Update the AttendanceRequest with userData
-      setAttend((prevAttend) => ({
+      setAttend(prevAttend => ({
         ...prevAttend,
         data: userData,
       }));
@@ -137,11 +148,16 @@ const Attendance = ({
       data: AttendInput.data
         .filter(item => item.is_present === 1)
         .map(item => {
-          const { user_name, ...rest } = item;
+          const {user_name, ...rest} = item;
           return rest;
-        })
+        }),
     };
-    dispatch(markAttendance({requestBody: modifiedAttendInput, uri:'trip/mark-attendance'}))
+    dispatch(
+      markAttendance({
+        requestBody: modifiedAttendInput,
+        uri: 'trip/mark-attendance',
+      }),
+    )
       .then(() => {
         dispatch(reset());
       })
@@ -160,7 +176,7 @@ const Attendance = ({
 
   return (
     <>
-      {(currentDate.isAfter(deadlineDate) && TripStatus != 'expired') && (
+      {currentDate.isAfter(deadlineDate) && TripStatus != 'expired' && (
         <View style={styles.deadline} marginB-10>
           <View row center marginH-20>
             <Image
@@ -175,7 +191,7 @@ const Attendance = ({
           </View>
         </View>
       )}
-          {(currentDate.isBefore(StartDate) && TripStatus != 'expired') && (
+      {currentDate.isBefore(StartDate) && TripStatus != 'expired' && (
         <View style={styles.deadline} marginB-10>
           <View row center marginH-20>
             <Image
@@ -251,46 +267,50 @@ const Attendance = ({
             </TouchableOpacity>
           </View>
 
-          <View style={styles.divider} />
+          {currentDate.isBetween(TripStart, TripEnd) && (
+            <>
+              <View style={styles.divider} />
 
-          <View row centerV marginH-20>
-            <View flex left>
-              <Text style={styles.text2}>Attendance List</Text>
-            </View>
+              <View row centerV marginH-20>
+                <View flex left>
+                  <Text style={styles.text2}>Attendance List</Text>
+                </View>
 
-            <TouchableOpacity
-              onPress={markingAttendance}
-              style={styles.attdView}>
-              <Text style={styles.text2}>Mark Attendance</Text>
-            </TouchableOpacity>
-          </View>
+                <TouchableOpacity
+                  onPress={markingAttendance}
+                  style={styles.attdView}>
+                  <Text style={styles.text2}>Mark Attendance</Text>
+                </TouchableOpacity>
+              </View>
 
-            <View marginH-20 marginT-10>
-               {AttendInput.data.map((userData, index) => (
-      <Checkbox
-        key={index}
-        label={userData.user_name}
-        labelStyle={styles.text2}
-        color="white"
-        style={{borderRadius: 2}}
-        containerStyle={{marginBottom: 20}}
-        value={userData.is_present ? true : false}
-        onValueChange={(isChecked) => {
-          // Update the is_present value in the AttendanceRequest model
-          setAttend((prevAttend) => {
-            const newData = [...prevAttend.data];
-            newData[index].is_present = isChecked ? 1 : 0;
-            return { ...prevAttend, data: newData };
-          });
-        }}
-      />
-    ))}
-    {AttendInput.data.length === 0 && (
-      <Text center style={styles.text2}>
-        No members joined.
-      </Text>
-    )}
-            </View>
+              <View marginH-20 marginT-10>
+                {AttendInput.data.map((userData, index) => (
+                  <Checkbox
+                    key={index}
+                    label={userData.user_name}
+                    labelStyle={styles.text2}
+                    color="white"
+                    style={{borderRadius: 2}}
+                    containerStyle={{marginBottom: 20}}
+                    value={userData.is_present ? true : false}
+                    onValueChange={isChecked => {
+                      // Update the is_present value in the AttendanceRequest model
+                      setAttend(prevAttend => {
+                        const newData = [...prevAttend.data];
+                        newData[index].is_present = isChecked ? 1 : 0;
+                        return {...prevAttend, data: newData};
+                      });
+                    }}
+                  />
+                ))}
+                {AttendInput.data.length === 0 && (
+                  <Text center style={styles.text2}>
+                    No members joined.
+                  </Text>
+                )}
+              </View>
+            </>
+          )}
         </View>
       )}
     </>

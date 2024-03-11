@@ -184,7 +184,7 @@ const TripDetails: React.FC<Props> = ({ route }: any) => {
                 )}
               </View>
 
-              {moment(new Date()).isBefore(
+              {moment(new Date()).isBetween(moment(tripDetails.data.joining_start_date),
                 moment(tripDetails.data.joining_deadline),
               ) &&
                 tripDetails.data.trip_status != 'expired' && (
@@ -299,6 +299,8 @@ const TripDetails: React.FC<Props> = ({ route }: any) => {
                 TripId={tripDetails.data.id}
                 TripStatus={tripDetails.data.trip_status}
                 navigation={navigation}
+                tripStartTime={(tripDetails.data.date + ' ' + tripDetails.data.start_time)}
+                tripEndTime={(tripDetails.data.date + ' ' + tripDetails.data.finish_time)}
               />
 
             </View>

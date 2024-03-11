@@ -65,11 +65,8 @@ const TripMembers: React.FC<Props> = ({route}:any) => {
 
   return (
     <View flex backgroundColor={AppColors.Black} padding-20>
-      {userId == loginUserId ?
-      <Header title="Trip Members" rightIcon={AppImages.CHAT} />
-      :
-      <Header title="Trip Members" rightIcon={AppImages.REFRESH} />
-}
+      <Header title="Trip Members" rightIcon={AppImages.CHAT} rightOnpress={()=>navigation.navigate(RouteNames.BroadcastScreen,{id:id, userId: userId})}/>
+
 <View marginV-20/>
       <SectionList
       sections={members}

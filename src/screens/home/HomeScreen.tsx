@@ -91,7 +91,7 @@ const HomeScreen: React.FC<Props> = () => {
     }).start();
   };
 
-  const filteredTrip = trip.filter((item) =>
+  const filteredTrip = trip?.data.filter((item) =>
   item.title.toLowerCase().includes(search.toLowerCase())
 );
 
@@ -103,10 +103,12 @@ const HomeScreen: React.FC<Props> = () => {
         </View>
 
         <View center style={styles.notifView}>
+          <TouchableOpacity onPress={()=>navigation.navigate(RouteNames.NotificationScreen)}>
           <Image source={AppImages.NOTIF} width={18} height={21} />
           {/* <View style={{position:'absolute', right:13, top:12 }}>
           <Image source={AppImages.DOT} width={8} height={8}/>
           </View> */}
+          </TouchableOpacity>
         </View>
       </View>
 

@@ -64,23 +64,29 @@ const MyTripScreen: React.FC<Props> = ({isReplace}:Props) => {
 
   useFocusEffect(
     React.useCallback(() => {
-      let request = JSON.stringify({
-          //title
-        name: search,
-          //by level
-        filter: filterValue === '' ? [] : [filterValue],
-         //My Trips,Created,Closed
-        tab_menu: chip === 2 ? 'Created' : chip === 3 ? 'Closed' : 'My Trips'
-      });
-      
-      dispatch(fetchTripList({ requestBody: request, uri: 'trip/trip-by-user' }));
-
+   
+fetchList(1)
       // Clean-up function
       return () => {
         isReplace()
       };
     }, [chip, search, filterValue]) 
   );
+
+  const fetchList = (page: number) => {
+    let request = JSON.stringify({
+      //title
+    name: search,
+      //by level
+    filter: filterValue === '' ? [] : [filterValue],
+     //My Trips,Created,Closed
+    tab_menu: chip === 2 ? 'Created' : chip === 3 ? 'Closed' : 'My Trips',
+    perpage:10,
+    page:page
+  });
+  
+  dispatch(fetchTripList({ requestBody: request, uri: 'trip/trip-by-user' }));
+  }
 
 const setChip = (value: number) => {
   dispatch({ type: 'SET_CHIP', payload: value });
@@ -102,6 +108,15 @@ const setChip = (value: number) => {
       easing: Easing.circle,
       useNativeDriver: true, // Set to true if possible, it improves performance
     }).start();
+  };
+
+  const loadMoreTrips = () => {
+    if (trip?.total_page && trip?.total_count) {
+        const nextPage = trip.total_page + 1;
+        if (nextPage <= trip.total_page) {
+          fetchList(nextPage);
+        }
+      }
   };
 
   return (
@@ -176,7 +191,7 @@ const setChip = (value: number) => {
       </View>
 
       <FlatList
-        data={trip}
+        data={trip?.data}
         showsVerticalScrollIndicator={false}
         renderItem={({item, index}) => {
           return (
@@ -295,6 +310,8 @@ const setChip = (value: number) => {
             </TouchableOpacity>
           );
         }}
+        onEndReached={loadMoreTrips}
+        onEndReachedThreshold={0.5}
       />
     </View>
   );

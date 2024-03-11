@@ -21,5 +21,7 @@ export const RouteNames = {
   MarshalList: 'MarshalList',
   UserList: 'UserList',
   TripMembers: 'TripMembers',
-  JoinTrip: 'JoinTrip'
+  JoinTrip: 'JoinTrip',
+  NotificationScreen: 'NotificationScreen',
+  BroadcastScreen: 'BroadcastScreen'
 } as const;

@@ -52,6 +52,7 @@ LOADER: require('../images/Loader.json'),
 CHAT: require('../images/chat.png'),
 BROADCAST: require('../images/broadcast.png'),
 NONOTIF: require('../images/noNotif.png'),
+REMOVE: require('../images/remove.png'),
 }
 
 export default AppImages;

@@ -1,21 +1,21 @@
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
 import * as apiInterface from '../apiInterface';
-import { TripListResponse } from './TripListResponse';
+import { TripDetailsResponse, TripListResponse } from './TripListResponse';
 
 export type TripListState = {
-  trip: TripListResponse[];
+  trip: TripDetailsResponse | null;
   loadingTrip: boolean;
   tripError: boolean;
 };
 
 const initialState: TripListState = {
-  trip: [],
+  trip: null,
   loadingTrip: false,
   tripError: false,
 };
 
 export const fetchTripList = createAsyncThunk<
-  {trip: TripListResponse[]},
+  {trip: TripDetailsResponse | null},
   {requestBody: any, uri: any}
 >('fetchTripList', async ({requestBody, uri}) => {
   const response = await apiInterface.fetchTripList(requestBody, uri);
@@ -23,7 +23,7 @@ export const fetchTripList = createAsyncThunk<
 
   if (response.kind == 'success') {
     return {
-      trip: response.body ?? [],
+      trip: response.body ?? null,
     };
   } else {
     throw 'Error fetching customers';
@@ -39,18 +39,18 @@ const TripListSlice = createSlice({
       .addCase(fetchTripList.pending, state => {
         state.loadingTrip = true;
         state.tripError = false;
-        state.trip = [];
+        state.trip = initialState.trip;
       })
       .addCase(fetchTripList.fulfilled, (state, action) => {
-        state.trip = [];
-        state.trip = state.trip.concat(action.payload.trip);
+        state.trip = initialState.trip;
+        state.trip = action.payload.trip;
         state.tripError = false;
         state.loadingTrip = false;
       })
       .addCase(fetchTripList.rejected, state => {
         state.tripError = true;
         state.loadingTrip = false;
-        state.trip = [];
+        state.trip = initialState.trip;
       });
   },
 });

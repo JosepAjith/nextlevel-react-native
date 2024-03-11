@@ -13,6 +13,9 @@ import { UpdateRoleResponse } from './levelUpdate/UpdateRoleSlice';
 import { LoginResponse } from './login/LoginCreateSlice';
 import { MarkAttendanceResponse } from './markAttendance/MarkAttendanceSlice';
 import { MemberListData } from './member/MemberListResponse';
+import { DeleteNotifResponse } from './notification/DeleteNotificationSlice';
+import { NotificationData, NotificationResponse } from './notification/NotificationResponse';
+import { SendNotifResponse } from './notification/SendNotificationSlice';
 import { ChangePasswordResponse } from './password/ChangePasswordSlice';
 import { EditProfileResponse } from './profile/EditProfileSlice';
 import { ProfileDetails } from './profile/ProfileDetailsSlice';
@@ -146,11 +149,11 @@ export const otpVerify = async (
 //API FOR TRIP LIST
 export const fetchTripList = async (
   requestBody: any,uri: any
-): Promise<NetworkResponse<TripListResponse[]>> => {
+): Promise<NetworkResponse<TripDetailsResponse>> => {
   const response = await apiClient(uri, 'POST', requestBody);
 
   if (response.status) {
-    const json = await response.data.data;
+    const json = await response.data;
     return {
       kind: 'success',
       body: json,
@@ -414,6 +417,63 @@ export const markAttendance = async (
   requestBody: any, uri: any
 ): Promise<NetworkResponse<MarkAttendanceResponse>> => {
   const response = await apiClient(uri, 'POST', requestBody);
+
+  if (response.status) {
+    const json = await response.data;
+    return {
+      kind: 'success',
+      body: json,
+    };
+  } else {
+    return {
+      kind: 'failure',
+    };
+  }
+};
+
+//API FOR SENDING NOTIFICATION
+export const sendNotif = async (
+  requestBody: any
+): Promise<NetworkResponse<SendNotifResponse>> => {
+  const response = await apiClient('notification/send-notification', 'POST', requestBody);
+
+  if (response.status) {
+    const json = await response.data;
+    return {
+      kind: 'success',
+      body: json,
+    };
+  } else {
+    return {
+      kind: 'failure',
+    };
+  }
+};
+
+//API FOR TRIP LIST
+export const fetchNotifications = async (
+  requestBody: any,uri: any
+): Promise<NetworkResponse<NotificationResponse>> => {
+  const response = await apiClient(uri, 'POST', requestBody);
+
+  if (response.status) {
+    const json = await response.data;
+    return {
+      kind: 'success',
+      body: json,
+    };
+  } else {
+    return {
+      kind: 'failure',
+    };
+  }
+};
+
+//API FOR DELETING NOTIFICATION
+export const deleteNotif = async (
+  requestBody: any,
+): Promise<NetworkResponse<DeleteNotifResponse>> => {
+  const response = await apiClient('notification/notification-delete', 'POST', requestBody);
 
   if (response.status) {
     const json = await response.data;

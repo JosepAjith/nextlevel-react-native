@@ -47,6 +47,10 @@ export const formatTime = (value: moment.MomentInput) => {
   return moment(value, 'HH:mm:ss').format('h:mm A');
 }
 
+export const getDayTime = (currentDate: moment.MomentInput) => {
+  return moment(currentDate).format('ddd h:mm A');
+};
+
 export const roundValueAsString = (value: number): string => {
   const multiplier: number = Math.pow(10, 2);
   const roundedNumber: number = Math.round(value * multiplier) / multiplier;
