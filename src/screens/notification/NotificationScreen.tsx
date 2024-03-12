@@ -66,7 +66,7 @@ const NotificationScreen: React.FC<Props> = () => {
     }, []),
   );
 
-  const Delete = async id => {
+  const Delete = async (id: number) => {
     let request = {
       id: id,
     };

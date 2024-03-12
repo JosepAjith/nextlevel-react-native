@@ -7,9 +7,9 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:1096238675733:android:da1a46c3952f4643df5b1c",
+        "mobilesdk_app_id": "1:1096238675733:android:b6f8278d002d9597df5b1c",
         "android_client_info": {
-          "package_name": "com.nextlevel"
+          "package_name": "com.nextlevel.app"
         }
       },
       "oauth_client": [],

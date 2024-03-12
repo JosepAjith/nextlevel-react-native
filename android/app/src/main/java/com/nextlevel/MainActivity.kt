@@ -1,4 +1,4 @@
-package com.nextlevel
+package com.nextlevel.app
 
 import com.facebook.react.ReactActivity
 import com.facebook.react.ReactActivityDelegate
