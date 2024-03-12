@@ -75,9 +75,9 @@ android {
     buildToolsVersion rootProject.ext.buildToolsVersion
     compileSdk rootProject.ext.compileSdkVersion
 
-    namespace "com.nextlevel.app"
+    namespace "com.bnbcnxtlevel.app"
     defaultConfig {
-        applicationId "com.nextlevel.app"
+        applicationId "com.bnbcnxtlevel.app"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
