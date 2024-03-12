@@ -76,12 +76,12 @@ const ProfileScreen: React.FC<Props> = ({isReplace}: Props) => {
         <View row marginV-20>
           <View flex>
             <View marginB-10 style={styles.imageView}>
-              {/* <Image
+              <Image
                 source={profileDetails?.user.image ? {uri:profileDetails.user.image} : AppImages.MAN}
                 width={70}
                 height={70}
                 style={{borderRadius: 35}}
-              /> */}
+              />
             </View>
             <Text style={styles.name}>{profileDetails?.user.name}</Text>
             <View row marginV-10>

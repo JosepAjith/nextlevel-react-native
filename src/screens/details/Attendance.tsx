@@ -152,6 +152,7 @@ const Attendance = ({
           return rest;
         }),
     };
+    console.log(modifiedAttendInput)
     dispatch(
       markAttendance({
         requestBody: modifiedAttendInput,

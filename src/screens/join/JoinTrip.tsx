@@ -59,6 +59,9 @@ const JoinTrip: React.FC<Props> = ({route}: any) => {
     new JoinValidation(),
   );
   const {tripDetails} = useSelector((state: RootState) => state.TripDetails);
+  const { profileDetails } = useSelector(
+    (state: RootState) => state.ProfileDetails,
+  );
 
   useEffect(() => {
     setJoin({...joinInput, application_status: status});
@@ -79,7 +82,21 @@ const JoinTrip: React.FC<Props> = ({route}: any) => {
         });
       }
     }
-  }, [type == 'edit']);
+    else if (type == 'join') {
+      if (profileDetails && typeof profileDetails.user === 'object') {
+        const item = profileDetails?.user;
+
+        setJoin({
+          ...joinInput,
+          name: item.name,
+          phone: item.phone,
+          gender: item.gender,
+          vehicle: '',
+          passenger: '',
+        });
+      }
+    }
+  }, [type]);
 
   function isValidate(): boolean {
     if (joinInput.name == '') {
@@ -234,7 +251,6 @@ const JoinTrip: React.FC<Props> = ({route}: any) => {
             placeholderTextColor={'#999999'}
             labelStyle={styles.label}
             style={styles.text}
-            keyboardType={'number-pad'}
             paddingH-20
             marginB-20
             value={joinInput.vehicle}

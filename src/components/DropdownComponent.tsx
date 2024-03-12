@@ -23,6 +23,7 @@ const DropdownComponent = ({data, item, label, value, onChange, error}: Props) =
       placeholderStyle={styles.placeholderStyle}
       selectedTextStyle={styles.selectedTextStyle}
       inputSearchStyle={styles.inputSearchStyle}
+      itemTextStyle={{fontSize:12,color:'black'}}
       data={data}
       search
       maxHeight={300}

@@ -123,7 +123,12 @@ const ImageSelector = (props: {close: any,isItem: any, multi?: any}) => {
               type: responses.type,
               uri: resizedImage.uri,
             };
+            if(multi == true){
             isItem([selectedImage]);
+            }
+            else{
+              isItem([selectedImage][0]);
+            }
           })
           .catch(error => {
             console.log('Image resizing error:', error);

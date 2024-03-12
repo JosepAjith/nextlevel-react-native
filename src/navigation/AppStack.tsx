@@ -24,6 +24,7 @@ import ProfileScreen from '../screens/profile/ProfileScreen';
 import AddTripScreen from '../screens/addtrip/AddTripScreen';
 import NotificationScreen from '../screens/notification/NotificationScreen';
 import BroadcastScreen from '../screens/broadcast/BroadcastScreen';
+import MapScreen from '../screens/map/MapScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -77,6 +78,7 @@ const AppStack = () => {
       <Stack.Screen name={RouteNames.AddTripScreen} component={AddTripScreen} />
       <Stack.Screen name={RouteNames.NotificationScreen} component={NotificationScreen} />
       <Stack.Screen name={RouteNames.BroadcastScreen} component={BroadcastScreen} />
+      <Stack.Screen name={RouteNames.MapScreen} component={MapScreen} />
     </Stack.Navigator>
   );
 };

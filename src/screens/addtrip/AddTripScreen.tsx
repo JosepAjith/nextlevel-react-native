@@ -280,7 +280,7 @@ const AddTripScreen: React.FC<Props> = ({ route, id, initial }: Props) => {
     });
     formData.append('city', tripInput.city);
     formData.append('area_details', tripInput.area_details);
-    formData.append('details_place', tripInput.details_place);
+    formData.append('details_place', 'Trivandrum');
     formData.append('longitude', '11.9898');
     formData.append('latitude', '9.8978');
     formData.append('level', tripInput.level);
@@ -351,6 +351,10 @@ const AddTripScreen: React.FC<Props> = ({ route, id, initial }: Props) => {
       image: prevTripInput.image.filter((_, index) => index !== indexToRemove),
     }));
   };
+
+  const setPlaceLocation = (item) => {
+
+  }
 
   return (
     <View flex backgroundColor={AppColors.Black}>
@@ -455,6 +459,7 @@ const AddTripScreen: React.FC<Props> = ({ route, id, initial }: Props) => {
             }
           />
 
+<TouchableOpacity onPress={()=>navigation.navigate(RouteNames.MapScreen, { setPlaceLocation })}>
           <TextField
             fieldStyle={styles.field}
             label={'Place Details'}
@@ -464,15 +469,17 @@ const AddTripScreen: React.FC<Props> = ({ route, id, initial }: Props) => {
             style={styles.text}
             paddingH-20
             marginB-20
+            editable={false}
             value={tripInput.details_place}
-            onChangeText={(text: any) => {
-              setTrip({...tripInput, details_place: text});
-              setValidate({...tripValidate, InvalidPlace: false});
-            }}
+            // onChangeText={(text: any) => {
+            //   setTrip({...tripInput, details_place: text});
+            //   setValidate({...tripValidate, InvalidPlace: false});
+            // }}
             trailingAccessory={
               <Text red10>{tripValidate.InvalidPlace ? '*Required' : ''}</Text>
             }
           />
+          </TouchableOpacity>
 
           <Text style={styles.label}>Level</Text>
           <DropdownComponent

@@ -212,7 +212,7 @@ const UserList: React.FC<Props> = () => {
                         placeholderStyle={styles.roleText}
                         selectedTextStyle={styles.roleText}
                         inputSearchStyle={styles.roleText}
-                        itemTextStyle={{fontSize:12}}
+                        itemTextStyle={{fontSize:12,color:'black'}}
                         data={Level}
                         search
                         maxHeight={300}

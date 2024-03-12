@@ -3,6 +3,8 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <application
       android:name=".MainApplication"
@@ -57,5 +59,8 @@
     <action android:name="com.google.firebase.MESSAGING_EVENT" />
   </intent-filter>
 </service>
+<meta-data
+android:name="com.google.android.geo.API_KEY"
+android:value="AIzaSyACWPy4KNDqex0QYmX-HkF7St0TXA6ARPI" />
     </application>
 </manifest>

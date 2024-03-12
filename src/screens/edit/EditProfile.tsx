@@ -81,19 +81,19 @@ const EditProfile: React.FC<Props> = () => {
   useEffect(() => {
     if (profileDetails && typeof profileDetails.user === 'object') {
       const item = profileDetails.user;
-
+console.log(item)
       setProfile({
         ...profileInput,
-        name: item.name,
-        dob: item.dob,
-        phone: item.phone,
-        gender: item.gender,
-        location: item.location,
-        emirates: item.emirates,
-        nationality: item.nationality,
-        occupation: item.occupation,
-        interest: item.interest,
-        referred_by: item.referred_by,
+        name: item.name ? item.name : '',
+        dob: item.dob ? getUserDate(item.dob) : '',
+        phone: item.phone ? item.phone : '',
+        gender: item.gender ? item.gender : '',
+        location: item.location ? item.location : '',
+        emirates: item.emirates ? item.emirates : '',
+        nationality: item.nationality ? item.nationality : '',
+        occupation: item.occupation? item.occupation : '',
+        interest: item.interest ? item.interest : '',
+        referred_by: item.referred_by ? item.referred_by : '',
         image: {
           uri: item.image,
           type: 'image/png',
@@ -476,7 +476,6 @@ const EditProfile: React.FC<Props> = () => {
         <ImageSelector
           close={() => setImageClick(false)}
           isItem={(item: any) => {
-         
             setProfile({...profileInput, image: item});
             setValidate({...profileValidate, InvalidImage: false});
           }}

@@ -2023,6 +2023,11 @@
   dependencies:
     "@babel/types" "^7.20.7"
 
+"@types/geojson@^7946.0.13":
+  "integrity" "sha512-WCfD5Ht3ZesJUsONdhvm84dmzWOiOzOAqOncN0++w0lBw1o8OuDNJF2McvvCef/yBqb/HYRahp1BYtODFQ8bRg=="
+  "resolved" "https://registry.npmjs.org/@types/geojson/-/geojson-7946.0.14.tgz"
+  "version" "7946.0.14"
+
 "@types/graceful-fs@^4.1.3":
   "integrity" "sha512-olP3sd1qOEe5dXTSaFvQG+02VdRXcdytWLAZsAq1PecU8uqQAhkrnbli7DagjtXKW/Bl7YJbUsa8MPcuc8LHEQ=="
   "resolved" "https://registry.npmjs.org/@types/graceful-fs/-/graceful-fs-4.1.9.tgz"
@@ -5951,6 +5956,16 @@
   dependencies:
     "lodash" "^4.17.21"
 
+"react-native-geocoding@^0.5.0":
+  "integrity" "sha512-peTXRpRxPLiZpbTW43AOvoXXAEoS+eLnSo4KRY0hcL9F2hulWE5r7o5KiaLx8AWj35c6EJP3fdGHe754q2Gd2Q=="
+  "resolved" "https://registry.npmjs.org/react-native-geocoding/-/react-native-geocoding-0.5.0.tgz"
+  "version" "0.5.0"
+
+"react-native-geolocation-service@^5.3.1":
+  "integrity" "sha512-LTXPtPNmrdhx+yeWG47sAaCgQc3nG1z+HLLHlhK/5YfOgfLcAb9HAkhREPjQKPZOUx8pKZMIpdGFUGfJYtimXQ=="
+  "resolved" "https://registry.npmjs.org/react-native-geolocation-service/-/react-native-geolocation-service-5.3.1.tgz"
+  "version" "5.3.1"
+
 "react-native-gesture-handler@^2.15.0":
   "integrity" "sha512-cmMGW8k86o/xgVTBZZOPohvR5re4Vh65PUxH4HbBBJAYTog4aN4wTVTUlnoky01HuSN8/X4h3tI/K3XLPoDnsg=="
   "resolved" "https://registry.npmjs.org/react-native-gesture-handler/-/react-native-gesture-handler-2.15.0.tgz"
@@ -5971,6 +5986,13 @@
   "integrity" "sha512-33EgL3C9pyvjKpullAB6fWyD5QhoYEpNNB9rxNvUsrpAnL2mHBW7PTrUCCZudJeB6Weg7nbweKrSw1nnto5aqg=="
   "resolved" "https://registry.npmjs.org/react-native-image-resizer/-/react-native-image-resizer-1.4.5.tgz"
   "version" "1.4.5"
+
+"react-native-maps@^1.11.3":
+  "integrity" "sha512-alz5FnQicz21lL09oTnQvX5Tw9zHoRabE3hchBnYS56KaF/6l0/cHe5ImMtcqriD9fmn6SXjW3cahELkCoR5mw=="
+  "resolved" "https://registry.npmjs.org/react-native-maps/-/react-native-maps-1.11.3.tgz"
+  "version" "1.11.3"
+  dependencies:
+    "@types/geojson" "^7946.0.13"
 
 "react-native-modal-datetime-picker@^17.1.0":
   "integrity" "sha512-jfTwfaCLtBffYbQ+pOGFLM+J5HmUh3vb9rT0JrrQPjxzecdc8pNYreB1c96+mVuq8bDCvaCdIeuEsslTqLJL0Q=="
