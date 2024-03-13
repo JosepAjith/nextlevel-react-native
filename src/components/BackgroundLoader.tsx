@@ -1,8 +1,7 @@
 import React from 'react';
 import { View } from 'react-native-ui-lib';
-import { StyleSheet } from 'react-native';
-import Lottie from 'lottie-react-native';
-import AppImages from '../constants/AppImages';
+import { ActivityIndicator, StyleSheet } from 'react-native';
+import AppColors from '../constants/AppColors';
 
 interface Props {
 }
@@ -17,12 +16,8 @@ const BackgroundLoader: React.FC<Props> = ({}) => {
             }}
           >
             <View flex center>
-              <Lottie
-                source={AppImages.LOADER}
-                autoPlay
-                loop={true}
-                style={{ width: 100, height: 100 }}
-              />
+
+              <ActivityIndicator color={AppColors.Orange} size={'large'}/>
             </View>
           </View>
   )
