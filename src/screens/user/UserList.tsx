@@ -139,7 +139,7 @@ const UserList: React.FC<Props> = () => {
 
   return (
     <View flex backgroundColor={AppColors.Black}>
-      <View padding-20>
+      <View flex padding-20>
         <Header title="User List" rightIcon={AppImages.REFRESH} />
 
         {loadingUsers && <BackgroundLoader/>}
@@ -173,7 +173,6 @@ const UserList: React.FC<Props> = () => {
             </TouchableOpacity>
           </View>
         </View>
-
         <FlatList
           data={SearchedUsers}
           numColumns={2}
@@ -189,7 +188,7 @@ const UserList: React.FC<Props> = () => {
                   }}>
                   <View center style={[styles.marshalView, {width: itemWidth}]}>
                     <Image
-                      source={item.image ? {uri: item.image} : AppImages.USER1}
+                      source={item.image ? {uri: item.image} : AppImages.PLACEHOLDER}
                       style={{
                         width: '100%',
                         height: 100,

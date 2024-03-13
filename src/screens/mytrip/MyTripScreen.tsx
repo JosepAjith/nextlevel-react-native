@@ -205,9 +205,8 @@ const setChip = (value: number) => {
                     item.trip_images.length != 0 &&
                     item.trip_images[0].image != ''
                       ? {uri: item.trip_images[0].image}
-                      : AppImages.HOME1
+                      : AppImages.NOIMAGE
                   }
-                  // source={AppImages.HOME1}
                   style={{width: '100%', height: 150}}
                   imageStyle={{
                     borderTopLeftRadius: 10,

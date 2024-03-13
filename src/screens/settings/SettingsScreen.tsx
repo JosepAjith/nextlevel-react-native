@@ -31,13 +31,7 @@ const SettingsScreen: React.FC<Props> = () => {
   const navigation = useNavigation<SettingsScreenNavigationProps>();
   const [isPersonal, setPersonal] = useState(false);
   const [isDelete, setDelete] = useState(false);
-
-  const Logout = async () => {
-    await AsyncStorage.removeItem(AppStrings.ACCESS_TOKEN);
-    await AsyncStorage.removeItem(AppStrings.IS_LOGIN);
-    await AsyncStorage.removeItem(AppStrings.TYPE);
-    navigation.replace(RouteNames.LoginScreen);
-  };
+  const [isLogout, setLogOut] = useState(false);
 
   const renderOption = (image: any, text: string, onPress: () => void) => (
     <TouchableOpacity onPress={onPress} style={styles.view}>
@@ -111,11 +105,12 @@ const SettingsScreen: React.FC<Props> = () => {
           setDelete(!isDelete);
         })}
         {renderOption(AppImages.LOGOUT, 'Log out', () => {
-          Logout();
+          setLogOut(!isLogout);
         })}  
         </View>
         </ScrollView>
-         {isDelete && <AccountDelete close={() => setDelete(false)} navigation={navigation}/>}
+         {isDelete && <AccountDelete close={() => setDelete(false)} navigation={navigation} type={'delete'}/>}
+         {isLogout && <AccountDelete close={() => setLogOut(false)} navigation={navigation} type={'logout'}/>}
       </View>
    
    

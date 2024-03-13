@@ -121,7 +121,7 @@ const BroadcastScreen: React.FC<Props> = ({route}: any) => {
               return (
                 <View row marginB-20>
                   <Image
-                    source={AppImages.USER2}
+                    source={AppImages.PLACEHOLDER}
                     width={32}
                     height={32}
                     style={{borderRadius: 16, marginTop: 20}}

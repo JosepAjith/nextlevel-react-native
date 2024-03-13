@@ -31,6 +31,7 @@ import {AnyAction, ThunkDispatch} from '@reduxjs/toolkit';
 import {RootState} from '../../../store';
 import {useDispatch, useSelector} from 'react-redux';
 import {fetchTripList} from '../../api/trip/TriplListSlice';
+import { formattedTime, getDateTime, getUserDate } from '../../constants/commonUtils';
 
 const {TextField} = Incubator;
 
@@ -140,7 +141,7 @@ const HomeScreen: React.FC<Props> = () => {
                     item.trip_images.length != 0 &&
                     item.trip_images[0].image != ''
                       ? {uri: item.trip_images[0].image}
-                      : AppImages.HOME1
+                     : AppImages.NOIMAGE
                   }
                   // source={AppImages.HOME1}
                   style={{width: '100%', height: 150}}
@@ -211,13 +212,13 @@ const HomeScreen: React.FC<Props> = () => {
 
                     <View row marginB-10>
                       <Text style={styles.rightText}>Meeting Time</Text>
-                      <Text style={styles.leftText}>{item.meeting_time}</Text>
+                      <Text style={styles.leftText}>{formattedTime(item.meeting_time)}</Text>
                     </View>
 
                     <View row marginB-10>
                       <Text style={styles.rightText}>Trip Date</Text>
                       <Text style={styles.leftText}>
-                        {item.joining_start_date}
+                        {getUserDate(item.date)}
                       </Text>
                     </View>
 
@@ -234,7 +235,7 @@ const HomeScreen: React.FC<Props> = () => {
                     <View row marginB-10>
                       <Text style={styles.rightText}>Joining deadline</Text>
                       <Text style={styles.leftText}>
-                        {item.joining_deadline}
+                        {getDateTime(item.joining_deadline)}
                       </Text>
                     </View>
                   </View>

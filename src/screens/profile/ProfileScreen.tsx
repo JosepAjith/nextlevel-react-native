@@ -77,7 +77,7 @@ const ProfileScreen: React.FC<Props> = ({isReplace}: Props) => {
           <View flex>
             <View marginB-10 style={styles.imageView}>
               <Image
-                source={profileDetails?.user.image ? {uri:profileDetails.user.image} : AppImages.MAN}
+                source={profileDetails?.user.image ? {uri:profileDetails.user.image} : AppImages.PLACEHOLDER}
                 width={70}
                 height={70}
                 style={{borderRadius: 35}}

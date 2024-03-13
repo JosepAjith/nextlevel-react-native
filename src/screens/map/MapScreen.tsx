@@ -31,8 +31,10 @@ export type MapScreenRouteProps = RouteProp<RootStackParams, 'MapScreen'>;
 
 interface Props {}
 
-const MapScreen: React.FC<Props> = () => {
+const MapScreen: React.FC<Props> = ({route}: any) => {
   const navigation = useNavigation();
+  const {setPlaceLocation} = route.params;
+  const type = route.params.type;
   const dispatch: ThunkDispatch<RootState, any, AnyAction> = useDispatch();
   const [location, setLocation] = useState<{
     latitude: number;
@@ -41,12 +43,19 @@ const MapScreen: React.FC<Props> = () => {
 
   const [isDone, setDone] = useState(false);
   const [address, setAddress] = useState('');
+  const {tripDetails} = useSelector((state: RootState) => state.TripDetails);
 
   useEffect(() => {
-    fetchLocation();
-    return () => {
-    };
-  }, []);
+    if (type == 'add') {
+      fetchLocation();
+    } else {
+      setLocation({
+        latitude: Number(tripDetails?.data.latitude),
+        longitude: Number(tripDetails?.data.longitude),
+      });
+    }
+    return () => {};
+  }, [type]);
 
   const fetchLocation = async () => {
     if (Platform.OS === 'android') {
@@ -74,7 +83,6 @@ const MapScreen: React.FC<Props> = () => {
     Geolocation.getCurrentPosition(
       position => {
         const {latitude, longitude} = position.coords;
-        console.log(position.coords)
         setLocation({latitude: latitude, longitude: longitude});
       },
       error => {
@@ -84,26 +92,20 @@ const MapScreen: React.FC<Props> = () => {
     );
   };
 
-
-
   const handleMapPress = (event: any) => {
-      setDone(true);
-      const coordinate = event.nativeEvent.coordinate;
-      setLocation(coordinate);
-      console.log(coordinate)
-      Geocoder.from(
-        event.nativeEvent.coordinate.latitude,
-        event.nativeEvent.coordinate.longitude,
-      )
-        .then(json => {
-          var addressComponent = json.results[0].formatted_address;
-          console.log(addressComponent)
-          setAddress(addressComponent);
-        })
-        .catch(error => console.warn(error));
+    setDone(true);
+    const coordinate = event.nativeEvent.coordinate;
+    setLocation(coordinate);
+    Geocoder.from(
+      event.nativeEvent.coordinate.latitude,
+      event.nativeEvent.coordinate.longitude,
+    )
+      .then(json => {
+        var addressComponent = json.results[0].formatted_address;
+        setAddress(addressComponent);
+      })
+      .catch(error => console.warn(error));
   };
-
-
 
   return (
     <View flex>
@@ -115,13 +117,8 @@ const MapScreen: React.FC<Props> = () => {
           latitudeDelta: 0.0122,
           longitudeDelta: 0.0061,
         }}
-        onPress={handleMapPress}
-        >
-          {location && 
-              <Marker coordinate={location} 
-            anchor={{ x: 0.5, y: 0.5 }}
-            />
-          }
+        onPress={handleMapPress}>
+        {location && <Marker coordinate={location} anchor={{x: 0.5, y: 0.5}} />}
       </MapView>
 
       {isDone && (
@@ -143,7 +140,17 @@ const MapScreen: React.FC<Props> = () => {
               {address}
             </Text>
           </View>
-          <ButtonView title='Done' onPress={()=>{navigation.goBack()}}/>
+          <ButtonView
+            title="Done"
+            onPress={() => {
+              setPlaceLocation({
+                latitude: location?.latitude,
+                longitude: location?.longitude,
+                address: address,
+              });
+              navigation.goBack();
+            }}
+          />
         </View>
       )}
     </View>

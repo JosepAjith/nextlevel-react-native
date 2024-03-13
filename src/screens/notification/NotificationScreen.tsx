@@ -132,7 +132,7 @@ const NotificationScreen: React.FC<Props> = () => {
                   )}>
                   <View row style={styles.notiFView}>
                     <Image
-                      source={AppImages.USER1}
+                      source={AppImages.PLACEHOLDER}
                       width={32}
                       height={32}
                       style={{borderRadius: 16}}

@@ -69,7 +69,9 @@ const MyCars = ({navigation, data}: Props) => {
                 </View>
               )}
               <Image
-                source={item.image ? {uri: item.image} : AppImages.JEEP}
+                source={
+                  item.image ? {uri: item.image} : 
+                AppImages.NOIMAGE}
                 width={300}
                 height={250}
                 marginT-20

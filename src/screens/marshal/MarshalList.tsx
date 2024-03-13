@@ -100,7 +100,7 @@ const MarshalList: React.FC<Props> = () => {
               navigation.navigate(RouteNames.ProfileScreen)}}>
               <View center style={[styles.marshalView, {width: itemWidth}]}>
                 <Image
-                  source={item.image?{uri:item.image}:AppImages.USER1}
+                  source={item.image?{uri:item.image}:AppImages.PLACEHOLDER}
                   style={{
                     width: '100%',
                     height: 100,

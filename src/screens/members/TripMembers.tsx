@@ -76,7 +76,7 @@ const TripMembers: React.FC<Props> = ({route}:any) => {
               <View row flex style={[styles.marshalView]}>
                 <View>
                 <Image
-                  source={AppImages.USER2}
+                  source={item.image?{uri:item.image}:AppImages.PLACEHOLDER}
                   style={{
                     width: itemWidth,
                     height: 130,
