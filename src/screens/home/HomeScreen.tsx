@@ -32,6 +32,7 @@ import {RootState} from '../../../store';
 import {useDispatch, useSelector} from 'react-redux';
 import {fetchTripList} from '../../api/trip/TriplListSlice';
 import { formattedTime, getDateTime, getUserDate } from '../../constants/commonUtils';
+import BackgroundLoader from '../../components/BackgroundLoader';
 
 const {TextField} = Incubator;
 
@@ -98,6 +99,8 @@ const HomeScreen: React.FC<Props> = () => {
 
   return (
     <View flex backgroundColor={AppColors.Black} padding-20>
+
+      {loadingTrip && <BackgroundLoader/>}
       <View row>
         <View flex>
           <Text style={styles.title}>Buckle up and get ready</Text>
@@ -244,6 +247,7 @@ const HomeScreen: React.FC<Props> = () => {
             </TouchableOpacity>
           );
         }}
+        keyExtractor={(item, index) => `${item.id}-${index}`}
       />
     </View>
   );

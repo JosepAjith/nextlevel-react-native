@@ -55,16 +55,19 @@ const NotificationScreen: React.FC<Props> = () => {
 
   useFocusEffect(
     React.useCallback(() => {
-      dispatch(
-        fetchNotifications({
-          requestBody: '',
-          uri: 'notification/get-notification',
-        }),
-      );
-
+      NotifList();
       return () => {};
     }, []),
   );
+
+  const NotifList = () => {
+    dispatch(
+      fetchNotifications({
+        requestBody: '',
+        uri: 'notification/get-notification',
+      }),
+    );
+  };
 
   const Delete = async (id: number) => {
     let request = {
@@ -95,7 +98,7 @@ const NotificationScreen: React.FC<Props> = () => {
   return (
     <GestureHandlerRootView style={{flex: 1}}>
       <View flex backgroundColor={AppColors.Black} padding-20>
-        <Header title="Notifications" rightIcon={AppImages.REFRESH} />
+        <Header title="Notifications" rightIcon={AppImages.REFRESH} rightOnpress={NotifList}/>
         {loadingNotifications && <BackgroundLoader />}
 
         {notification?.data.length == 0 ? (

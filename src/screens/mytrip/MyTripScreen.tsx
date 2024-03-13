@@ -51,7 +51,7 @@ interface Props {
   isReplace?: any;
 }
 
-const MyTripScreen: React.FC<Props> = ({isReplace}:Props) => {
+const MyTripScreen: React.FC<Props> = ({isReplace}: Props) => {
   const navigation = useNavigation<MyTripScreenNavigationProps>();
   const [search, setSearch] = useState('');
   const [expandedItems, setExpandedItems] = useState([]);
@@ -60,37 +60,38 @@ const MyTripScreen: React.FC<Props> = ({isReplace}:Props) => {
     (state: RootState) => state.TripList,
   );
   const {type} = useSelector((state: RootState) => state.GlobalVariables);
-  const {filterValue,chip} = useSelector((state: RootState) => state.TripReducer);
+  const {filterValue, chip} = useSelector(
+    (state: RootState) => state.TripReducer,
+  );
 
   useFocusEffect(
     React.useCallback(() => {
-   
-fetchList(1)
+      fetchList(1);
       // Clean-up function
       return () => {
-        isReplace()
+        isReplace();
       };
-    }, [chip, search, filterValue]) 
+    }, [chip, search, filterValue]),
   );
 
   const fetchList = (page: number) => {
     let request = JSON.stringify({
       //title
-    name: search,
+      name: search,
       //by level
-    filter: filterValue === '' ? [] : [filterValue],
-     //My Trips,Created,Closed
-    tab_menu: chip === 2 ? 'Created' : chip === 3 ? 'Closed' : 'My Trips',
-    perpage:10,
-    page:page
-  });
-  
-  dispatch(fetchTripList({ requestBody: request, uri: 'trip/trip-by-user' }));
-  }
+      filter: filterValue === '' ? [] : [filterValue],
+      //My Trips,Created,Closed
+      tab_menu: chip === 2 ? 'Created' : chip === 3 ? 'Closed' : 'My Trips',
+      perpage: 10,
+      page: page,
+    });
 
-const setChip = (value: number) => {
-  dispatch({ type: 'SET_CHIP', payload: value });
-}
+    dispatch(fetchTripList({requestBody: request, uri: 'trip/trip-by-user'}));
+  };
+
+  const setChip = (value: number) => {
+    dispatch({type: 'SET_CHIP', payload: value});
+  };
 
   const [arrowRotation, setArrowRotation] = useState(new Animated.Value(0));
 
@@ -112,18 +113,27 @@ const setChip = (value: number) => {
 
   const loadMoreTrips = () => {
     if (trip?.total_page && trip?.total_count) {
-        const nextPage = trip.total_page + 1;
-        if (nextPage <= trip.total_page) {
-          fetchList(nextPage);
-        }
+      const nextPage = trip.total_page + 1;
+      if (nextPage <= trip.total_page) {
+        fetchList(nextPage);
       }
+    }
   };
 
   return (
     <View flex backgroundColor={AppColors.Black} padding-20>
-      <Header leftIcon={false} title="My Trips" rightIcon={AppImages.REFRESH} />
+      <Header
+        leftIcon={false}
+        title="My Trips"
+        rightIcon={AppImages.REFRESH}
+        rightOnpress={() => {
+          setSearch('')
+          dispatch({type: 'SET_FILTER_VALUE', payload: ''});
+          fetchList(1);
+        }}
+      />
 
-      {loadingTrip && <BackgroundLoader/>}
+      {loadingTrip && <BackgroundLoader />}
 
       <View row centerV>
         <View flex>
@@ -136,7 +146,9 @@ const setChip = (value: number) => {
             marginT-25
             marginB-20
             value={search}
-            onChangeText={(text: any) => {setSearch(text)}}
+            onChangeText={(text: any) => {
+              setSearch(text);
+            }}
             leadingAccessory={
               <Image
                 source={AppImages.SEARCH}
@@ -262,9 +274,7 @@ const setChip = (value: number) => {
                   <View row right flex centerV>
                     <Text style={styles.text1}>Status</Text>
                     <View style={styles.statusView}>
-                      <Text style={styles.statusText}>
-                        {item.trip_status}
-                      </Text>
+                      <Text style={styles.statusText}>{item.trip_status}</Text>
                     </View>
                   </View>
                 </View>
@@ -311,6 +321,7 @@ const setChip = (value: number) => {
         }}
         onEndReached={loadMoreTrips}
         onEndReachedThreshold={0.5}
+        keyExtractor={(item, index) => `${item.id}-${index}`}
       />
     </View>
   );

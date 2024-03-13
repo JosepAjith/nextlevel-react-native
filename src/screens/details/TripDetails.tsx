@@ -55,15 +55,18 @@ const TripDetails: React.FC<Props> = ({route}: any) => {
 
   useFocusEffect(
     React.useCallback(() => {
-      let request = JSON.stringify({
-        id: id,
-      });
-      dispatch(fetchTripDetails({requestBody: request}));
-
+      fetchDetails();
       // Clean-up function
       return () => {};
     }, [cancelData]),
   );
+
+  const fetchDetails = () => {
+    let request = JSON.stringify({
+      id: id,
+    });
+    dispatch(fetchTripDetails({requestBody: request}));
+  };
 
   const cancelingTrip = async (book_id: number) => {
     let request = {
@@ -100,7 +103,7 @@ const TripDetails: React.FC<Props> = ({route}: any) => {
   return (
     <View flex backgroundColor={AppColors.Black}>
       <View padding-20>
-        <Header title="Trip Details" rightIcon={AppImages.REFRESH} />
+        <Header title="Trip Details" rightIcon={AppImages.REFRESH} rightOnpress={fetchDetails}/>
       </View>
 
       {(loadingTripDetails || loadingCancel) && <BackgroundLoader />}
@@ -179,7 +182,8 @@ const TripDetails: React.FC<Props> = ({route}: any) => {
                 )}
                 <View row marginB-10>
                   <Text style={styles.rightText}>Starting Point</Text>
-                  <TouchableOpacity style={{flex:1}}
+                  <TouchableOpacity
+                    style={{flex: 1}}
                     onPress={() =>
                       navigation.navigate(RouteNames.MapScreen, {
                         type: 'details',

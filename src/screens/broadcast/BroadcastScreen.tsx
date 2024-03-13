@@ -64,11 +64,10 @@ const BroadcastScreen: React.FC<Props> = ({route}: any) => {
     }, []),
   );
 
-  const getMessages = (page : number) => {
+  const getMessages = (page: number) => {
     dispatch(
       fetchNotifications({
-        requestBody: {trip_id: id, perpage:10,
-        page:page,},
+        requestBody: {trip_id: id, perpage: 10, page: page},
         uri: 'notification/message-show-from',
       }),
     );
@@ -76,11 +75,11 @@ const BroadcastScreen: React.FC<Props> = ({route}: any) => {
 
   const loadMoreMessages = () => {
     if (notification?.total_page && notification?.total_count) {
-        const nextPage = notification.total_page + 1;
-        if (nextPage <= notification.total_page) {
-          getMessages(nextPage);
-        }
+      const nextPage = notification.total_page + 1;
+      if (nextPage <= notification.total_page) {
+        getMessages(nextPage);
       }
+    }
   };
 
   const Send = async () => {
@@ -99,8 +98,8 @@ const BroadcastScreen: React.FC<Props> = ({route}: any) => {
     if (NotifSendData != null) {
       if (!loadingSendNotif && !NotifSendError && NotifSendData.status) {
         showToast(NotifSendData.message);
-        setMsg('')
-        getMessages(1)
+        setMsg('');
+        getMessages(1);
       } else {
         showToast(NotifSendData.message);
       }
@@ -109,7 +108,14 @@ const BroadcastScreen: React.FC<Props> = ({route}: any) => {
 
   return (
     <View flex backgroundColor={AppColors.Black} padding-20>
-      <Header title="BroadCast" rightIcon={AppImages.REFRESH} />
+      <Header
+        title="BroadCast"
+        rightIcon={AppImages.REFRESH}
+        rightOnpress={() => {
+          setMsg('');
+          getMessages(1);
+        }}
+      />
 
       <View flex backgroundColor="#1B1E1D" style={styles.card}>
         <View flex>
@@ -127,7 +133,9 @@ const BroadcastScreen: React.FC<Props> = ({route}: any) => {
                     style={{borderRadius: 16, marginTop: 20}}
                   />
                   <View flex right marginL-10>
-                    <Text style={styles.time}>{getDayTime(item.created_at)}</Text>
+                    <Text style={styles.time}>
+                      {getDayTime(item.created_at)}
+                    </Text>
                     <View style={styles.msgView} marginT-5>
                       <Text style={styles.message}>{item.content}</Text>
                     </View>
@@ -139,27 +147,27 @@ const BroadcastScreen: React.FC<Props> = ({route}: any) => {
           />
         </View>
 
-{userId == loginUserId &&
-        <View row marginV-20>
-          <View flex marginR-10>
-            <TextField
-              placeholder={'Type your broadcast message'}
-              placeholderTextColor={'#72777A'}
-              fieldStyle={styles.typeView}
-              style={styles.time}
-              value={message}
-              onChangeText={text => setMsg(text)}
-              onSubmitEditing={Send}
-            />
-          </View>
+        {userId == loginUserId && (
+          <View row marginV-20>
+            <View flex marginR-10>
+              <TextField
+                placeholder={'Type your broadcast message'}
+                placeholderTextColor={'#72777A'}
+                fieldStyle={styles.typeView}
+                style={styles.time}
+                value={message}
+                onChangeText={text => setMsg(text)}
+                onSubmitEditing={Send}
+              />
+            </View>
 
-          <View style={styles.sendView} center>
-            <TouchableOpacity onPress={Send}>
-              <Image source={AppImages.BROADCAST} width={24} height={24} />
-            </TouchableOpacity>
+            <View style={styles.sendView} center>
+              <TouchableOpacity onPress={Send}>
+                <Image source={AppImages.BROADCAST} width={24} height={24} />
+              </TouchableOpacity>
+            </View>
           </View>
-        </View>
-}
+        )}
       </View>
     </View>
   );

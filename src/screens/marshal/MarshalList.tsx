@@ -18,9 +18,9 @@ import {Dimensions, FlatList, TouchableOpacity} from 'react-native';
 import {Header} from '../../components/Header';
 import {useDispatch, useSelector} from 'react-redux';
 import {styles} from '../mytrip/styles';
-import { AnyAction, ThunkDispatch } from '@reduxjs/toolkit';
-import { RootState } from '../../../store';
-import { fetchUserList } from '../../api/user/UserListSlice';
+import {AnyAction, ThunkDispatch} from '@reduxjs/toolkit';
+import {RootState} from '../../../store';
+import {fetchUserList} from '../../api/user/UserListSlice';
 import BackgroundLoader from '../../components/BackgroundLoader';
 
 const {TextField} = Incubator;
@@ -34,7 +34,7 @@ export type MarshalListRouteProps = RouteProp<RootStackParams, 'MarshalList'>;
 
 interface Props {}
 
-const Marshals =  ['Marshal','Super Marshal','Get To Gether']
+const Marshals = ['Marshal', 'Super Marshal', 'Get To Gether'];
 
 const MarshalList: React.FC<Props> = () => {
   const navigation = useNavigation<MarshalListNavigationProps>();
@@ -46,31 +46,40 @@ const MarshalList: React.FC<Props> = () => {
   );
   const [search, setSearch] = useState('');
 
-
   useFocusEffect(
     React.useCallback(() => {
-      let request = JSON.stringify({
-        level: Marshals,
-      });
-      dispatch(fetchUserList({requestBody: request}));
+      FetchList();
 
-      return () => {
-        
-      };
+      return () => {};
     }, []),
   );
 
-  const SearchedMarshal = users.filter((item) =>
-  item.name.toLowerCase().includes(search.toLowerCase()) ||
-  item.email.toLowerCase().includes(search.toLowerCase()) ||
-  item.level.toLowerCase().includes(search.toLowerCase())
-);
+  const FetchList = () => {
+    let request = JSON.stringify({
+      level: Marshals,
+    });
+    dispatch(fetchUserList({requestBody: request}));
+  };
+
+  const SearchedMarshal = users.filter(
+    item =>
+      item.name.toLowerCase().includes(search.toLowerCase()) ||
+      item.email.toLowerCase().includes(search.toLowerCase()) ||
+      item.level.toLowerCase().includes(search.toLowerCase()),
+  );
 
   return (
     <View flex backgroundColor={AppColors.Black} padding-20>
-      <Header title="Marshals" rightIcon={AppImages.REFRESH} />
+      <Header
+        title="Marshals"
+        rightIcon={AppImages.REFRESH}
+        rightOnpress={() => {
+          setSearch('');
+          FetchList;
+        }}
+      />
 
-      {loadingUsers && <BackgroundLoader/>}
+      {loadingUsers && <BackgroundLoader />}
 
       <TextField
         fieldStyle={[styles.field, {width: '100%'}]}
@@ -81,7 +90,7 @@ const MarshalList: React.FC<Props> = () => {
         marginT-25
         marginB-20
         value={search}
-        onChangeText={(text)=> setSearch(text)}
+        onChangeText={text => setSearch(text)}
         leadingAccessory={
           <Image source={AppImages.SEARCH} width={20} height={20} marginR-10 />
         }
@@ -93,33 +102,43 @@ const MarshalList: React.FC<Props> = () => {
         renderItem={({item, index}) => {
           const isEvenIndex = index % 2 === 0;
           const alignmentStyle = isEvenIndex ? 'flex-start' : 'flex-end';
-      
+
           return (
             <View style={{alignItems: alignmentStyle, flex: 1}}>
-              <TouchableOpacity onPress={()=>{dispatch({ type: 'SET_USER_ID', payload: item.id }) 
-              navigation.navigate(RouteNames.ProfileScreen)}}>
-              <View center style={[styles.marshalView, {width: itemWidth}]}>
-                <Image
-                  source={item.image?{uri:item.image}:AppImages.PLACEHOLDER}
-                  style={{
-                    width: '100%',
-                    height: 100,
-                    borderRadius: 5
-                  }}
-                />
-                <View paddingV-10 center>
-                <Text style={styles.name}>{item.name}</Text>
-                <Text style={styles.email}>{item.email}</Text>
-                <View row center>
-                  <Text style={styles.email}>{item.level}</Text>
-                  <View row marginL-5>
-                    <Image source={AppImages.STAR} width={10} height={10} />
-                    <Image source={AppImages.STAR} width={10} height={10} marginH-5/>
-                    <Image source={AppImages.STAR} width={10} height={10} />
+              <TouchableOpacity
+                onPress={() => {
+                  dispatch({type: 'SET_USER_ID', payload: item.id});
+                  navigation.navigate(RouteNames.ProfileScreen);
+                }}>
+                <View center style={[styles.marshalView, {width: itemWidth}]}>
+                  <Image
+                    source={
+                      item.image ? {uri: item.image} : AppImages.PLACEHOLDER
+                    }
+                    style={{
+                      width: '100%',
+                      height: 100,
+                      borderRadius: 5,
+                    }}
+                  />
+                  <View paddingV-10 center>
+                    <Text style={styles.name}>{item.name}</Text>
+                    <Text style={styles.email}>{item.email}</Text>
+                    <View row center>
+                      <Text style={styles.email}>{item.level}</Text>
+                      <View row marginL-5>
+                        <Image source={AppImages.STAR} width={10} height={10} />
+                        <Image
+                          source={AppImages.STAR}
+                          width={10}
+                          height={10}
+                          marginH-5
+                        />
+                        <Image source={AppImages.STAR} width={10} height={10} />
+                      </View>
+                    </View>
                   </View>
                 </View>
-                </View>
-              </View>
               </TouchableOpacity>
             </View>
           );

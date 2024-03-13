@@ -96,14 +96,18 @@ const UserList: React.FC<Props> = () => {
 
   useFocusEffect(
     React.useCallback(() => {
-      let request = JSON.stringify({
-        level: filterValue ? [filterValue] : User,
-      });
-      dispatch(fetchUserList({requestBody: request}));
+     FetchList();
 
       return () => {};
     }, [filterValue]),
   );
+
+  const FetchList = () => {
+    let request = JSON.stringify({
+      level: filterValue ? [filterValue] : User,
+    });
+    dispatch(fetchUserList({requestBody: request}));
+  }
 
   const SearchedUsers = users.filter(
     item =>
@@ -140,7 +144,11 @@ const UserList: React.FC<Props> = () => {
   return (
     <View flex backgroundColor={AppColors.Black}>
       <View flex padding-20>
-        <Header title="User List" rightIcon={AppImages.REFRESH} />
+        <Header title="User List" rightIcon={AppImages.REFRESH} rightOnpress={() => {
+          setSearch('');
+          dispatch({type: 'SET_FILTER_VALUE', payload: ''});
+          FetchList;
+        }}/>
 
         {loadingUsers && <BackgroundLoader/>}
 
