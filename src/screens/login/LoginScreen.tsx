@@ -54,6 +54,21 @@ const LoginScreen: React.FC<Props> = () => {
     (state: RootState) => state.GlobalVariables,
   );
 
+  useEffect(() => {
+    const setFCMToken = async () => {
+      let token;
+      token = await AsyncStorage.getItem(AppStrings.FCM_TOKEN);
+      if (token != null) {
+        setLogin({
+          ...loginInput,
+          fcmToken: token,
+        });
+      }
+    };
+
+    setFCMToken();
+  }, []);
+
   function isValidate(): boolean {
     if (!IsNetConnected) {
       showToast('Need internet connection');
@@ -95,24 +110,18 @@ const LoginScreen: React.FC<Props> = () => {
           AppStrings.ACCESS_TOKEN,
           LoginData.token == null ? '' : LoginData.token,
         );
-        AsyncStorage.setItem(
-          AppStrings.IS_LOGIN,
-          'true'
-        );
-        AsyncStorage.setItem(
-          AppStrings.TYPE,
-          LoginData.user.level
-        );
+        AsyncStorage.setItem(AppStrings.IS_LOGIN, 'true');
+        AsyncStorage.setItem(AppStrings.TYPE, LoginData.user.level);
         AsyncStorage.setItem(
           AppStrings.LOGIN_USER_ID,
-          String(LoginData.user.id)
+          String(LoginData.user.id),
         );
         navigation.replace(RouteNames.BottomTabs);
       } else {
         if (LoginData.verified == 0) {
           navigation.navigate(RouteNames.VerificationScreen, {
             email: loginInput.email,
-            from:'login'
+            from: 'login',
           });
         }
         showToast(LoginData.message);
@@ -126,7 +135,7 @@ const LoginScreen: React.FC<Props> = () => {
         <Text style={styles.title}>Sign in</Text>
       </View>
 
-      {loadingLogin && <BackgroundLoader/>}
+      {loadingLogin && <BackgroundLoader />}
 
       <TextField
         fieldStyle={styles.field}

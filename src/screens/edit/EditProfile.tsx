@@ -32,9 +32,11 @@ import {ProfileValidation} from '../../api/profile/ProfileValidation';
 import DropdownComponent from '../../components/DropdownComponent';
 import ImageSelector from '../../components/ImageSelector';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
-import { editProfile, reset } from '../../api/profile/EditProfileSlice';
+import {editProfile, reset} from '../../api/profile/EditProfileSlice';
 import moment from 'moment';
 import BackgroundLoader from '../../components/BackgroundLoader';
+import CountryPicker, {DARK_THEME} from 'react-native-country-picker-modal';
+import { fetchProfileDetails } from '../../api/profile/ProfileDetailsSlice';
 
 const {TextField} = Incubator;
 
@@ -77,11 +79,11 @@ const EditProfile: React.FC<Props> = () => {
     (state: RootState) => state.ProfileDetails,
   );
   const [isImageClick, setImageClick] = useState(false);
+  const [isNationClick, setNationClick] = useState(false);
 
   useEffect(() => {
     if (profileDetails && typeof profileDetails.user === 'object') {
       const item = profileDetails.user;
-console.log(item)
       setProfile({
         ...profileInput,
         name: item.name ? item.name : '',
@@ -91,7 +93,7 @@ console.log(item)
         location: item.location ? item.location : '',
         emirates: item.emirates ? item.emirates : '',
         nationality: item.nationality ? item.nationality : '',
-        occupation: item.occupation? item.occupation : '',
+        occupation: item.occupation ? item.occupation : '',
         interest: item.interest ? item.interest : '',
         referred_by: item.referred_by ? item.referred_by : '',
         image: {
@@ -206,7 +208,10 @@ console.log(item)
       name: profileInput.image.name,
       type: profileInput.image.type,
     });
-    formData.append('dob', moment(profileInput.dob, 'DD-MM-YYYY', true).format('YYYY-MM-DD'));
+    formData.append(
+      'dob',
+      moment(profileInput.dob, 'DD-MM-YYYY', true).format('YYYY-MM-DD'),
+    );
     formData.append('phone', profileInput.phone);
     formData.append('gender', profileInput.gender);
     formData.append('location', profileInput.location);
@@ -228,9 +233,10 @@ console.log(item)
   };
 
   useEffect(() => {
-    if (editProfileData!= null) {
+    if (editProfileData != null) {
       if (!loadingEditProfile && !editProfileError && editProfileData.status) {
         showToast(editProfileData.message);
+        dispatch(fetchProfileDetails({requestBody: ''}));
         navigation.goBack();
       } else {
         showToast(editProfileData.message);
@@ -252,10 +258,15 @@ console.log(item)
     hideDatePicker();
   };
 
+  const onCountrySelect = (country: { name: any; }) => {
+    setProfile({...profileInput, nationality: country.name});
+    setValidate({...profileValidate, InvalidNation: false});
+    setNationClick(false);
+  };
+
   return (
     <View flex backgroundColor={AppColors.Black}>
-
-      {loadingEditProfile && <BackgroundLoader/>}
+      {loadingEditProfile && <BackgroundLoader />}
       <ScrollView>
         <View padding-20>
           <Header title="Edit Profile" />
@@ -263,20 +274,22 @@ console.log(item)
           <TouchableOpacity onPress={() => setImageClick(!isImageClick)}>
             <View center style={styles.imageView}>
               {profileInput.image.uri ? (
-              <Image
-                source={{uri: profileInput.image.uri}}
-                style={{width: '100%', height: '100%', borderRadius: 20}}
-              />
-            ) : (
-              <>
-              <Image source={AppImages.GALLERY} width={34} height={30} />
-              <Text style={styles.add}>+ Add Profile Image</Text>
-              <Text style={styles.click}>
-                (Click From camera or browse to upload)
-              </Text>
-              <Text red10>{profileValidate.InvalidImage ? '*Required' : ''}</Text>
-              </>
-            )}
+                <Image
+                  source={{uri: profileInput.image.uri}}
+                  style={{width: '100%', height: '100%', borderRadius: 20}}
+                />
+              ) : (
+                <>
+                  <Image source={AppImages.GALLERY} width={34} height={30} />
+                  <Text style={styles.add}>+ Add Profile Image</Text>
+                  <Text style={styles.click}>
+                    (Click From camera or browse to upload)
+                  </Text>
+                  <Text red10>
+                    {profileValidate.InvalidImage ? '*Required' : ''}
+                  </Text>
+                </>
+              )}
             </View>
           </TouchableOpacity>
 
@@ -350,10 +363,17 @@ console.log(item)
           />
 
           <Text style={styles.label}>Gender</Text>
-          <DropdownComponent data={Gender} item={profileInput.gender} label="type" value="id" onChange={(item: any)=>{
-            setProfile({...profileInput, gender: item});
-              setValidate({...profileValidate, InvalidGender: false});}}
-              error={profileValidate.InvalidGender}/>
+          <DropdownComponent
+            data={Gender}
+            item={profileInput.gender}
+            label="type"
+            value="id"
+            onChange={(item: any) => {
+              setProfile({...profileInput, gender: item});
+              setValidate({...profileValidate, InvalidGender: false});
+            }}
+            error={profileValidate.InvalidGender}
+          />
 
           <TextField
             fieldStyle={styles.field}
@@ -377,30 +397,37 @@ console.log(item)
           />
 
           <Text style={styles.label}>Emirate</Text>
-          <DropdownComponent data={Emirates} item={profileInput.emirates}  label="type" value="id" onChange={(item: any)=>{setProfile({...profileInput, emirates: item});
-              setValidate({...profileValidate, InvalidEmirates: false});}}
-              error={profileValidate.InvalidEmirates}/>
-
-          <TextField
-            fieldStyle={styles.field}
-            label={'Nationality'}
-            placeholder={'Select nationality'}
-            placeholderTextColor={'#999999'}
-            labelStyle={styles.label}
-            style={styles.text}
-            paddingH-20
-            marginB-20
-            value={profileInput.nationality}
-            onChangeText={(text: any) => {
-              setProfile({...profileInput, nationality: text});
-              setValidate({...profileValidate, InvalidNation: false});
+          <DropdownComponent
+            data={Emirates}
+            item={profileInput.emirates}
+            label="type"
+            value="id"
+            onChange={(item: any) => {
+              setProfile({...profileInput, emirates: item});
+              setValidate({...profileValidate, InvalidEmirates: false});
             }}
-            trailingAccessory={
-              <Text red10>
-                {profileValidate.InvalidNation ? '*Required' : ''}
-              </Text>
-            }
+            error={profileValidate.InvalidEmirates}
           />
+
+          <TouchableOpacity onPress={() => setNationClick(!isNationClick)}>
+            <TextField
+              fieldStyle={styles.field}
+              label={'Nationality'}
+              placeholder={'Select nationality'}
+              placeholderTextColor={'#999999'}
+              labelStyle={styles.label}
+              style={styles.text}
+              paddingH-20
+              marginB-20
+              editable={false}
+              value={profileInput.nationality}
+              trailingAccessory={
+                <Text red10>
+                  {profileValidate.InvalidNation ? '*Required' : ''}
+                </Text>
+              }
+            />
+          </TouchableOpacity>
 
           <TextField
             fieldStyle={styles.field}
@@ -465,11 +492,14 @@ console.log(item)
             }
           />
 
-          <ButtonView title="Update Profile" onPress={() => {
-            if (isValidate()) {
-              updatingProfile();
-            }
-          }} />
+          <ButtonView
+            title="Update Profile"
+            onPress={() => {
+              if (isValidate()) {
+                updatingProfile();
+              }
+            }}
+          />
         </View>
       </ScrollView>
       {isImageClick && (
@@ -479,6 +509,20 @@ console.log(item)
             setProfile({...profileInput, image: item});
             setValidate({...profileValidate, InvalidImage: false});
           }}
+        />
+      )}
+
+      {isNationClick && (
+        <CountryPicker
+          withFlag
+          withCallingCode
+          withModal
+          visible={isNationClick}
+          onSelect={onCountrySelect}
+          onClose={() => setNationClick(false)}
+          countryCode={'IN'}
+          withFilter
+          theme={DARK_THEME}
         />
       )}
     </View>

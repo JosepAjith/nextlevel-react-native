@@ -365,6 +365,7 @@ const AddTripScreen: React.FC<Props> = ({route, id, initial}: Props) => {
       latitude: String(location.latitude),
       longitude: String(location.longitude),
     });
+    setValidate({...tripValidate, InvalidPlace: false});
   };
 
   return (

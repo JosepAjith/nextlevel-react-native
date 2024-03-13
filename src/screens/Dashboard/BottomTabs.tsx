@@ -21,6 +21,8 @@ import {RootState} from '../../../store';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import AppStrings from '../../constants/AppStrings';
 import { useFocusEffect, useRoute } from '@react-navigation/native';
+import { fetchProfileDetails } from '../../api/profile/ProfileDetailsSlice';
+import { AnyAction, ThunkDispatch } from '@reduxjs/toolkit/react';
 
 if (Platform.OS === 'android') {
   if (UIManager.setLayoutAnimationEnabledExperimental) {
@@ -31,7 +33,7 @@ if (Platform.OS === 'android') {
 const BottomTabs = () => {
   const [activeTab, setActiveTab] = useState('Home');
   const {openFilter,filterValue} = useSelector((state: RootState) => state.TripReducer);
-  const dispatch = useDispatch();
+  const dispatch: ThunkDispatch<RootState, any, AnyAction> = useDispatch();
   const {type} = useSelector((state: RootState) => state.GlobalVariables);
   const [replace, setReplace] = useState(false)
   useEffect(() => {
@@ -42,6 +44,7 @@ const BottomTabs = () => {
 
   useFocusEffect(
     React.useCallback(() => {
+      dispatch(fetchProfileDetails({requestBody: ''}))
       dispatch({ type: 'SET_FILTER_VALUE', payload: '' });
       dispatch({ type: 'SET_CHIP', payload: 1 });
       dispatch({ type: 'SET_USER_ID', payload: 0 })

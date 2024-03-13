@@ -161,7 +161,7 @@ const HomeScreen: React.FC<Props> = () => {
                   </View>
 
                   <View flex right centerV margin-20>
-                    <Image source={AppImages.SHARE} width={30} height={30} />
+                    {/* <Image source={AppImages.SHARE} width={30} height={30} /> */}
                   </View>
 
                   <TouchableOpacity

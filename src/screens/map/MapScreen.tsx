@@ -33,7 +33,6 @@ interface Props {}
 
 const MapScreen: React.FC<Props> = ({route}: any) => {
   const navigation = useNavigation();
-  const {setPlaceLocation} = route.params;
   const type = route.params.type;
   const dispatch: ThunkDispatch<RootState, any, AnyAction> = useDispatch();
   const [location, setLocation] = useState<{
@@ -143,7 +142,7 @@ const MapScreen: React.FC<Props> = ({route}: any) => {
           <ButtonView
             title="Done"
             onPress={() => {
-              setPlaceLocation({
+              route.params.setPlaceLocation({
                 latitude: location?.latitude,
                 longitude: location?.longitude,
                 address: address,
