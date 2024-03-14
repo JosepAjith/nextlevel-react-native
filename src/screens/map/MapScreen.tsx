@@ -34,6 +34,8 @@ interface Props {}
 const MapScreen: React.FC<Props> = ({route}: any) => {
   const navigation = useNavigation();
   const type = route.params.type;
+  const lat = route.params.lat;
+  const long = route.params.long;
   const dispatch: ThunkDispatch<RootState, any, AnyAction> = useDispatch();
   const [location, setLocation] = useState<{
     latitude: number;
@@ -47,6 +49,11 @@ const MapScreen: React.FC<Props> = ({route}: any) => {
   useEffect(() => {
     if (type == 'add') {
       fetchLocation();
+    } else if (type == 'edit') {
+      setLocation({
+        latitude: Number(lat),
+        longitude: Number(long),
+      });
     } else {
       setLocation({
         latitude: Number(tripDetails?.data.latitude),
@@ -116,7 +123,7 @@ const MapScreen: React.FC<Props> = ({route}: any) => {
           latitudeDelta: 0.0122,
           longitudeDelta: 0.0061,
         }}
-        onPress={handleMapPress}>
+        onPress={type === 'add' || type === 'edit' ? handleMapPress : undefined}>
         {location && <Marker coordinate={location} anchor={{x: 0.5, y: 0.5}} />}
       </MapView>
 

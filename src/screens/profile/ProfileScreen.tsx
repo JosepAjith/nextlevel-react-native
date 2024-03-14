@@ -71,13 +71,17 @@ const ProfileScreen: React.FC<Props> = ({isReplace}: Props) => {
           <Header title="Profile" />
         )}
 
-        {loadingProfileDetails && <BackgroundLoader/>}
+        {loadingProfileDetails && <BackgroundLoader />}
 
         <View row marginV-20>
           <View flex>
             <View marginB-10 style={styles.imageView}>
               <Image
-                source={profileDetails?.user.image ? {uri:profileDetails.user.image} : AppImages.PLACEHOLDER}
+                source={
+                  profileDetails?.user.image
+                    ? {uri: profileDetails.user.image}
+                    : AppImages.PLACEHOLDER
+                }
                 width={70}
                 height={70}
                 style={{borderRadius: 35}}
@@ -90,12 +94,21 @@ const ProfileScreen: React.FC<Props> = ({isReplace}: Props) => {
                 <Text style={[styles.rank, {color: AppColors.Orange}]}>
                   {profileDetails?.user.level}
                 </Text>
-                <Image
-                  source={AppImages.STAR}
-                  width={10}
-                  height={10}
-                  marginL-5
-                />
+                {Array.from({
+                  length:
+                    profileDetails?.user.level == 'Marshal' ||
+                    profileDetails?.user.level == 'Super Marshal'
+                      ? 3
+                      : 1,
+                }).map((_, index) => (
+                  <Image
+                    key={index}
+                    source={AppImages.STAR}
+                    width={10}
+                    height={10}
+                    marginL-5
+                  />
+                ))}
               </View>
             </View>
           </View>

@@ -25,5 +25,5 @@ export type RootStackParams = {
 JoinTrip: {id: any, status:any, type:any};
 NotificationScreen: undefined;
 BroadcastScreen: {id: any,userId: any};
-MapScreen: {setPlaceLocation?: any, type: any};
+MapScreen: {setPlaceLocation?: any, type: any, lat: any, long: any};
 };

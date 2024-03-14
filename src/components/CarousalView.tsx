@@ -14,20 +14,6 @@ const CarouselView = ({images}: Prop) => {
   const carouselWidth = windowWidth ; 
   const carouselHeight = windowHeight * 0.2;
     const [currentIndex, setCurrentIndex] = useState(0);
-    const [dummy, setImages] = useState([
-        {
-          id: 1,
-          image: AppImages.DETAILS
-        },
-        {
-          id: 2,
-          image: AppImages.DETAILS
-        },
-        {
-          id: 3,
-          image: AppImages.DETAILS
-        },
-      ]);
 
 
     return (
@@ -50,7 +36,7 @@ const CarouselView = ({images}: Prop) => {
         )}
     />
     :
-    <ImageBackground source={AppImages.DETAILS} style={{width:'100%', height:170,alignSelf:'center'}} imageStyle={{borderRadius:5}}>
+    <ImageBackground source={AppImages.NOIMAGE} style={{width:'100%', height:170,alignSelf:'center'}} imageStyle={{borderRadius:5}}>
            <View flex row centerH bottom marginB-20>
                 {[1].map((item, index) => (
                     <View key={index} style={[styles.dot, { backgroundColor: index === currentIndex ? 'white' : 'transparent' }]} />

@@ -476,7 +476,12 @@ const AddTripScreen: React.FC<Props> = ({route, id, initial}: Props) => {
 
           <TouchableOpacity
             onPress={() =>
-              navigation.navigate(RouteNames.MapScreen, {setPlaceLocation, type:'add'})
+              navigation.navigate(RouteNames.MapScreen, {
+                setPlaceLocation,
+                type: routeId == 0 ? 'add' : 'edit',
+                lat: tripInput.latitude,
+                long: tripInput.longitude,
+              })
             }>
             <TextField
               fieldStyle={[
