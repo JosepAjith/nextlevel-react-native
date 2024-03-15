@@ -1,18 +1,23 @@
 import moment from 'moment';
-import {Linking, ToastAndroid} from 'react-native';
+import {Alert, Linking, Platform, ToastAndroid} from 'react-native';
 
 export const makeCall = (phoneNumber: string) => {
   Linking.openURL(`tel:${phoneNumber}`);
 };
 
 export const showToast = (message: any) => {
-  ToastAndroid.showWithGravityAndOffset(
-    message,
-    ToastAndroid.SHORT,
-    ToastAndroid.BOTTOM,
-    1,
-    50,
-  );
+  if (Platform.OS === 'android') {
+    ToastAndroid.showWithGravityAndOffset(
+      message,
+      ToastAndroid.SHORT,
+      ToastAndroid.BOTTOM,
+      1,
+      50,
+    );
+  } else {
+    Alert.alert(message);
+  }
+  
 };
 
 
