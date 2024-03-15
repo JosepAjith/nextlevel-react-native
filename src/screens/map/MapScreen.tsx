@@ -44,6 +44,7 @@ const MapScreen: React.FC<Props> = ({route}: any) => {
 
   const [isDone, setDone] = useState(false);
   const [address, setAddress] = useState('');
+  const [mapType, setMapType] = useState<'standard' | 'satellite'>('standard');
   const {tripDetails} = useSelector((state: RootState) => state.TripDetails);
 
   useEffect(() => {
@@ -117,6 +118,11 @@ const MapScreen: React.FC<Props> = ({route}: any) => {
     <View flex>
       <MapView
         style={{flex: 1}}
+        showsMyLocationButton={true}
+        showsPointsOfInterest={true}
+        showsUserLocation={true}
+        followsUserLocation={true}
+        mapType={mapType}
         region={{
           latitude: location?.latitude || 0, // Default latitude (or any value)
           longitude: location?.longitude || 0, // Default longitude (or any value)
@@ -126,6 +132,19 @@ const MapScreen: React.FC<Props> = ({route}: any) => {
         onPress={type === 'add' || type === 'edit' ? handleMapPress : undefined}>
         {location && <Marker coordinate={location} anchor={{x: 0.5, y: 0.5}} />}
       </MapView>
+
+      <View
+        style={{
+          position: 'absolute',
+          bottom: 20,
+          right: 20,
+        }}>
+        <Button
+        backgroundColor={AppColors.Black}
+          label={mapType === 'standard' ? 'Satellite' : 'Default'}
+          onPress={() => setMapType(mapType === 'standard' ? 'satellite' : 'standard')}
+        />
+      </View>
 
       {isDone && (
         <View
