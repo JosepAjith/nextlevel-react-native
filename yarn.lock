@@ -6085,6 +6085,11 @@
   "resolved" "https://registry.npmjs.org/react-native-pager-view/-/react-native-pager-view-6.2.3.tgz"
   "version" "6.2.3"
 
+"react-native-permissions@^4.1.4":
+  "integrity" "sha512-el6u90VZNFDEtmHpSheirwRhGvs6M5rSZcoqIqB128IPO00f2c1q+PP4kEaM1u19Q0ldQ+R+S7C/l8Zrduy6JQ=="
+  "resolved" "https://registry.npmjs.org/react-native-permissions/-/react-native-permissions-4.1.4.tgz"
+  "version" "4.1.4"
+
 "react-native-push-notification@^8.1.1":
   "integrity" "sha512-XpBtG/w+a6WXTxu6l1dNYyTiHnbgnvjoc3KxPTxYkaIABRmvuJZkFxqruyGvfCw7ELAlZEAJO+dthdTabCe1XA=="
   "resolved" "https://registry.npmjs.org/react-native-push-notification/-/react-native-push-notification-8.1.1.tgz"

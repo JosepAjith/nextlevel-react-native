@@ -135,6 +135,7 @@ const UserList: React.FC<Props> = () => {
     if (updateRoleData != null) {
       if (!loadingRoleUpdate && !roleUpdateError && updateRoleData.status) {
         showToast(updateRoleData.message);
+        FetchList()
       } else {
         showToast(updateRoleData.message);
       }

@@ -99,7 +99,7 @@ const MyTripScreen: React.FC<Props> = ({isReplace}: Props) => {
 
 
   return (
-    <View flex backgroundColor={AppColors.Black} padding-20>
+    <View flex backgroundColor={AppColors.Black} padding-20 paddingB-0>
       <Header
         leftIcon={false}
         title="My Trips"
