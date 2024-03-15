@@ -61,8 +61,8 @@ const ListItem = ({item, index, navigation}: Props) => {
             <View row margin-20>
               <Text style={styles.viewText}>{item.title}</Text>
               <View flex right>
-                <Text style={styles.date}>{item.date}</Text>
-                <Text style={styles.date}>{item.start_time}</Text>
+                <Text style={styles.date}>{getUserDate(item.date)}</Text>
+                <Text style={styles.date}>{formattedTime(item.start_time)}</Text>
               </View>
             </View>
 

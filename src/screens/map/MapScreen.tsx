@@ -19,6 +19,8 @@ import AppFonts from '../../constants/AppFonts';
 import Geocoder from 'react-native-geocoding';
 import AppColors from '../../constants/AppColors';
 import ButtonView from '../../components/ButtonView';
+import { PERMISSIONS, RESULTS, check, request } from 'react-native-permissions';
+import { showToast } from '../../constants/commonUtils';
 
 Geocoder.init('AIzaSyACWPy4KNDqex0QYmX-HkF7St0TXA6ARPI', {language: 'en'});
 
@@ -73,10 +75,20 @@ const MapScreen: React.FC<Props> = ({route}: any) => {
         if (granted === PermissionsAndroid.RESULTS.GRANTED) {
           getCurrentLocation();
         } else {
-          ToastAndroid.show(
-            JSON.stringify('Location permission denied'),
-            ToastAndroid.SHORT,
-          );
+          showToast(
+            'Location permission denied');
+        }
+      } catch (err) {
+        console.warn(err);
+      }
+    } else if (Platform.OS === 'ios') {
+      try {
+        const permissionStatus = await request(PERMISSIONS.IOS.LOCATION_WHEN_IN_USE);
+        if (permissionStatus === 'granted') {
+          getCurrentLocation();
+        } else {
+          showToast(
+            'Location permission denied');
         }
       } catch (err) {
         console.warn(err);

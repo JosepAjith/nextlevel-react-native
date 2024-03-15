@@ -74,7 +74,7 @@ const HomeScreen: React.FC<Props> = () => {
 );
 
   return (
-    <View flex backgroundColor={AppColors.Black} padding-20>
+    <View flex backgroundColor={AppColors.Black} padding-20 paddingB-0>
 
       {loadingTrip && <BackgroundLoader/>}
       <View row>

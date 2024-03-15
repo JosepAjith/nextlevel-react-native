@@ -292,7 +292,7 @@ const JoinTrip: React.FC<Props> = ({route}: any) => {
               value={agree}
               label={
                 <Text style={[styles.forgot, {color: 'white', lineHeight: 20}]}>
-                  I have read and agree to the club indemnity{' '}
+                  I have read and agree to the club indemnity{'\n'}
                   <Text style={styles.lineText}>
                     You must accept club indemnity to continue.
                   </Text>
