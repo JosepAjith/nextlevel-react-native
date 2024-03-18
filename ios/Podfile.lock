@@ -1113,6 +1113,8 @@ PODS:
     - glog
     - RCT-Folly (= 2022.05.16.00)
     - React-Core
+  - RNPermissions (4.1.4):
+    - React-Core
   - RNReanimated (3.7.1):
     - glog
     - RCT-Folly (= 2022.05.16.00)
@@ -1190,6 +1192,7 @@ DEPENDENCIES:
   - "RNCPushNotificationIOS (from `../node_modules/@react-native-community/push-notification-ios`)"
   - "RNDateTimePicker (from `../node_modules/@react-native-community/datetimepicker`)"
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
+  - RNPermissions (from `../node_modules/react-native-permissions`)
   - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
@@ -1326,6 +1329,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-community/datetimepicker"
   RNGestureHandler:
     :path: "../node_modules/react-native-gesture-handler"
+  RNPermissions:
+    :path: "../node_modules/react-native-permissions"
   RNReanimated:
     :path: "../node_modules/react-native-reanimated"
   RNScreens:
@@ -1399,6 +1404,7 @@ SPEC CHECKSUMS:
   RNCPushNotificationIOS: 64218f3c776c03d7408284a819b2abfda1834bc8
   RNDateTimePicker: fc2e4f2795877d45e84d85659bebe627eba5c931
   RNGestureHandler: deda62b8339496ba721a45e0f3e2d7a319932cee
+  RNPermissions: e8d5f054c1d7e704220028b2b2b13b64b1bc28c9
   RNReanimated: beb07f7f900543928467da8107c175d1e57a1049
   RNScreens: b582cb834dc4133307562e930e8fa914b8c04ef2
   SocketRocket: f32cd54efbe0f095c4d7594881e52619cfe80b17
