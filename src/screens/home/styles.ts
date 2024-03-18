@@ -4,10 +4,9 @@ import AppFonts from '../../constants/AppFonts';
 
 export const styles = StyleSheet.create({
   title: {
-    fontSize: 27,
+    fontSize: 22,
     fontFamily: AppFonts.BOLD,
     color: 'white',
-    lineHeight: 31,
     width: '70%',
   },
   notifView: {
@@ -67,8 +66,7 @@ export const styles = StyleSheet.create({
   },
   capView:{
     backgroundColor:AppColors.Black,
-    paddingHorizontal:10,
-    paddingVertical:5,
+    padding:5,
     marginLeft:5,
     borderRadius:15
   },
@@ -79,8 +77,7 @@ export const styles = StyleSheet.create({
   },
   statusView:{
     backgroundColor:'#BBFD79',
-    paddingHorizontal:10,
-    paddingVertical:5,
+    padding:5,
     borderRadius:15,
     marginLeft:5
   },

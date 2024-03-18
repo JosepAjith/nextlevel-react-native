@@ -24,5 +24,6 @@ export const RouteNames = {
   JoinTrip: 'JoinTrip',
   NotificationScreen: 'NotificationScreen',
   BroadcastScreen: 'BroadcastScreen',
-  MapScreen: 'MapScreen'
+  MapScreen: 'MapScreen',
+  DeleteAccount: 'DeleteAccount'
 } as const;

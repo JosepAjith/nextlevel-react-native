@@ -222,7 +222,7 @@ const Attendance = ({
       )}
       {userId == loginUserId && TripStatus != 'expired' && (
         <View style={styles.deadline}>
-          <View row marginH-15>
+          <View row marginH-15 style={{justifyContent:'space-between'}}>
             <TouchableOpacity
               style={[styles.smallView, {backgroundColor: '#00A1FC'}]}
               onPress={() =>
@@ -234,7 +234,7 @@ const Attendance = ({
                 source={AppImages.UPDATE}
                 width={24}
                 height={24}
-                marginR-5
+                marginR-3
               />
               <Text style={styles.text2}>Edit Trip</Text>
             </TouchableOpacity>
@@ -248,7 +248,7 @@ const Attendance = ({
                 source={AppImages.CANCEL}
                 width={18}
                 height={18}
-                marginR-5
+                marginR-3
               />
               <Text style={styles.text2}>Close Trip</Text>
             </TouchableOpacity>
@@ -262,7 +262,7 @@ const Attendance = ({
                 source={AppImages.CANCEL}
                 width={18}
                 height={18}
-                marginR-5
+                marginR-3
               />
               <Text style={styles.text2}>Cancel Trip</Text>
             </TouchableOpacity>

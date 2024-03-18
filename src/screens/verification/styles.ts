@@ -10,12 +10,14 @@ export const styles = StyleSheet.create({
     },
     textInputContainer: {
         marginBottom: 30,
+        
       },
       roundedTextInput: {
         borderRadius: 5,
         borderWidth: 2,
         backgroundColor:'rgba(217,217,217,0.2)',
-        borderColor:'white'
+        borderColor:'white',
+        color:'white'
       },
       text:{
         fontSize:13,

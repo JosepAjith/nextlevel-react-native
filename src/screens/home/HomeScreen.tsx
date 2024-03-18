@@ -98,7 +98,7 @@ const HomeScreen: React.FC<Props> = () => {
         placeholderTextColor={'#999999'}
         style={styles.text}
         paddingH-20
-        marginT-25
+        marginT-15
         marginB-20
         value={search}
         onChangeText={(text:any) => setSearch(text)}

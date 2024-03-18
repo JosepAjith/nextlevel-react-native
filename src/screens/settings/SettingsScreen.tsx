@@ -9,9 +9,7 @@ import {styles} from './styles';
 import AppImages from '../../constants/AppImages';
 import {ScrollView, TouchableOpacity} from 'react-native';
 import {Header} from '../../components/Header';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import AppStrings from '../../constants/AppStrings';
-import AccountDelete from './AccountDelete';
+import Logout from './Logout';
 
 const {TextField} = Incubator;
 
@@ -30,7 +28,6 @@ interface Props {}
 const SettingsScreen: React.FC<Props> = () => {
   const navigation = useNavigation<SettingsScreenNavigationProps>();
   const [isPersonal, setPersonal] = useState(false);
-  const [isDelete, setDelete] = useState(false);
   const [isLogout, setLogOut] = useState(false);
 
   const renderOption = (image: any, text: string, onPress: () => void) => (
@@ -101,16 +98,13 @@ const SettingsScreen: React.FC<Props> = () => {
         <View marginV-20>
           <Text style={styles.title}>Login</Text>
         </View>
-        {renderOption(AppImages.DELETE, 'Delete Account', () => {
-          setDelete(!isDelete);
-        })}
+        {renderOption(AppImages.DELETE, 'Delete Account', () => { navigation.navigate(RouteNames.DeleteAccount)})}
         {renderOption(AppImages.LOGOUT, 'Log out', () => {
           setLogOut(!isLogout);
         })}  
         </View>
         </ScrollView>
-         {isDelete && <AccountDelete close={() => setDelete(false)} navigation={navigation} type={'delete'}/>}
-         {isLogout && <AccountDelete close={() => setLogOut(false)} navigation={navigation} type={'logout'}/>}
+         {isLogout && <Logout close={() => setLogOut(false)} navigation={navigation}/>}
       </View>
    
    

@@ -13,9 +13,10 @@ interface Props {
     value: string;
     onChange: any;
     error: any;
+    placeholder?: any
 }
 
-const DropdownComponent = ({data, item, label, value, onChange, error}: Props) => {
+const DropdownComponent = ({data, item, label, value, onChange, error,placeholder}: Props) => {
 
   return (
     <Dropdown
@@ -30,7 +31,7 @@ const DropdownComponent = ({data, item, label, value, onChange, error}: Props) =
       labelField={label}
       valueField={value}
       value={item}
-      placeholder="Select item"
+      placeholder={placeholder ? placeholder : 'Select item'}
       searchPlaceholder="Search..."
       onChange={item => {
         onChange(item.type);

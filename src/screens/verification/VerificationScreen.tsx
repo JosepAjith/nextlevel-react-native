@@ -44,7 +44,7 @@ interface Props {}
 
 const VerificationScreen: React.FC<Props> = ({route}: any) => {
   const navigation = useNavigation<VerificationScreenNavigationProps>();
-  const [timer, setTimer] = useState(10);
+  const [timer, setTimer] = useState(300);
   const [isTimerRunning, setIsTimerRunning] = useState(true);
   const dispatch: ThunkDispatch<RootState, any, AnyAction> = useDispatch();
   const {verifyOtpData, loadingVerifyOtp, verifyOtpError} = useSelector(
@@ -66,7 +66,7 @@ const VerificationScreen: React.FC<Props> = ({route}: any) => {
           if (prevTimer === 0) {
             clearInterval(interval);
             setIsTimerRunning(false);
-            return 10; // Reset timer to 5 minutes when it reaches 0
+            return 300; // Reset timer to 5 minutes when it reaches 0
           }
           return prevTimer - 1;
         });

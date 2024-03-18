@@ -25,19 +25,18 @@ import AddTripScreen from '../screens/addtrip/AddTripScreen';
 import NotificationScreen from '../screens/notification/NotificationScreen';
 import BroadcastScreen from '../screens/broadcast/BroadcastScreen';
 import MapScreen from '../screens/map/MapScreen';
+import DeleteAccount from '../screens/settings/DeleteAccount';
 
 const Stack = createNativeStackNavigator();
 
 const AppStack = () => {
-
-
   return (
     <Stack.Navigator
       screenOptions={{
         headerShown: false,
         animationDuration: 1000,
       }}>
-        <Stack.Screen name={RouteNames.SplashScreen} component={SplashScreen} />
+      <Stack.Screen name={RouteNames.SplashScreen} component={SplashScreen} />
       <Stack.Screen name={RouteNames.OnboardScreen} component={OnboardScreen} />
       <Stack.Screen name={RouteNames.LoginScreen} component={LoginScreen} />
       <Stack.Screen
@@ -76,9 +75,16 @@ const AppStack = () => {
       <Stack.Screen name={RouteNames.JoinTrip} component={JoinTrip} />
       <Stack.Screen name={RouteNames.ProfileScreen} component={ProfileScreen} />
       <Stack.Screen name={RouteNames.AddTripScreen} component={AddTripScreen} />
-      <Stack.Screen name={RouteNames.NotificationScreen} component={NotificationScreen} />
-      <Stack.Screen name={RouteNames.BroadcastScreen} component={BroadcastScreen} />
+      <Stack.Screen
+        name={RouteNames.NotificationScreen}
+        component={NotificationScreen}
+      />
+      <Stack.Screen
+        name={RouteNames.BroadcastScreen}
+        component={BroadcastScreen}
+      />
       <Stack.Screen name={RouteNames.MapScreen} component={MapScreen} />
+      <Stack.Screen name={RouteNames.DeleteAccount} component={DeleteAccount} />
     </Stack.Navigator>
   );
 };

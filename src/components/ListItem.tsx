@@ -96,7 +96,7 @@ const ListItem = ({item, index, navigation}: Props) => {
               <View></View>
             </View>
 
-            <View row flex center>
+            <View row flex center marginH-10>
               <Text style={styles.text1}>Capacity</Text>
               <View style={styles.capView}>
                 <Text style={styles.capty}>
@@ -105,7 +105,7 @@ const ListItem = ({item, index, navigation}: Props) => {
               </View>
             </View>
 
-            <View row right flex centerV>
+            <View row right flex centerV >
               <Text style={styles.text1}>Status</Text>
               <View style={styles.statusView}>
                 <Text style={styles.statusText}>{item.trip_status}</Text>
