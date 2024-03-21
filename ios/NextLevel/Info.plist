@@ -37,6 +37,9 @@
 	<string>Your location is required to show your current position on the map</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Your location is required to show your current position on the map</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+    <string>To allow users to upload and edit photos within the app.</string>
+
 	<key>UIAppFonts</key>
 	<array>
 		<string>Satoshi-Bold.ttf</string>
