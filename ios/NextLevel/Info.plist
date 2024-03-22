@@ -40,7 +40,9 @@
 	<key>NSPhotoLibraryUsageDescription</key>
     <string>To allow users to upload and edit photos within the app.</string>
 	<key>NSCameraUsageDescription</key>
-	<string>To allow users to caoture photos within the app.</string>
+    <string>We need access to your camera to take photos and videos for app functionality.</string>
+
+
 	<key>UIAppFonts</key>
 	<array>
 		<string>Satoshi-Bold.ttf</string>
