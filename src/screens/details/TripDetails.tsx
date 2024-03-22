@@ -277,21 +277,17 @@ const TripDetails: React.FC<Props> = ({route}: any) => {
                             navigation.navigate(RouteNames.JoinTrip, {
                               id: tripDetails.data.id,
                               status:
-                                type == 'Explorer' ||
-                                type == 'Marshal' ||
-                                type == 'Super Marshal'
-                                  ? 'support'
-                                  : '',
+                                type == tripDetails.data.level 
+                                  ? ''
+                                  : 'support',
                               type: 'join',
                             })
                           }>
                           <View style={styles.yellowButton}>
                             <Text style={styles.text2}>
-                              {type == 'Explorer' ||
-                              type == 'Marshal' ||
-                              type == 'Super Marshal'
-                                ? 'Support Sign in'
-                                : 'Sign in'}
+                              {type == tripDetails.data.level
+                                ? 'Sign in'
+                                : 'Support Sign in'}
                             </Text>
                           </View>
                         </TouchableOpacity>
