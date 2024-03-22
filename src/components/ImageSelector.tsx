@@ -15,6 +15,7 @@ import * as ImagePicker from 'react-native-image-picker';
 import { showToast } from '../constants/commonUtils';
 import DocumentPicker from 'react-native-document-picker';
 import ImageResizer from 'react-native-image-resizer';
+import { types } from 'util';
 const deviceHeight = Dimensions.get('window').height;
 
 const ImageSelector = (props: {close: any,isItem: any, multi?: any}) => {
@@ -76,7 +77,7 @@ const ImageSelector = (props: {close: any,isItem: any, multi?: any}) => {
       if(multi == true) {
         pickerResult = await DocumentPicker.pick({
           presentationStyle: 'fullScreen',
-          allowMultiSelection: true
+          allowMultiSelection: true,
         });
       }
       else{
