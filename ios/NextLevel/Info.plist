@@ -39,6 +39,9 @@
 	<string>Your location is required to show your current position on the map</string>
 	<key>NSPhotoLibraryUsageDescription</key>
     <string>To allow users to upload and edit photos within the app.</string>
+	<key>NSCameraUsageDescription</key>
+    <string>We need access to your camera to take photos and videos for app functionality.</string>
+
 
 	<key>UIAppFonts</key>
 	<array>
