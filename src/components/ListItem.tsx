@@ -100,7 +100,7 @@ const ListItem = ({item, index, navigation}: Props) => {
               <Text style={styles.text1}>Capacity</Text>
               <View style={styles.capView}>
                 <Text style={styles.capty}>
-                  {item.trip_book_count}/{item.capacity}
+                  {item.trip_book_joined_count}/{item.capacity}
                 </Text>
               </View>
             </View>

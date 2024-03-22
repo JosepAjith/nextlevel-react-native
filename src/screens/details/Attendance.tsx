@@ -207,7 +207,7 @@ const Attendance = ({
           </View>
         </View>
       )}
-      {TripStatus == 'expired' && (
+      {(TripStatus == 'expired' || TripStatus == 'completed') && (
         <View style={styles.deadline} marginB-10>
           <View row center marginH-20>
             <Image
@@ -220,7 +220,7 @@ const Attendance = ({
           </View>
         </View>
       )}
-      {userId == loginUserId && TripStatus != 'expired' && (
+      {userId == loginUserId && TripStatus != 'expired' && TripStatus != 'completed' && (
         <View style={styles.deadline}>
           <View row marginH-15 style={{justifyContent:'space-between'}}>
             <TouchableOpacity

@@ -93,6 +93,7 @@ const TripDetails: React.FC<Props> = ({route}: any) => {
     }
   }, [cancelData]);
 
+
   const renderDetails = (label: string, value: string) => (
     <View row marginB-10>
       <Text style={styles.rightText}>{label}</Text>
@@ -144,7 +145,7 @@ const TripDetails: React.FC<Props> = ({route}: any) => {
                   <Text style={styles.text1}>Capacity</Text>
                   <View style={styles.capView}>
                     <Text style={styles.capty}>
-                      {tripDetails.data.trip_book_count}/
+                      {tripDetails.data.trip_book_joined_count}/
                       {tripDetails.data.capacity}
                     </Text>
                   </View>
@@ -210,19 +211,21 @@ const TripDetails: React.FC<Props> = ({route}: any) => {
                 moment(tripDetails.data.joining_start_date),
                 moment(tripDetails.data.joining_deadline),
               ) &&
-                tripDetails.data.trip_status != 'expired' && (
+                tripDetails.data.trip_status != 'expired' && tripDetails.data.trip_status != 'completed' && (
                   <View row marginB-20>
                     {tripDetails.data.trip_book &&
                     (tripDetails.data.trip_book.application_status ===
                       'support' ||
                       tripDetails.data.trip_book.application_status ===
-                        'joined') ? (
+                        'joined' ||
+                        tripDetails.data.trip_book.application_status ===
+                        'waiting list') ? (
                       <>
                         <TouchableOpacity
                           onPress={() =>
                             navigation.navigate(RouteNames.JoinTrip, {
                               id: tripDetails.data.trip_book.id,
-                              status: 'support',
+                              status: tripDetails.data.trip_book.application_status,
                               type: 'edit',
                             })
                           }>
@@ -250,7 +253,7 @@ const TripDetails: React.FC<Props> = ({route}: any) => {
                           onPress={() =>
                             navigation.navigate(RouteNames.JoinTrip, {
                               id: tripDetails.data.trip_book.id,
-                              status: 'edit',
+                              status: tripDetails.data.trip_book.application_status,
                               type: 'edit',
                             })
                           }>

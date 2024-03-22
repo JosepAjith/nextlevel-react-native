@@ -52,8 +52,15 @@ const ChangePasswordScreen: React.FC<Props> = () => {
   const [passwordValidate, setValidate] = useState<PasswordValidation>(
     new PasswordValidation(),
   );
+  const {IsNetConnected} = useSelector(
+    (state: RootState) => state.GlobalVariables,
+  );
 
   function isValidate(): boolean {
+    if (!IsNetConnected) {
+      showToast('Need internet connection');
+      return false;
+    }
     if (passwordInput.password == '') {
       setValidate({
         ...passwordValidate,

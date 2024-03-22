@@ -7,6 +7,7 @@ import {
   PermissionsAndroid,
   Platform,
   ToastAndroid,
+  TouchableOpacity,
 } from 'react-native';
 import {RouteProp, useNavigation} from '@react-navigation/native';
 import {RootStackParams} from '../../navigation/RoutesParams';
@@ -19,8 +20,9 @@ import AppFonts from '../../constants/AppFonts';
 import Geocoder from 'react-native-geocoding';
 import AppColors from '../../constants/AppColors';
 import ButtonView from '../../components/ButtonView';
-import { PERMISSIONS, RESULTS, check, request } from 'react-native-permissions';
-import { showToast } from '../../constants/commonUtils';
+import {PERMISSIONS, RESULTS, check, request} from 'react-native-permissions';
+import {showToast} from '../../constants/commonUtils';
+import AppImages from '../../constants/AppImages';
 
 Geocoder.init('AIzaSyACWPy4KNDqex0QYmX-HkF7St0TXA6ARPI', {language: 'en'});
 
@@ -75,20 +77,20 @@ const MapScreen: React.FC<Props> = ({route}: any) => {
         if (granted === PermissionsAndroid.RESULTS.GRANTED) {
           getCurrentLocation();
         } else {
-          showToast(
-            'Location permission denied');
+          showToast('Location permission denied');
         }
       } catch (err) {
         console.warn(err);
       }
     } else if (Platform.OS === 'ios') {
       try {
-        const permissionStatus = await request(PERMISSIONS.IOS.LOCATION_WHEN_IN_USE);
+        const permissionStatus = await request(
+          PERMISSIONS.IOS.LOCATION_WHEN_IN_USE,
+        );
         if (permissionStatus === 'granted') {
           getCurrentLocation();
         } else {
-          showToast(
-            'Location permission denied');
+          showToast('Location permission denied');
         }
       } catch (err) {
         console.warn(err);
@@ -141,7 +143,9 @@ const MapScreen: React.FC<Props> = ({route}: any) => {
           latitudeDelta: 0.0122,
           longitudeDelta: 0.0061,
         }}
-        onPress={type === 'add' || type === 'edit' ? handleMapPress : undefined}>
+        onPress={
+          type === 'add' || type === 'edit' ? handleMapPress : undefined
+        }>
         {location && <Marker coordinate={location} anchor={{x: 0.5, y: 0.5}} />}
       </MapView>
 
@@ -152,11 +156,27 @@ const MapScreen: React.FC<Props> = ({route}: any) => {
           right: 20,
         }}>
         <Button
-        backgroundColor={AppColors.Black}
+          backgroundColor={AppColors.Black}
           label={mapType === 'standard' ? 'Satellite' : 'Default'}
-          onPress={() => setMapType(mapType === 'standard' ? 'satellite' : 'standard')}
+          onPress={() =>
+            setMapType(mapType === 'standard' ? 'satellite' : 'standard')
+          }
         />
       </View>
+
+      <TouchableOpacity onPress={() => navigation.goBack()}
+      style={{
+        position: 'absolute',
+        top: 16,
+        left: 16,
+        right: 16,
+        width: '10%',
+        backgroundColor:'white',
+        padding:10,
+        alignItems:'center'
+      }}>
+          <Image source={AppImages.BACK} tintColor="black" />
+      </TouchableOpacity>
 
       {isDone && (
         <View

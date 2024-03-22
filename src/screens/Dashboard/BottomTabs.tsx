@@ -5,6 +5,7 @@ import AddTripScreen from '../addtrip/AddTripScreen';
 import ProfileScreen from '../profile/ProfileScreen';
 import AppImages from '../../constants/AppImages';
 import {
+  BackHandler,
   ImageSourcePropType,
   LayoutAnimation,
   Platform,
@@ -20,9 +21,14 @@ import {useDispatch, useSelector} from 'react-redux';
 import {RootState} from '../../../store';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import AppStrings from '../../constants/AppStrings';
-import {useFocusEffect, useRoute} from '@react-navigation/native';
+import {
+  useFocusEffect,
+  useNavigation,
+  useRoute,
+} from '@react-navigation/native';
 import {fetchProfileDetails} from '../../api/profile/ProfileDetailsSlice';
 import {AnyAction, ThunkDispatch} from '@reduxjs/toolkit/react';
+import {RouteNames} from '../../navigation';
 
 if (Platform.OS === 'android') {
   if (UIManager.setLayoutAnimationEnabledExperimental) {
@@ -31,6 +37,7 @@ if (Platform.OS === 'android') {
 }
 
 const BottomTabs = () => {
+  const navigation = useNavigation();
   const [activeTab, setActiveTab] = useState('Home');
   const {openFilter, filterValue} = useSelector(
     (state: RootState) => state.TripReducer,
@@ -42,6 +49,24 @@ const BottomTabs = () => {
     if (replace) {
       setActiveTab('My Trips');
     }
+  }, [replace]);
+
+  useEffect(() => {
+    const backHandler = () => {
+      if (replace) {
+        setActiveTab('Profile');
+        return true;
+      }
+      return false;
+    };
+
+    // Add event listener for hardware back button press
+    BackHandler.addEventListener('hardwareBackPress', backHandler);
+
+    // Cleanup function to remove the event listener when the component unmounts
+    return () => {
+      BackHandler.removeEventListener('hardwareBackPress', backHandler);
+    };
   }, [replace]);
 
   useFocusEffect(

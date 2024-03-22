@@ -65,8 +65,15 @@ const DeleteAccount: React.FC<Props> = () => {
   const {deleteData, loadingDelete, deleteError} = useSelector(
     (state: RootState) => state.AccountDelete,
   );
+  const {IsNetConnected} = useSelector(
+    (state: RootState) => state.GlobalVariables,
+  );
 
   function isValidate(): boolean {
+    if (!IsNetConnected) {
+      showToast('Need internet connection');
+      return false;
+    }
     if (deleteInput.reason == '') {
       setDelete({
         ...deleteInput,
@@ -89,7 +96,7 @@ const DeleteAccount: React.FC<Props> = () => {
 
     return true;
   }
-console.log(deleteInput)
+
   const Delete = async () => {
     let request = JSON.stringify({
       

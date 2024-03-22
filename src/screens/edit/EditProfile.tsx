@@ -78,6 +78,9 @@ const EditProfile: React.FC<Props> = () => {
   const {profileDetails} = useSelector(
     (state: RootState) => state.ProfileDetails,
   );
+  const { IsNetConnected } = useSelector(
+    (state: RootState) => state.GlobalVariables,
+  );
   const [isImageClick, setImageClick] = useState(false);
   const [isNationClick, setNationClick] = useState(false);
 
@@ -108,6 +111,10 @@ const EditProfile: React.FC<Props> = () => {
   }, [profileDetails]);
 
   function isValidate(): boolean {
+    if (!IsNetConnected) {
+      showToast('Need internet connection');
+      return false;
+    }
     if (profileInput.image.uri == '') {
       setValidate({
         ...profileValidate,

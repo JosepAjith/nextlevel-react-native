@@ -49,11 +49,12 @@ interface Props {
 const MyTripScreen: React.FC<Props> = ({isReplace}: Props) => {
   const navigation = useNavigation<MyTripScreenNavigationProps>();
   const [search, setSearch] = useState('');
+  const [tripList, setTripList] = useState([]);
   const dispatch: ThunkDispatch<RootState, any, AnyAction> = useDispatch();
   const {trip, loadingTrip, tripError} = useSelector(
     (state: RootState) => state.TripList,
   );
-  const {type} = useSelector((state: RootState) => state.GlobalVariables);
+  const {type, IsNetConnected} = useSelector((state: RootState) => state.GlobalVariables);
   const {filterValue, chip} = useSelector(
     (state: RootState) => state.TripReducer,
   );
@@ -64,11 +65,13 @@ const MyTripScreen: React.FC<Props> = ({isReplace}: Props) => {
       // Clean-up function
       return () => {
         isReplace();
+        setTripList([])
       };
     }, [chip, search, filterValue]),
   );
 
   const fetchList = (page: number) => {
+    if(IsNetConnected){
     let request = JSON.stringify({
       //title
       name: search,
@@ -76,24 +79,29 @@ const MyTripScreen: React.FC<Props> = ({isReplace}: Props) => {
       filter: filterValue === '' ? [] : [filterValue],
       //My Trips,Created,Closed
       tab_menu: chip === 2 ? 'Created' : chip === 3 ? 'Closed' : 'My Trips',
-      perpage: 10,
-      page: page,
+      // perpage: 10,
+       page: page,
     });
 
-    dispatch(fetchTripList({requestBody: request, uri: 'trip/trip-by-user'}));
+    dispatch(fetchTripList({ requestBody: request, uri: 'trip/trip-by-user' }))
+      .then((response: any) => {
+        // Concatenate the new trips with the existing list
+        setTripList(prevList => prevList.concat(response.payload.trip.data));
+      })
+      .catch((error: any) => {
+        // Handle error
+      });
+    }
   };
 
   const setChip = (value: number) => {
     dispatch({type: 'SET_CHIP', payload: value});
   };
 
-
   const loadMoreTrips = () => {
-    if (trip?.total_page && trip?.total_count) {
-      const nextPage = trip.total_page + 1;
-      if (nextPage <= trip.total_page) {
-        fetchList(nextPage);
-      }
+    if (trip?.total_page && trip?.current_page < trip?.total_page) {
+      const nextPage = trip.current_page + 1;
+      fetchList(nextPage);
     }
   };
 
@@ -112,6 +120,8 @@ const MyTripScreen: React.FC<Props> = ({isReplace}: Props) => {
       />
 
       {loadingTrip && <BackgroundLoader />}
+
+      
 
       <View row centerV>
         <View flex>
@@ -180,8 +190,13 @@ const MyTripScreen: React.FC<Props> = ({isReplace}: Props) => {
         />
       </View>
 
+      {!IsNetConnected && 
+      <View flex center>
+        <Text white text40>No Network Connection</Text>
+        </View>}
+        
       <FlatList
-        data={trip?.data}
+        data={tripList}
         showsVerticalScrollIndicator={false}
         renderItem={({item, index}) => {
           return (
@@ -189,8 +204,6 @@ const MyTripScreen: React.FC<Props> = ({isReplace}: Props) => {
           );
         }}
         onEndReached={loadMoreTrips}
-        onEndReachedThreshold={0.5}
-        keyExtractor={(item, index) => `${item.id}-${index}`}
       />
     </View>
   );

@@ -3,6 +3,7 @@ export type TripDetailsResponse ={
     data: TripListResponse;
     total_count: number;
     total_page: number;
+    current_page: number;
 }
 
 export type TripListResponse = {
@@ -30,7 +31,7 @@ export type TripListResponse = {
     trip_status:        string;
     user:               User;
     meeting_time:       string;
-    trip_book_count:    number;
+    trip_book_joined_count:    number;
     trip_images:        TripImage[];
     trip_book:          TripBook
 }

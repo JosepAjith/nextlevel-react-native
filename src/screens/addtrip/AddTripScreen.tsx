@@ -94,7 +94,11 @@ const AddTripScreen: React.FC<Props> = ({route, id, initial}: Props) => {
     (state: RootState) => state.TripCreate,
   );
   const {tripDetails} = useSelector((state: RootState) => state.TripDetails);
+  const {IsNetConnected} = useSelector(
+    (state: RootState) => state.GlobalVariables,
+  );
 
+ 
   useEffect(() => {
     if (routeId !== 0 && typeof tripDetails?.data === 'object') {
       const item = tripDetails?.data;
@@ -131,6 +135,10 @@ const AddTripScreen: React.FC<Props> = ({route, id, initial}: Props) => {
   }, [routeId, tripDetails]);
 
   function isValidate(): boolean {
+    if (!IsNetConnected) {
+      showToast('Need internet connection');
+      return false;
+    }
     if (tripInput.image.length == 0) {
       setValidate({
         ...tripValidate,
@@ -269,6 +277,8 @@ const AddTripScreen: React.FC<Props> = ({route, id, initial}: Props) => {
   }
 
   const AddingTrip = async () => {
+
+    console.log(tripInput.image)
     let formData = new FormData();
     if (routeId != 0) {
       formData.append('id', routeId);
@@ -332,6 +342,7 @@ const AddTripScreen: React.FC<Props> = ({route, id, initial}: Props) => {
   };
 
   useEffect(() => {
+    console.log(addTripData)
     if (addTripData != null) {
       if (!loadingAddTrip && !addTripError && addTripData.status) {
         showToast(addTripData.message);
@@ -367,6 +378,7 @@ const AddTripScreen: React.FC<Props> = ({route, id, initial}: Props) => {
     });
     setValidate({...tripValidate, InvalidPlace: false});
   };
+
 
   return (
     <View flex backgroundColor={AppColors.Black}>
@@ -571,6 +583,7 @@ const AddTripScreen: React.FC<Props> = ({route, id, initial}: Props) => {
             <DateTimePickerModal
               isVisible={tripValidate.isDatePickerVisible}
               mode="date"
+              minimumDate={new Date()}
               onConfirm={(date: any) => {
                 setTrip({...tripInput, date: getUserDate(date)});
                 setValidate({
@@ -698,12 +711,18 @@ const AddTripScreen: React.FC<Props> = ({route, id, initial}: Props) => {
           </TouchableOpacity>
 
           <TouchableOpacity
-            onPress={() =>
-              setValidate({...tripValidate, isJoinPickerVisible: true})
+            onPress={() =>{
+              if (tripInput.joining_deadline == '') {
+                showToast('First select deadline date');
+              } else {
+                setValidate({...tripValidate, isJoinPickerVisible: true})
+              }
+            }
+              
             }>
             <TextField
               fieldStyle={styles.field}
-              label={'Joining Date & Time'}
+              label={'Joining Start Date & Time'}
               placeholder={'Select joining date & time'}
               placeholderTextColor={'#999999'}
               labelStyle={styles.label}
@@ -721,6 +740,8 @@ const AddTripScreen: React.FC<Props> = ({route, id, initial}: Props) => {
             <DateTimePickerModal
               isVisible={tripValidate.isJoinPickerVisible}
               mode="datetime"
+              minimumDate={new Date()}
+              maximumDate={moment(tripInput.joining_deadline, 'DD-MM-YYYY').toDate()}
               onConfirm={(date: any) => {
                 setTrip({...tripInput, joining_start_date: getDateTime(date)});
                 setValidate({
@@ -736,8 +757,14 @@ const AddTripScreen: React.FC<Props> = ({route, id, initial}: Props) => {
           </TouchableOpacity>
 
           <TouchableOpacity
-            onPress={() =>
-              setValidate({...tripValidate, isDeadlinePickerVisible: true})
+            onPress={() =>{
+              if (tripInput.date == '') {
+                showToast('First select trip date');
+              } else {
+                setValidate({...tripValidate, isDeadlinePickerVisible: true})
+              }
+            }
+             
             }>
             <TextField
               fieldStyle={styles.field}
@@ -759,6 +786,8 @@ const AddTripScreen: React.FC<Props> = ({route, id, initial}: Props) => {
             <DateTimePickerModal
               isVisible={tripValidate.isDeadlinePickerVisible}
               mode="datetime"
+              minimumDate={new Date()}
+              maximumDate={moment(tripInput.date, 'DD-MM-YYYY').toDate()}
               onConfirm={(date: any) => {
                 setTrip({...tripInput, joining_deadline: getDateTime(date)});
                 setValidate({

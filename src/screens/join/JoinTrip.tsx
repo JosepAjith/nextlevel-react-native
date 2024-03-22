@@ -63,9 +63,6 @@ const JoinTrip: React.FC<Props> = ({route}: any) => {
     (state: RootState) => state.ProfileDetails,
   );
 
-  useEffect(() => {
-    setJoin({...joinInput, application_status: status});
-  }, []);
 
   useEffect(() => {
     if (type == 'edit') {
@@ -79,6 +76,7 @@ const JoinTrip: React.FC<Props> = ({route}: any) => {
           gender: item.gender,
           vehicle: item.vehicle,
           passenger: item.passenger.toString(),
+          application_status: status
         });
       }
     }
@@ -93,6 +91,7 @@ const JoinTrip: React.FC<Props> = ({route}: any) => {
           gender: item.gender,
           vehicle: '',
           passenger: '',
+          application_status: status
         });
       }
     }
@@ -162,6 +161,8 @@ const JoinTrip: React.FC<Props> = ({route}: any) => {
         ...joinInput,
       };
     }
+
+    console.log(request)
    
     dispatch(
       joinTrip({

@@ -61,6 +61,9 @@ const AddCar: React.FC<Props> = ({ route }: any) => {
   const { profileDetails } = useSelector(
     (state: RootState) => state.ProfileDetails,
   );
+  const { IsNetConnected } = useSelector(
+    (state: RootState) => state.GlobalVariables,
+  );
 
   useEffect(() => {
     if (id !== 0 && profileDetails) {
@@ -92,6 +95,10 @@ const AddCar: React.FC<Props> = ({ route }: any) => {
 
 
   function isValidate(): boolean {
+    if (!IsNetConnected) {
+      showToast('Need internet connection');
+      return false;
+    }
     if (carInput.image.uri == '') {
       setValidate({
         ...carValidate,
