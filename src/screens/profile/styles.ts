@@ -31,13 +31,13 @@ export const styles = StyleSheet.create({
     },
     inner:{
         paddingVertical:5,
-        paddingHorizontal:20,
         borderRadius:5,
         flex:1,
     },
     tabText:{
             fontSize:12,
-            fontFamily:AppFonts.INTER_SEMIBOLD
+            fontFamily:AppFonts.INTER_SEMIBOLD,
+            marginHorizontal:10
     },
     view:{
         backgroundColor:AppColors.Grey,

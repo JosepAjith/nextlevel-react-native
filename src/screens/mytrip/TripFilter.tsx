@@ -23,7 +23,7 @@ const TripFilter = (props: {close: any}) => {
     {id: 1, status: 'First Join'},
     {id: 2, status: 'newbie'},
     {id: 3, status: 'newbie+'},
-    {id: 4, status: 'Intermediate Exam'},
+    {id: 4, status: 'Intermediate'},
     {id: 5, status: 'Intermediate Exam'},
     {id: 6, status: 'Intermediate+'},
     {id: 7, status: 'Advance Exam'},

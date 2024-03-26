@@ -15,7 +15,7 @@ import AppColors from '../../constants/AppColors';
 import {styles} from './styles';
 import AppImages from '../../constants/AppImages';
 import ButtonView from '../../components/ButtonView';
-import {ScrollView, ToastAndroid, TouchableOpacity} from 'react-native';
+import {KeyboardAvoidingView, Platform, ScrollView, ToastAndroid, TouchableOpacity} from 'react-native';
 import {Header} from '../../components/Header';
 import {AnyAction, ThunkDispatch} from '@reduxjs/toolkit';
 import {RootState} from '../../../store';
@@ -155,7 +155,11 @@ const RegisterScreen: React.FC<Props> = () => {
   }, [RegisterData]);
 
   return (
-    <ScrollView>
+    <KeyboardAvoidingView
+    style={{ flex: 1 }} // Make sure it takes full height of the screen
+    behavior={Platform.OS === 'ios' ? 'padding' : 'padding'} // Adjust behavior for iOS
+  >
+    <ScrollView style={{backgroundColor:AppColors.Black}}>
       <View flex backgroundColor={AppColors.Black} padding-20>
         <Header title={'Sign up'} />
 
@@ -167,7 +171,7 @@ const RegisterScreen: React.FC<Props> = () => {
           labelStyle={styles.label}
           style={styles.text}
           paddingH-20
-          marginT-40
+          marginT-20
           onChangeText={(text: any) => {
             setRegister({...registerInput, nickname: text, type: 'user'});
             setValidate({...registerValidate, InvalidNickname: false});
@@ -336,6 +340,7 @@ const RegisterScreen: React.FC<Props> = () => {
         </View>
       </View>
     </ScrollView>
+    </KeyboardAvoidingView>
   );
 };
 export default RegisterScreen;

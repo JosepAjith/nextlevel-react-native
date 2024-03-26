@@ -15,7 +15,7 @@ import AppColors from '../../constants/AppColors';
 import {styles} from './styles';
 import AppImages from '../../constants/AppImages';
 import ButtonView from '../../components/ButtonView';
-import {TouchableOpacity} from 'react-native';
+import {KeyboardAvoidingView, Platform, ScrollView, TouchableOpacity} from 'react-native';
 import {AnyAction, ThunkDispatch} from '@reduxjs/toolkit';
 import {RootState} from '../../../store';
 import {useDispatch, useSelector} from 'react-redux';
@@ -130,6 +130,11 @@ const LoginScreen: React.FC<Props> = () => {
   }, [LoginData]);
 
   return (
+    <KeyboardAvoidingView
+    style={{ flex: 1 }} // Make sure it takes full height of the screen
+    behavior={Platform.OS === 'ios' ? 'padding' : 'padding'} // Adjust behavior for iOS
+  >
+    <ScrollView style={{backgroundColor:AppColors.Black}}>
     <View flex backgroundColor={AppColors.Black} padding-20>
       <View center marginT-20 marginB-40>
         <Text style={styles.title}>Sign in</Text>
@@ -185,6 +190,7 @@ const LoginScreen: React.FC<Props> = () => {
           setValidate({...loginValidate, InvalidPassword: false});
         }}
       />
+      
       <View row centerV marginV-30>
         {/* <Checkbox
           value={remember}
@@ -223,6 +229,8 @@ const LoginScreen: React.FC<Props> = () => {
         </TouchableOpacity>
       </View>
     </View>
+    </ScrollView>
+    </KeyboardAvoidingView>
   );
 };
 export default LoginScreen;

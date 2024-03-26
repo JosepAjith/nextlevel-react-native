@@ -3,6 +3,7 @@ export type UserListResponse = {
     data:        UserListData[];
     total_count: number;
     total_page:  number;
+    page: number;
 }
 
 export type UserListData = {

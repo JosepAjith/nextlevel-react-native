@@ -14,7 +14,7 @@ import {useNavigation} from '@react-navigation/native';
 import AppColors from '../../constants/AppColors';
 import AppImages from '../../constants/AppImages';
 import ButtonView from '../../components/ButtonView';
-import {ScrollView, TouchableOpacity} from 'react-native';
+import {KeyboardAvoidingView, Platform, ScrollView, TouchableOpacity} from 'react-native';
 import {Header} from '../../components/Header';
 import AppFonts from '../../constants/AppFonts';
 import {styles} from '../addtrip/styles';
@@ -121,6 +121,7 @@ const EditProfile: React.FC<Props> = () => {
         InvalidImage: true,
         error: '*Required',
       });
+      showToast("Image Field required")
       return false;
     }
     if (profileInput.name == '') {
@@ -129,6 +130,7 @@ const EditProfile: React.FC<Props> = () => {
         InvalidName: true,
         error: '*Required',
       });
+      showToast("Name Field required")
       return false;
     }
     if (profileInput.dob == '') {
@@ -137,6 +139,7 @@ const EditProfile: React.FC<Props> = () => {
         InvalidDob: true,
         error: '*Required',
       });
+      showToast("DOB Field required")
       return false;
     }
     if (profileInput.phone == '') {
@@ -145,6 +148,7 @@ const EditProfile: React.FC<Props> = () => {
         InvalidPhone: true,
         error: '*Required',
       });
+      showToast("Phone Field required")
       return false;
     }
     if (profileInput.gender == '') {
@@ -153,6 +157,7 @@ const EditProfile: React.FC<Props> = () => {
         InvalidGender: true,
         error: '*Required',
       });
+      showToast("Gender Field required")
       return false;
     }
     if (profileInput.location == '') {
@@ -161,6 +166,7 @@ const EditProfile: React.FC<Props> = () => {
         InvalidLocation: true,
         error: '*Required',
       });
+      showToast("Location Field required")
       return false;
     }
     if (profileInput.emirates == '') {
@@ -169,6 +175,7 @@ const EditProfile: React.FC<Props> = () => {
         InvalidEmirates: true,
         error: '*Required',
       });
+      showToast("Emirates Field required")
       return false;
     }
     if (profileInput.nationality == '') {
@@ -177,6 +184,7 @@ const EditProfile: React.FC<Props> = () => {
         InvalidNation: true,
         error: '*Required',
       });
+      showToast("Nationality Field required")
       return false;
     }
     if (profileInput.occupation == '') {
@@ -185,6 +193,7 @@ const EditProfile: React.FC<Props> = () => {
         InvalidOccup: true,
         error: '*Required',
       });
+      showToast("Occupation Field required")
       return false;
     }
     if (profileInput.interest == '') {
@@ -193,6 +202,7 @@ const EditProfile: React.FC<Props> = () => {
         InvalidInterest: true,
         error: '*Required',
       });
+      showToast("Interest Field required")
       return false;
     }
     if (profileInput.referred_by == '') {
@@ -201,6 +211,7 @@ const EditProfile: React.FC<Props> = () => {
         InvalidRefer: true,
         error: '*Required',
       });
+      showToast("Refer Field required")
       return false;
     }
 
@@ -272,6 +283,10 @@ const EditProfile: React.FC<Props> = () => {
   };
 
   return (
+    <KeyboardAvoidingView
+    style={{ flex: 1 }} // Make sure it takes full height of the screen
+    behavior={Platform.OS === 'ios' ? 'padding' : 'padding'} // Adjust behavior for iOS
+  >
     <View flex backgroundColor={AppColors.Black}>
       {loadingEditProfile && <BackgroundLoader />}
       <ScrollView>
@@ -533,6 +548,7 @@ const EditProfile: React.FC<Props> = () => {
         />
       )}
     </View>
+    </KeyboardAvoidingView>
   );
 };
 export default EditProfile;

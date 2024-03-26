@@ -15,7 +15,7 @@ import AppColors from '../../constants/AppColors';
 import {styles} from './styles';
 import AppImages from '../../constants/AppImages';
 import ButtonView from '../../components/ButtonView';
-import {ScrollView, TouchableOpacity} from 'react-native';
+import {KeyboardAvoidingView, Platform, ScrollView, TouchableOpacity} from 'react-native';
 import {Header} from '../../components/Header';
 import AppFonts from '../../constants/AppFonts';
 import {TripRequest} from '../../api/trip/TripRequest';
@@ -145,6 +145,7 @@ const AddTripScreen: React.FC<Props> = ({route, id, initial}: Props) => {
         InvalidImage: true,
         error: '*Required',
       });
+      showToast("Image field required")
       return false;
     }
 
@@ -154,6 +155,7 @@ const AddTripScreen: React.FC<Props> = ({route, id, initial}: Props) => {
         InvalidTitle: true,
         error: '*Required',
       });
+      showToast("Title field required")
       return false;
     }
 
@@ -163,6 +165,7 @@ const AddTripScreen: React.FC<Props> = ({route, id, initial}: Props) => {
         InvalidCity: true,
         error: '*Required',
       });
+      showToast("City field required")
       return false;
     }
 
@@ -172,6 +175,7 @@ const AddTripScreen: React.FC<Props> = ({route, id, initial}: Props) => {
         InvalidArea: true,
         error: '*Required',
       });
+      showToast("Area field required")
       return false;
     }
 
@@ -181,6 +185,7 @@ const AddTripScreen: React.FC<Props> = ({route, id, initial}: Props) => {
         InvalidPlace: true,
         error: '*Required',
       });
+      showToast("Place field required")
       return false;
     }
 
@@ -190,6 +195,7 @@ const AddTripScreen: React.FC<Props> = ({route, id, initial}: Props) => {
         InvalidLevel: true,
         error: '*Required',
       });
+      showToast("Level field required")
       return false;
     }
 
@@ -199,6 +205,7 @@ const AddTripScreen: React.FC<Props> = ({route, id, initial}: Props) => {
         InvalidCapacity: true,
         error: '*Required',
       });
+      showToast("Capacity field required")
       return false;
     }
 
@@ -208,6 +215,7 @@ const AddTripScreen: React.FC<Props> = ({route, id, initial}: Props) => {
         InvalidDate: true,
         error: '*Required',
       });
+      showToast("Date field required")
       return false;
     }
 
@@ -217,6 +225,7 @@ const AddTripScreen: React.FC<Props> = ({route, id, initial}: Props) => {
         InvalidMeet: true,
         error: '*Required',
       });
+      showToast("Meeting Time field required")
       return false;
     }
 
@@ -226,6 +235,7 @@ const AddTripScreen: React.FC<Props> = ({route, id, initial}: Props) => {
         InvalidStart: true,
         error: '*Required',
       });
+      showToast("Start time field required")
       return false;
     }
 
@@ -235,6 +245,7 @@ const AddTripScreen: React.FC<Props> = ({route, id, initial}: Props) => {
         InvalidFinish: true,
         error: '*Required',
       });
+      showToast("Finish time field required")
       return false;
     }
 
@@ -244,6 +255,7 @@ const AddTripScreen: React.FC<Props> = ({route, id, initial}: Props) => {
         InvalidJoinDate: true,
         error: '*Required',
       });
+      showToast("Joining date field required")
       return false;
     }
 
@@ -253,6 +265,7 @@ const AddTripScreen: React.FC<Props> = ({route, id, initial}: Props) => {
         InvalidDeadline: true,
         error: '*Required',
       });
+      showToast("Deadline date field required")
       return false;
     }
 
@@ -262,6 +275,7 @@ const AddTripScreen: React.FC<Props> = ({route, id, initial}: Props) => {
         InvalidDescrip: true,
         error: '*Required',
       });
+      showToast("Description field required")
       return false;
     }
 
@@ -271,6 +285,7 @@ const AddTripScreen: React.FC<Props> = ({route, id, initial}: Props) => {
         InvalidPassengers: true,
         error: '*Required',
       });
+      showToast("Passenger field required")
       return false;
     }
     return true;
@@ -381,6 +396,10 @@ const AddTripScreen: React.FC<Props> = ({route, id, initial}: Props) => {
 
 
   return (
+    <KeyboardAvoidingView
+    style={{ flex: 1 }} // Make sure it takes full height of the screen
+    behavior={Platform.OS === 'ios' ? 'padding' : 'padding'} // Adjust behavior for iOS
+  >
     <View flex backgroundColor={AppColors.Black}>
       {loadingAddTrip && <BackgroundLoader />}
       <ScrollView>
@@ -872,6 +891,7 @@ const AddTripScreen: React.FC<Props> = ({route, id, initial}: Props) => {
         />
       )}
     </View>
+    </KeyboardAvoidingView>
   );
 };
 export default AddTripScreen;

@@ -77,6 +77,7 @@ const UserList: React.FC<Props> = () => {
   const windowWidth = Dimensions.get('window').width;
   const itemWidth = (windowWidth - 50) / 2;
   const dispatch: ThunkDispatch<RootState, any, AnyAction> = useDispatch();
+  const [userList, setUserList] = useState([]);
   const {users, loadingUsers, usersError} = useSelector(
     (state: RootState) => state.UserList,
   );
@@ -85,6 +86,9 @@ const UserList: React.FC<Props> = () => {
   );
   const [search, setSearch] = useState('');
   const {filterValue} = useSelector((state: RootState) => state.TripReducer);
+  const {IsNetConnected} = useSelector(
+    (state: RootState) => state.GlobalVariables,
+  );
 
   useFocusEffect(
     React.useCallback(() => {
@@ -96,25 +100,37 @@ const UserList: React.FC<Props> = () => {
 
   useFocusEffect(
     React.useCallback(() => {
-     FetchList();
+      FetchList(1);
 
-      return () => {};
-    }, [filterValue]),
+      return () => {
+        setUserList([])
+      };
+    }, [search, filterValue]),
   );
 
-  const FetchList = () => {
-    let request = JSON.stringify({
-      level: filterValue ? [filterValue] : User,
-    });
-    dispatch(fetchUserList({requestBody: request}));
+  const FetchList = (page: number) => {
+    if(IsNetConnected){
+      let request = JSON.stringify({
+        level: filterValue ? [filterValue] : User,
+        page: page,
+        title: search
+      });
+      dispatch(fetchUserList({requestBody: request}))
+        .then((response: any) => {
+          if (page === 1) {
+            setUserList(response.payload.users.data);
+          } else {
+            // Concatenate the new trips with the existing list
+            setUserList(prevList => prevList.concat(response.payload.users.data));
+          }
+        })
+        .catch((error: any) => {
+          // Handle error
+        });
+      }
+ 
   }
 
-  const SearchedUsers = users.filter(
-    item =>
-      item.name.toLowerCase().includes(search.toLowerCase()) ||
-      item.email.toLowerCase().includes(search.toLowerCase()) ||
-      item.level.toLowerCase().includes(search.toLowerCase()),
-  );
 
   const updatingRole = async (id: number, level: string) => {
     let request = {
@@ -135,12 +151,19 @@ const UserList: React.FC<Props> = () => {
     if (updateRoleData != null) {
       if (!loadingRoleUpdate && !roleUpdateError && updateRoleData.status) {
         showToast(updateRoleData.message);
-        FetchList()
+        FetchList(1)
       } else {
         showToast(updateRoleData.message);
       }
     }
   }, [updateRoleData]);
+
+  const loadMoreTrips = () => {
+    if (users?.total_page && users?.page < users?.total_page) {
+      const nextPage = users.page + 1;
+      FetchList(nextPage);
+    }
+  };
 
   return (
     <View flex backgroundColor={AppColors.Black}>
@@ -148,7 +171,8 @@ const UserList: React.FC<Props> = () => {
         <Header title="User List" rightIcon={AppImages.REFRESH} rightOnpress={() => {
           setSearch('');
           dispatch({type: 'SET_FILTER_VALUE', payload: ''});
-          FetchList;
+          setUserList([]);
+          FetchList(1);
         }}/>
 
         {loadingUsers && <BackgroundLoader/>}
@@ -183,7 +207,7 @@ const UserList: React.FC<Props> = () => {
           </View>
         </View>
         <FlatList
-          data={SearchedUsers}
+          data={userList}
           numColumns={2}
           renderItem={({item, index}) => {
             const isEvenIndex = index % 2 === 0;
@@ -250,6 +274,7 @@ const UserList: React.FC<Props> = () => {
               </View>
             );
           }}
+          onEndReached={loadMoreTrips}
         />
       </View>
       {filter && <TripFilter close={() => setFilter(false)} />}

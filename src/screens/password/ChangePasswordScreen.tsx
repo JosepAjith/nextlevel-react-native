@@ -15,7 +15,7 @@ import AppColors from '../../constants/AppColors';
 import {styles} from './styles';
 import AppImages from '../../constants/AppImages';
 import ButtonView from '../../components/ButtonView';
-import {TouchableOpacity} from 'react-native';
+import {KeyboardAvoidingView, Platform, TouchableOpacity} from 'react-native';
 import {Header} from '../../components/Header';
 import { AnyAction, ThunkDispatch } from '@reduxjs/toolkit';
 import { RootState } from '../../../store';
@@ -103,6 +103,10 @@ const ChangePasswordScreen: React.FC<Props> = () => {
   }, [changePasswordData]);
 
   return (
+    <KeyboardAvoidingView
+    style={{ flex: 1 }} // Make sure it takes full height of the screen
+    behavior={Platform.OS === 'ios' ? 'padding' : 'padding'} // Adjust behavior for iOS
+  >
     <View flex backgroundColor={AppColors.Black} padding-20>
       <Header title="Change Password" />
 
@@ -190,6 +194,7 @@ const ChangePasswordScreen: React.FC<Props> = () => {
             }
           }} />
     </View>
+    </KeyboardAvoidingView>
   );
 };
 export default ChangePasswordScreen;

@@ -22,7 +22,7 @@ const MyCars = ({navigation, data}: Props) => {
     (state: RootState) => state.CarDelete,
   );
   const {userId} = useSelector((state: RootState) => state.GlobalVariables);
-
+  console.log(data);
   const deletingCar = (id: any) => {
     dispatch(deleteCar({requestBody: {id: id}}))
       .then(() => {
@@ -44,59 +44,63 @@ const MyCars = ({navigation, data}: Props) => {
 
   return (
     <View>
-      <FlatList
-        data={data}
-        showsVerticalScrollIndicator={false}
-        renderItem={({item, index}) => {
-          return (
-            <View padding-20 center style={styles.view} marginB-10>
-              {userId == 0 && (
-                <View row absR absT marginR-10 marginT-10>
-                  <TouchableOpacity onPress={() => deletingCar(item.id)}>
-                    <Image
-                      source={AppImages.DELETE}
-                      marginR-10
-                      width={25}
-                      height={25}
-                    />
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    onPress={() =>
-                      navigation.navigate(RouteNames.AddCar, {id: item.id})
-                    }>
-                    <Image source={AppImages.PENCIL} width={25} height={25} />
-                  </TouchableOpacity>
-                </View>
-              )}
-              <Image
-                source={
-                  item.image ? {uri: item.image} : 
-                AppImages.NOIMAGE}
-                width={300}
-                height={250}
-                marginT-20
-              />
+      {data.length == 0 ? (
+        <View flex center>
+          <Text style={[styles.carTitle,{fontSize:20}]}>No cars added</Text>
+        </View>
+      ) : (
+        <FlatList
+          data={data}
+          showsVerticalScrollIndicator={false}
+          renderItem={({item, index}) => {
+            return (
+              <View padding-20 center style={styles.view} marginB-10>
+                {userId == 0 && (
+                  <View row absR absT marginR-10 marginT-10>
+                    <TouchableOpacity onPress={() => deletingCar(item.id)}>
+                      <Image
+                        source={AppImages.DELETE}
+                        marginR-10
+                        width={25}
+                        height={25}
+                      />
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      onPress={() =>
+                        navigation.navigate(RouteNames.AddCar, {id: item.id})
+                      }>
+                      <Image source={AppImages.PENCIL} width={25} height={25} />
+                    </TouchableOpacity>
+                  </View>
+                )}
+                <Image
+                  source={item.image ? {uri: item.image} : AppImages.NOIMAGE}
+                  width={300}
+                  height={250}
+                  marginT-20
+                />
 
-              <Text style={styles.carTitle}>
-                {item.model_name.toUpperCase()}
-              </Text>
-              <Text style={[styles.carText, {marginVertical: 5}]}>
-                Purchase Year:{' '}
-                <Text white>{getUserDate(item.purchased_year)}</Text>
-              </Text>
-              <Text style={[styles.carText]}>
-                Trim: <Text white>{item.trim}</Text>
-              </Text>
-              <Text style={[styles.carText, {marginVertical: 5}]}>
-                Make: <Text white>{item.make}</Text>
-              </Text>
-              <Text style={styles.carText}>
-                Model Series : <Text white>{item.model_series}</Text>
-              </Text>
-            </View>
-          );
-        }}
-      />
+                <Text style={styles.carTitle}>
+                  {item.model_name.toUpperCase()}
+                </Text>
+                <Text style={[styles.carText, {marginVertical: 5}]}>
+                  Purchase Year:{' '}
+                  <Text white>{getUserDate(item.purchased_year)}</Text>
+                </Text>
+                <Text style={[styles.carText]}>
+                  Trim: <Text white>{item.trim}</Text>
+                </Text>
+                <Text style={[styles.carText, {marginVertical: 5}]}>
+                  Make: <Text white>{item.make}</Text>
+                </Text>
+                <Text style={styles.carText}>
+                  Model Series : <Text white>{item.model_series}</Text>
+                </Text>
+              </View>
+            );
+          }}
+        />
+      )}
 
       {userId == 0 && (
         <TouchableOpacity

@@ -24,7 +24,7 @@ import { AddTripResponse } from './trip/TripCreateSlice';
 import { TripDeleteResponse } from './trip/TripDeleteSlice';
 import { TripDetailsResponse, TripListResponse } from './trip/TripListResponse';
 import { TripStatusChangeResponse } from './trip/TripStatusChangeSlice';
-import { UserListData } from './user/UserListResponse';
+import { UserListData, UserListResponse } from './user/UserListResponse';
 
 type ResponseKind = 'success' | 'failure';
 
@@ -39,7 +39,7 @@ export const createRegister = async (
 ): Promise<NetworkResponse<RegisterResponse>> => {
   const response = await SimpleApiClient('register', 'POST', requestBody);
 
-  if (response.status) {
+  if (response && response.status) {
     const json = await response.data;
     return {
       kind: 'success',
@@ -58,7 +58,7 @@ export const createLogin = async (
 ): Promise<NetworkResponse<LoginResponse>> => {
   const response = await SimpleApiClient('login', 'POST', requestBody);
 
-  if (response.status) {
+  if (response && response.status) {
     const json = await response.data;
     return {
       kind: 'success',
@@ -77,7 +77,7 @@ export const changePassword = async (
 ): Promise<NetworkResponse<ChangePasswordResponse | null>> => {
   const response = await apiClient('forgot-password-change', 'POST', requestBody);
 
-  if (response.status) {
+  if (response && response.status) {
     const json = await response.data;
     return {
       kind: 'success',
@@ -96,7 +96,7 @@ export const editProfile = async (
 ): Promise<NetworkResponse<EditProfileResponse | null>> => {
   const response = await ApiFormData('update-profile', 'POST', requestBody);
 
-  if (response.status) {
+  if (response && response.status) {
     const json = await response.data;
     return {
       kind: 'success',
@@ -115,7 +115,7 @@ export const sendOtp = async (
 ): Promise<NetworkResponse<SendOtpResponse | null>> => {
   const response = await apiClient(url, 'POST', requestBody);
 
-  if (response.status) {
+  if (response && response.status) {
     const json = await response.data;
     return {
       kind: 'success',
@@ -134,7 +134,7 @@ export const otpVerify = async (
 ): Promise<NetworkResponse<VerifyOtpResponse | null>> => {
   const response = await apiClient('verify-otp', 'POST', requestBody);
 
-  if (response.status) {
+  if (response && response.status) {
     const json = await response.data;
     return {
       kind: 'success',
@@ -152,7 +152,7 @@ export const fetchTripList = async (
 ): Promise<NetworkResponse<TripDetailsResponse>> => {
   const response = await apiClient(uri, 'POST', requestBody);
 
-  if (response.status) {
+  if (response && response.status) {
     const json = await response.data;
     return {
       kind: 'success',
@@ -171,7 +171,7 @@ export const fetchTripDetails = async (
 ): Promise<NetworkResponse<TripDetailsResponse>> => {
   const response = await apiClient('trip/show', 'POST', requestBody);
 
-  if (response.status) {
+  if (response && response.status) {
     const json = await response.data;
     return {
       kind: 'success',
@@ -190,7 +190,7 @@ export const fetchProfileDetails = async (
 ): Promise<NetworkResponse<ProfileDetails | null>> => {
   const response = await apiClient('user-profile', 'POST', requestBody);
 
-  if (response.status) {
+  if (response && response.status) {
     const json = await response.data;
     return {
       kind: 'success',
@@ -209,7 +209,7 @@ export const createCar = async (
 ): Promise<NetworkResponse<CarResponse>> => {
   const response = await ApiFormData(uri, 'POST', requestBody);
 
-  if (response.status) {
+  if (response && response.status) {
     const json = await response.data;
     return {
       kind: 'success',
@@ -228,7 +228,7 @@ export const deleteCar = async (
 ): Promise<NetworkResponse<CarResponse>> => {
   const response = await apiClient('car/delete', 'POST', requestBody);
 
-  if (response.status) {
+  if (response && response.status) {
     const json = await response.data;
     return {
       kind: 'success',
@@ -247,7 +247,7 @@ export const deleteAccount = async (
 ): Promise<NetworkResponse<DeleteResponse>> => {
   const response = await apiClient('account-delete', 'POST', requestBody);
 
-  if (response.status) {
+  if (response && response.status) {
     const json = await response.data;
     return {
       kind: 'success',
@@ -266,7 +266,7 @@ export const createTrip = async (
 ): Promise<NetworkResponse<AddTripResponse>> => {
   const response = await ApiFormData(uri, 'POST', requestBody);
 
-  if (response.status) {
+  if (response && response.status) {
     const json = await response.data;
     return {
       kind: 'success',
@@ -285,7 +285,7 @@ export const joinTrip = async (
 ): Promise<NetworkResponse<TripJoinResponse>> => {
   const response = await apiClient(uri, 'POST', requestBody);
 
-  if (response.status) {
+  if (response && response.status) {
     const json = await response.data;
     return {
       kind: 'success',
@@ -304,7 +304,7 @@ export const cancelTrip = async (
 ): Promise<NetworkResponse<TripCancelResponse>> => {
   const response = await apiClient('booking/sign-out-trip', 'POST', requestBody);
 
-  if (response.status) {
+  if (response && response.status) {
     const json = await response.data;
     return {
       kind: 'success',
@@ -320,11 +320,11 @@ export const cancelTrip = async (
 //API FOR USER AnD MARSHALS LIST
 export const fetchUserList = async (
   requestBody: any
-): Promise<NetworkResponse<UserListData[]>> => {
+): Promise<NetworkResponse<UserListResponse>> => {
   const response = await apiClient('level-user-wise', 'POST', requestBody);
 
-  if (response.status) {
-    const json = await response.data.data;
+  if (response && response.status) {
+    const json = await response.data;
     return {
       kind: 'success',
       body: json,
@@ -342,7 +342,7 @@ export const fetchMemberList = async (
 ): Promise<NetworkResponse<MemberListData[]>> => {
   const response = await apiClient('trip/trip-users', 'POST', requestBody);
 
-  if (response.status) {
+  if (response && response.status) {
     const json = await response.data.data;
     return {
       kind: 'success',
@@ -361,7 +361,7 @@ export const updateRole = async (
 ): Promise<NetworkResponse<UpdateRoleResponse>> => {
   const response = await apiClient('update-role', 'POST', requestBody);
 
-  if (response.status) {
+  if (response && response.status) {
     const json = await response.data;
     return {
       kind: 'success',
@@ -380,7 +380,7 @@ export const deleteTrip = async (
 ): Promise<NetworkResponse<TripDeleteResponse>> => {
   const response = await apiClient('trip/delete', 'POST', requestBody);
 
-  if (response.status) {
+  if (response && response.status) {
     const json = await response.data;
     return {
       kind: 'success',
@@ -399,7 +399,7 @@ export const changeTripStatus = async (
 ): Promise<NetworkResponse<TripStatusChangeResponse>> => {
   const response = await apiClient('trip/change-trip-status', 'POST', requestBody);
 
-  if (response.status) {
+  if (response && response.status) {
     const json = await response.data;
     return {
       kind: 'success',
@@ -418,7 +418,7 @@ export const markAttendance = async (
 ): Promise<NetworkResponse<MarkAttendanceResponse>> => {
   const response = await apiClient(uri, 'POST', requestBody);
 
-  if (response.status) {
+  if (response && response.status) {
     const json = await response.data;
     return {
       kind: 'success',
@@ -437,7 +437,7 @@ export const sendNotif = async (
 ): Promise<NetworkResponse<SendNotifResponse>> => {
   const response = await apiClient('notification/send-notification', 'POST', requestBody);
 
-  if (response.status) {
+  if (response && response.status) {
     const json = await response.data;
     return {
       kind: 'success',
@@ -456,7 +456,7 @@ export const fetchNotifications = async (
 ): Promise<NetworkResponse<NotificationResponse>> => {
   const response = await apiClient(uri, 'POST', requestBody);
 
-  if (response.status) {
+  if (response && response.status) {
     const json = await response.data;
     return {
       kind: 'success',
@@ -475,7 +475,7 @@ export const deleteNotif = async (
 ): Promise<NetworkResponse<DeleteNotifResponse>> => {
   const response = await apiClient('notification/notification-delete', 'POST', requestBody);
 
-  if (response.status) {
+  if (response && response.status) {
     const json = await response.data;
     return {
       kind: 'success',

@@ -67,26 +67,31 @@ const MyTripScreen: React.FC<Props> = ({isReplace}: Props) => {
         isReplace();
         setTripList([])
       };
-    }, [chip, search, filterValue]),
+    }, [chip,search, filterValue]),
   );
 
   const fetchList = (page: number) => {
     if(IsNetConnected){
+      console.log(chip,'++++++++++')
     let request = JSON.stringify({
       //title
       name: search,
       //by level
       filter: filterValue === '' ? [] : [filterValue],
       //My Trips,Created,Closed
-      tab_menu: chip === 2 ? 'Created' : chip === 3 ? 'Closed' : 'My Trips',
+      tab_menu: chip === 1 ? 'My Trips' : chip === 2 ? 'Created' : chip === 3 ? 'Closed' : 'My Trips',
       // perpage: 10,
        page: page,
     });
 
     dispatch(fetchTripList({ requestBody: request, uri: 'trip/trip-by-user' }))
       .then((response: any) => {
-        // Concatenate the new trips with the existing list
-        setTripList(prevList => prevList.concat(response.payload.trip.data));
+        if (page === 1) {
+          setTripList(response.payload.trip.data);
+        } else {
+          // Concatenate the new trips with the existing list
+          setTripList(prevList => prevList.concat(response.payload.trip.data));
+        }
       })
       .catch((error: any) => {
         // Handle error
@@ -105,7 +110,6 @@ const MyTripScreen: React.FC<Props> = ({isReplace}: Props) => {
     }
   };
 
-
   return (
     <View flex backgroundColor={AppColors.Black} padding-20 paddingB-0>
       <Header
@@ -115,6 +119,7 @@ const MyTripScreen: React.FC<Props> = ({isReplace}: Props) => {
         rightOnpress={() => {
           setSearch('')
           dispatch({type: 'SET_FILTER_VALUE', payload: ''});
+          setTripList([])
           fetchList(1);
         }}
       />

@@ -1,21 +1,21 @@
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
 import * as apiInterface from '../apiInterface';
-import { UserListData } from './UserListResponse';
+import { UserListData, UserListResponse } from './UserListResponse';
 
 export type UserListState = {
-  users: UserListData[];
+  users: UserListResponse | null;
   loadingUsers: boolean;
   usersError: boolean;
 };
 
 const initialState: UserListState = {
-    users: [],
+    users: null,
     loadingUsers: false,
     usersError: false,
 };
 
 export const fetchUserList = createAsyncThunk<
-  {users: UserListData[]},
+  {users: UserListResponse | null},
   {requestBody: any}
 >('fetchUserList', async ({requestBody}) => {
   const response = await apiInterface.fetchUserList(requestBody);
@@ -23,7 +23,7 @@ export const fetchUserList = createAsyncThunk<
 
   if (response.kind == 'success') {
     return {
-        users: response.body ?? [],
+        users: response.body ?? null,
     };
   } else {
     throw 'Error fetching customers';
@@ -39,18 +39,18 @@ const UserListSlice = createSlice({
       .addCase(fetchUserList.pending, state => {
         state.loadingUsers = true;
         state.usersError = false;
-        state.users = [];
+        state.users = initialState.users;
       })
       .addCase(fetchUserList.fulfilled, (state, action) => {
-        state.users = [];
-        state.users = state.users.concat(action.payload.users);
+        state.users = initialState.users;
+        state.users = action.payload.users;
         state.usersError = false;
         state.loadingUsers = false;
       })
       .addCase(fetchUserList.rejected, state => {
         state.usersError = true;
         state.loadingUsers = false;
-        state.users = [];
+        state.users = initialState.users;
       });
   },
 });

@@ -6,6 +6,7 @@ import { formattedTime, getDateTime, getUserDate } from "../constants/commonUtil
 import { RouteNames } from "../navigation";
 import { styles } from "../screens/home/styles";
 import AppImages from "../constants/AppImages";
+import { useDispatch } from "react-redux";
 
 interface Props {
     item: any;
@@ -22,7 +23,7 @@ if (Platform.OS === 'android') {
 
 const ListItem = ({item, index, navigation}: Props) => {
     const [expandedItems, setExpandedItems] = useState([]);
-
+    const dispatch = useDispatch();
     const [arrowRotation, setArrowRotation] = useState(new Animated.Value(0));
 
   const toggleExpand = (index: number) => {
@@ -43,7 +44,8 @@ const ListItem = ({item, index, navigation}: Props) => {
   
     return(
         <TouchableOpacity
-        onPress={() => navigation.navigate(RouteNames.TripDetails,{id:item.id})}>
+        onPress={() => {dispatch({ type: 'SET_CHIP', payload: 1 });
+          navigation.navigate(RouteNames.TripDetails,{id:item.id})}}>
         <View style={styles.view}>
           <ImageBackground
             source={

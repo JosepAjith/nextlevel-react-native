@@ -14,7 +14,7 @@ import { useNavigation } from '@react-navigation/native';
 import AppColors from '../../constants/AppColors';
 import AppImages from '../../constants/AppImages';
 import ButtonView from '../../components/ButtonView';
-import { ScrollView, TouchableOpacity } from 'react-native';
+import { KeyboardAvoidingView, Platform, ScrollView, TouchableOpacity } from 'react-native';
 import { Header } from '../../components/Header';
 import AppFonts from '../../constants/AppFonts';
 import { styles } from '../addtrip/styles';
@@ -208,6 +208,10 @@ const AddCar: React.FC<Props> = ({ route }: any) => {
   };
 
   return (
+    <KeyboardAvoidingView
+    style={{ flex: 1 }} // Make sure it takes full height of the screen
+    behavior={Platform.OS === 'ios' ? 'padding' : 'padding'} // Adjust behavior for iOS
+  >
     <View flex backgroundColor={AppColors.Black}>
 
       {loadingCar && <BackgroundLoader />}
@@ -361,7 +365,7 @@ const AddCar: React.FC<Props> = ({ route }: any) => {
         />
       )}
     </View>
-
+</KeyboardAvoidingView>
   );
 };
 export default AddCar;

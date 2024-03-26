@@ -67,7 +67,9 @@ const BroadcastScreen: React.FC<Props> = ({route}: any) => {
   const getMessages = (page: number) => {
     dispatch(
       fetchNotifications({
-        requestBody: {trip_id: id, perpage: 10, page: page},
+        requestBody: {trip_id: id, 
+          // perpage: 10, page: page
+        },
         uri: 'notification/message-show-from',
       }),
     );

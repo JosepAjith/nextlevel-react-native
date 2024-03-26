@@ -119,7 +119,7 @@ const NotificationScreen: React.FC<Props> = () => {
             renderItem={({item, index}) => {
               return (
                 <Swipeable
-                  onActivated={() => Delete(item.id)}
+                  // onActivated={() => Delete(item.id)}
                   renderRightActions={() => (
                     <TouchableOpacity
                       onPress={() => Delete(item.id)}

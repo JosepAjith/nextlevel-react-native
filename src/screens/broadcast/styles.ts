@@ -4,7 +4,7 @@ import AppColors from "../../constants/AppColors";
 
 export const styles = StyleSheet.create({
 card:{
-    marginTop:30,
+    marginTop:20,
     borderRadius:20,
     padding:10
 },

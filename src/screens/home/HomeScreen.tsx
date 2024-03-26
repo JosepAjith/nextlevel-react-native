@@ -67,8 +67,10 @@ const HomeScreen: React.FC<Props> = () => {
     React.useCallback(() => {
       fetchList(1);
 
-      return () => {};
-    }, []),
+      return () => {
+        setTripList([])
+      };
+    }, [search]),
   );
 
   const fetchList = (page: number) => {
@@ -76,13 +78,18 @@ const HomeScreen: React.FC<Props> = () => {
     let request = JSON.stringify({
       //upcoming, ongoing, completed
       status: ['upcoming', 'ongoing'],
+      title:search,
       // perpage: 10,
       page: page,
     });
     dispatch(fetchTripList({requestBody: request, uri: 'trip/list'}))
       .then((response: any) => {
-        // Concatenate the new trips with the existing list
-        setTripList(prevList => prevList.concat(response.payload.trip.data));
+        if (page === 1) {
+          setTripList(response.payload.trip.data);
+        } else {
+          // Concatenate the new trips with the existing list
+          setTripList(prevList => prevList.concat(response.payload.trip.data));
+        }
       })
       .catch((error: any) => {
         // Handle error
@@ -90,9 +97,6 @@ const HomeScreen: React.FC<Props> = () => {
     }
   };
 
-  const filteredTrip = tripList.filter(item =>
-    item.title.toLowerCase().includes(search.toLowerCase()),
-  );
 
   const loadMoreTrips = () => {
     if (trip?.total_page && trip?.current_page < trip?.total_page) {
@@ -141,7 +145,7 @@ const HomeScreen: React.FC<Props> = () => {
         </View>}
 
       <FlatList
-        data={filteredTrip}
+        data={tripList}
         showsVerticalScrollIndicator={false}
         renderItem={({item, index}) => {
           return <ListItem item={item} index={index} navigation={navigation} />;

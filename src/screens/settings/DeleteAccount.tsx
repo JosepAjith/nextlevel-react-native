@@ -6,7 +6,7 @@ import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {useNavigation} from '@react-navigation/native';
 import AppColors from '../../constants/AppColors';
 import {Header} from '../../components/Header';
-import {ScrollView, TouchableOpacity} from 'react-native';
+import {KeyboardAvoidingView, Platform, ScrollView, TouchableOpacity} from 'react-native';
 import DropdownComponent from '../../components/DropdownComponent';
 import {styles} from './styles';
 import ButtonView from '../../components/ButtonView';
@@ -134,6 +134,10 @@ const DeleteAccount: React.FC<Props> = () => {
   };
 
   return (
+    <KeyboardAvoidingView
+    style={{ flex: 1 }} // Make sure it takes full height of the screen
+    behavior={Platform.OS === 'ios' ? 'padding' : 'padding'} // Adjust behavior for iOS
+  >
     <View flex backgroundColor={AppColors.Black} padding-20>
       <Header title="Delete Account" />
 
@@ -238,6 +242,7 @@ const DeleteAccount: React.FC<Props> = () => {
 
      
     </View>
+    </KeyboardAvoidingView>
   );
 };
 

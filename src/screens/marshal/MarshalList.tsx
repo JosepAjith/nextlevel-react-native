@@ -41,32 +41,46 @@ const MarshalList: React.FC<Props> = () => {
   const windowWidth = Dimensions.get('window').width;
   const itemWidth = (windowWidth - 50) / 2;
   const dispatch: ThunkDispatch<RootState, any, AnyAction> = useDispatch();
+  const [marshList, setMarshList] = useState([]);
   const {users, loadingUsers, usersError} = useSelector(
     (state: RootState) => state.UserList,
   );
   const [search, setSearch] = useState('');
+  const {IsNetConnected} = useSelector(
+    (state: RootState) => state.GlobalVariables,
+  );
 
   useFocusEffect(
     React.useCallback(() => {
-      FetchList();
+      FetchList(1);
 
-      return () => {};
-    }, []),
+      return () => {
+        setMarshList([]);
+      };
+    }, [search]),
   );
 
-  const FetchList = () => {
+  const FetchList = (page: number) => {
+    if(IsNetConnected){
     let request = JSON.stringify({
       level: Marshals,
+      page: page,
+      title: search
     });
-    dispatch(fetchUserList({requestBody: request}));
+    dispatch(fetchUserList({requestBody: request}))
+    .then((response: any) => {
+      if (page === 1) {
+        setMarshList(response.payload.users.data);
+      } else {
+        // Concatenate the new trips with the existing list
+        setMarshList(prevList => prevList.concat(response.payload.users.data));
+      }
+    })
+    .catch((error: any) => {
+      // Handle error
+    });
+  }
   };
-
-  const SearchedMarshal = users.filter(
-    item =>
-      item.name.toLowerCase().includes(search.toLowerCase()) ||
-      item.email.toLowerCase().includes(search.toLowerCase()) ||
-      item.level.toLowerCase().includes(search.toLowerCase()),
-  );
 
   return (
     <View flex backgroundColor={AppColors.Black} padding-20>
@@ -75,7 +89,8 @@ const MarshalList: React.FC<Props> = () => {
         rightIcon={AppImages.REFRESH}
         rightOnpress={() => {
           setSearch('');
-          FetchList;
+          setMarshList([]);
+          FetchList(1);
         }}
       />
 
@@ -97,7 +112,7 @@ const MarshalList: React.FC<Props> = () => {
       />
 
       <FlatList
-        data={SearchedMarshal}
+        data={marshList}
         numColumns={2}
         renderItem={({item, index}) => {
           const isEvenIndex = index % 2 === 0;
