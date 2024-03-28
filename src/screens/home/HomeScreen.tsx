@@ -14,29 +14,18 @@ import {useNavigation} from '@react-navigation/native';
 import AppColors from '../../constants/AppColors';
 import {styles} from './styles';
 import AppImages from '../../constants/AppImages';
-import ButtonView from '../../components/ButtonView';
 import {
   Animated,
-  Easing,
   FlatList,
-  ImageBackground,
   LayoutAnimation,
   Platform,
   TouchableOpacity,
   UIManager,
 } from 'react-native';
-import {Header} from '../../components/Header';
-import AppFonts from '../../constants/AppFonts';
 import {AnyAction, ThunkDispatch} from '@reduxjs/toolkit';
 import {RootState} from '../../../store';
 import {useDispatch, useSelector} from 'react-redux';
 import {fetchTripList} from '../../api/trip/TriplListSlice';
-import {
-  formattedTime,
-  getDateTime,
-  getUserDate,
-  showToast,
-} from '../../constants/commonUtils';
 import BackgroundLoader from '../../components/BackgroundLoader';
 import ListItem from '../../components/ListItem';
 
@@ -48,6 +37,12 @@ export type HomeScreenNavigationProps = NativeStackNavigationProp<
 >;
 
 export type HomeScreenRouteProps = RouteProp<RootStackParams, 'HomeScreen'>;
+
+if (Platform.OS === 'android') {
+  if (UIManager.setLayoutAnimationEnabledExperimental) {
+    UIManager.setLayoutAnimationEnabledExperimental(true);
+  }
+}
 
 interface Props {}
 
@@ -62,6 +57,29 @@ const HomeScreen: React.FC<Props> = () => {
   const {IsNetConnected} = useSelector(
     (state: RootState) => state.GlobalVariables,
   );
+  const [scrollY] = useState(new Animated.Value(0));
+  const [headerVisible, setHeaderVisible] = useState(true);
+
+  const handleScroll = Animated.event(
+    [{ nativeEvent: { contentOffset: { y: scrollY } } }],
+    { useNativeDriver: true },
+  );
+
+  useEffect(() => {
+    scrollY.addListener(({ value }) => {
+      if (value > 0) {
+        LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+        setHeaderVisible(false);
+      } else {
+        LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+        setHeaderVisible(true);
+      }
+    });
+
+    return () => {
+      scrollY.removeAllListeners();
+    };
+  }, []);
 
   useFocusEffect(
     React.useCallback(() => {
@@ -108,6 +126,8 @@ const HomeScreen: React.FC<Props> = () => {
   return (
     <View flex backgroundColor={AppColors.Black} padding-20 paddingB-0>
       {loadingTrip && <BackgroundLoader />}
+      
+      {headerVisible &&
       <View row>
         <View flex>
           <Text style={styles.title}>Buckle up and get ready</Text>
@@ -123,6 +143,7 @@ const HomeScreen: React.FC<Props> = () => {
           </TouchableOpacity>
         </View>
       </View>
+}
 
       <TextField
         fieldStyle={styles.field}
@@ -144,7 +165,7 @@ const HomeScreen: React.FC<Props> = () => {
         <Text white text40>No Network Connection</Text>
         </View>}
 
-      <FlatList
+      <Animated.FlatList
         data={tripList}
         showsVerticalScrollIndicator={false}
         renderItem={({item, index}) => {
@@ -152,6 +173,7 @@ const HomeScreen: React.FC<Props> = () => {
         }}
         keyExtractor={(item, index) => `${item.id}-${index}`}
         onEndReached={loadMoreTrips}
+        onScroll={handleScroll}
       />
     </View>
   );

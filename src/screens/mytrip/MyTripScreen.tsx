@@ -42,6 +42,12 @@ export type MyTripScreenNavigationProps = NativeStackNavigationProp<
 
 export type MyTripScreenRouteProps = RouteProp<RootStackParams, 'MyTripScreen'>;
 
+if (Platform.OS === 'android') {
+  if (UIManager.setLayoutAnimationEnabledExperimental) {
+    UIManager.setLayoutAnimationEnabledExperimental(true);
+  }
+}
+
 interface Props {
   isReplace?: any;
 }
@@ -54,10 +60,35 @@ const MyTripScreen: React.FC<Props> = ({isReplace}: Props) => {
   const {trip, loadingTrip, tripError} = useSelector(
     (state: RootState) => state.TripList,
   );
-  const {type, IsNetConnected} = useSelector((state: RootState) => state.GlobalVariables);
+  const {type, IsNetConnected} = useSelector(
+    (state: RootState) => state.GlobalVariables,
+  );
   const {filterValue, chip} = useSelector(
     (state: RootState) => state.TripReducer,
   );
+  const [scrollY] = useState(new Animated.Value(0));
+  const [headerVisible, setHeaderVisible] = useState(true);
+
+  const handleScroll = Animated.event(
+    [{nativeEvent: {contentOffset: {y: scrollY}}}],
+    {useNativeDriver: true},
+  );
+
+  useEffect(() => {
+    scrollY.addListener(({value}) => {
+      if (value > 0) {
+        LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+        setHeaderVisible(false);
+      } else {
+        LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+        setHeaderVisible(true);
+      }
+    });
+
+    return () => {
+      scrollY.removeAllListeners();
+    };
+  }, []);
 
   useFocusEffect(
     React.useCallback(() => {
@@ -65,37 +96,46 @@ const MyTripScreen: React.FC<Props> = ({isReplace}: Props) => {
       // Clean-up function
       return () => {
         isReplace();
-        setTripList([])
+        setTripList([]);
       };
-    }, [chip,search, filterValue]),
+    }, [chip, search, filterValue]),
   );
 
   const fetchList = (page: number) => {
-    if(IsNetConnected){
-      console.log(chip,'++++++++++')
-    let request = JSON.stringify({
-      //title
-      name: search,
-      //by level
-      filter: filterValue === '' ? [] : [filterValue],
-      //My Trips,Created,Closed
-      tab_menu: chip === 1 ? 'My Trips' : chip === 2 ? 'Created' : chip === 3 ? 'Closed' : 'My Trips',
-      // perpage: 10,
-       page: page,
-    });
-
-    dispatch(fetchTripList({ requestBody: request, uri: 'trip/trip-by-user' }))
-      .then((response: any) => {
-        if (page === 1) {
-          setTripList(response.payload.trip.data);
-        } else {
-          // Concatenate the new trips with the existing list
-          setTripList(prevList => prevList.concat(response.payload.trip.data));
-        }
-      })
-      .catch((error: any) => {
-        // Handle error
+    if (IsNetConnected) {
+      console.log(chip, '++++++++++');
+      let request = JSON.stringify({
+        //title
+        name: search,
+        //by level
+        filter: filterValue === '' ? [] : [filterValue],
+        //My Trips,Created,Closed
+        tab_menu:
+          chip === 1
+            ? 'My Trips'
+            : chip === 2
+            ? 'Created'
+            : chip === 3
+            ? 'Closed'
+            : 'My Trips',
+        // perpage: 10,
+        page: page,
       });
+
+      dispatch(fetchTripList({requestBody: request, uri: 'trip/trip-by-user'}))
+        .then((response: any) => {
+          if (page === 1) {
+            setTripList(response.payload.trip.data);
+          } else {
+            // Concatenate the new trips with the existing list
+            setTripList(prevList =>
+              prevList.concat(response.payload.trip.data),
+            );
+          }
+        })
+        .catch((error: any) => {
+          // Handle error
+        });
     }
   };
 
@@ -112,54 +152,55 @@ const MyTripScreen: React.FC<Props> = ({isReplace}: Props) => {
 
   return (
     <View flex backgroundColor={AppColors.Black} padding-20 paddingB-0>
-      <Header
-        leftIcon={false}
-        title="My Trips"
-        rightIcon={AppImages.REFRESH}
-        rightOnpress={() => {
-          setSearch('')
-          dispatch({type: 'SET_FILTER_VALUE', payload: ''});
-          setTripList([])
-          fetchList(1);
-        }}
-      />
-
       {loadingTrip && <BackgroundLoader />}
-
-      
-
-      <View row centerV>
-        <View flex>
-          <TextField
-            fieldStyle={[styles.field, {width: '100%'}]}
-            placeholder={'Search'}
-            placeholderTextColor={'#999999'}
-            style={styles.text}
-            paddingH-20
-            marginT-25
-            marginB-20
-            value={search}
-            onChangeText={(text: any) => {
-              setSearch(text);
+      {headerVisible && (
+        <View>
+          <Header
+            leftIcon={false}
+            title="My Trips"
+            rightIcon={AppImages.REFRESH}
+            rightOnpress={() => {
+              setSearch('');
+              dispatch({type: 'SET_FILTER_VALUE', payload: ''});
+              setTripList([]);
+              fetchList(1);
             }}
-            leadingAccessory={
-              <Image
-                source={AppImages.SEARCH}
-                width={20}
-                height={20}
-                marginR-10
-              />
-            }
           />
-        </View>
 
-        <View style={{flex: 0.3}} right>
-          <TouchableOpacity
-            onPress={() => dispatch({type: 'IS_FILTER', payload: true})}>
-            <Image source={AppImages.FILTER} width={50} height={50} />
-          </TouchableOpacity>
+          <View row centerV>
+            <View flex>
+              <TextField
+                fieldStyle={[styles.field, {width: '100%'}]}
+                placeholder={'Search'}
+                placeholderTextColor={'#999999'}
+                style={styles.text}
+                paddingH-20
+                marginT-25
+                marginB-20
+                value={search}
+                onChangeText={(text: any) => {
+                  setSearch(text);
+                }}
+                leadingAccessory={
+                  <Image
+                    source={AppImages.SEARCH}
+                    width={20}
+                    height={20}
+                    marginR-10
+                  />
+                }
+              />
+            </View>
+
+            <View style={{flex: 0.3}} right>
+              <TouchableOpacity
+                onPress={() => dispatch({type: 'IS_FILTER', payload: true})}>
+                <Image source={AppImages.FILTER} width={50} height={50} />
+              </TouchableOpacity>
+            </View>
+          </View>
         </View>
-      </View>
+      )}
 
       <View row marginB-20>
         <Chip
@@ -195,20 +236,22 @@ const MyTripScreen: React.FC<Props> = ({isReplace}: Props) => {
         />
       </View>
 
-      {!IsNetConnected && 
-      <View flex center>
-        <Text white text40>No Network Connection</Text>
-        </View>}
-        
-      <FlatList
+      {!IsNetConnected && (
+        <View flex center>
+          <Text white text40>
+            No Network Connection
+          </Text>
+        </View>
+      )}
+
+      <Animated.FlatList
         data={tripList}
         showsVerticalScrollIndicator={false}
         renderItem={({item, index}) => {
-          return (
-            <ListItem item={item} index={index} navigation={navigation}/>
-          );
+          return <ListItem item={item} index={index} navigation={navigation} />;
         }}
         onEndReached={loadMoreTrips}
+        onScroll={handleScroll}
       />
     </View>
   );
