@@ -15,15 +15,20 @@ import AppColors from '../../constants/AppColors';
 import {styles} from './styles';
 import AppImages from '../../constants/AppImages';
 import ButtonView from '../../components/ButtonView';
-import {KeyboardAvoidingView, Platform, TouchableOpacity} from 'react-native';
+import {
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  TouchableOpacity,
+} from 'react-native';
 import {Header} from '../../components/Header';
-import { AnyAction, ThunkDispatch } from '@reduxjs/toolkit';
-import { RootState } from '../../../store';
-import { useDispatch, useSelector } from 'react-redux';
-import { PasswordRequest } from '../../api/password/PasswordRequest';
-import { PasswordValidation } from '../../api/password/PasswordValidation';
-import { showToast } from '../../constants/commonUtils';
-import { changePassword, reset } from '../../api/password/ChangePasswordSlice';
+import {AnyAction, ThunkDispatch} from '@reduxjs/toolkit';
+import {RootState} from '../../../store';
+import {useDispatch, useSelector} from 'react-redux';
+import {PasswordRequest} from '../../api/password/PasswordRequest';
+import {PasswordValidation} from '../../api/password/PasswordValidation';
+import {showToast} from '../../constants/commonUtils';
+import {changePassword, reset} from '../../api/password/ChangePasswordSlice';
 import BackgroundLoader from '../../components/BackgroundLoader';
 
 const {TextField} = Incubator;
@@ -43,9 +48,8 @@ interface Props {}
 const ChangePasswordScreen: React.FC<Props> = () => {
   const navigation = useNavigation<ChangePasswordScreenNavigationProps>();
   const dispatch: ThunkDispatch<RootState, any, AnyAction> = useDispatch();
-  const {changePasswordData, loadingChangePassword, changePasswordError} = useSelector(
-    (state: RootState) => state.ChangePassword,
-  );
+  const {changePasswordData, loadingChangePassword, changePasswordError} =
+    useSelector((state: RootState) => state.ChangePassword);
   const [passwordInput, setPassword] = useState<PasswordRequest>(
     new PasswordRequest(),
   );
@@ -93,107 +97,126 @@ const ChangePasswordScreen: React.FC<Props> = () => {
 
   useEffect(() => {
     if (changePasswordData != null) {
-      if (!loadingChangePassword && !changePasswordError && changePasswordData.status) {
-       showToast(changePasswordData.message)
-        navigation.replace(RouteNames.SuccessScreen,{from:'change'});
+      if (
+        !loadingChangePassword &&
+        !changePasswordError &&
+        changePasswordData.status
+      ) {
+        showToast(changePasswordData.message);
+        navigation.replace(RouteNames.SuccessScreen, {from: 'change'});
       } else {
-        showToast(changePasswordData.message)
+        showToast(changePasswordData.message);
       }
     }
   }, [changePasswordData]);
 
   return (
     <KeyboardAvoidingView
-    style={{ flex: 1 }} // Make sure it takes full height of the screen
-    behavior={Platform.OS === 'ios' ? 'padding' : 'padding'} // Adjust behavior for iOS
-  >
-    <View flex backgroundColor={AppColors.Black} padding-20>
-      <Header title="Change Password" />
+      style={{flex: 1}} // Make sure it takes full height of the screen
+      behavior={Platform.OS === 'ios' ? 'padding' : 'padding'} // Adjust behavior for iOS
+    >
+      <View flex backgroundColor={AppColors.Black} padding-20>
+        <Header title="Change Password" />
 
-      {loadingChangePassword && <BackgroundLoader/>}
+        {loadingChangePassword && <BackgroundLoader />}
 
-      <TextField
-        fieldStyle={styles.field}
-        label={'New Password'}
-        labelStyle={styles.label}
-        style={styles.text}
-        paddingH-20
-        marginT-40
-        secureTextEntry={!passwordValidate.showPassword}
-          trailingAccessory={
-            <View row center>
-              <Text marginR-10 red10>
-                {passwordValidate.InvalidPassword ? '*Required' : ''}
+        <ScrollView>
+          <View>
+            <TextField
+              fieldStyle={styles.field}
+              label={'New Password'}
+              labelStyle={styles.label}
+              style={styles.text}
+              paddingH-20
+              marginT-40
+              secureTextEntry={!passwordValidate.showPassword}
+              trailingAccessory={
+                <View row center>
+                  <Text marginR-10 red10>
+                    {passwordValidate.InvalidPassword ? '*Required' : ''}
+                  </Text>
+                  <TouchableOpacity
+                    onPress={() =>
+                      setValidate({
+                        ...passwordValidate,
+                        showPassword: !passwordValidate.showPassword,
+                      })
+                    }>
+                    {passwordValidate.showPassword ? (
+                      <Image
+                        source={AppImages.EYECLOSE}
+                        width={23}
+                        height={15}
+                      />
+                    ) : (
+                      <Image source={AppImages.EYE} />
+                    )}
+                  </TouchableOpacity>
+                </View>
+              }
+              onChangeText={(text: any) => {
+                setPassword({...passwordInput, password: text});
+                setValidate({...passwordValidate, InvalidPassword: false});
+              }}
+            />
+
+            <View marginT-10>
+              <Text style={styles.text1}>
+                Create a new password. Ensure it differs from previous ones for
+                security
               </Text>
-              <TouchableOpacity
-                onPress={() =>
-                  setValidate({
-                    ...passwordValidate,
-                    showPassword: !passwordValidate.showPassword,
-                  })
-                }>
-                {passwordValidate.showPassword ? (
-                  <Image source={AppImages.EYECLOSE} width={23} height={15} />
-                ) : (
-                  <Image source={AppImages.EYE} />
-                )}
-              </TouchableOpacity>
             </View>
-          }
-          onChangeText={(text: any) => {
-            setPassword({...passwordInput, password: text});
-            setValidate({...passwordValidate, InvalidPassword: false});
-          }}
-      />
 
-      <View marginT-10>
-        <Text style={styles.text1}>
-          Create a new password. Ensure it differs from previous ones for
-          security
-        </Text>
+            <TextField
+              fieldStyle={styles.field}
+              label={'Re-enter Password'}
+              labelStyle={styles.label}
+              style={styles.text}
+              paddingH-20
+              marginT-25
+              marginB-40
+              secureTextEntry={!passwordValidate.showConfirmPass}
+              trailingAccessory={
+                <View row center>
+                  <Text marginR-10 red10>
+                    {passwordValidate.InvalidConfirmation ? '*Required' : ''}
+                  </Text>
+                  <TouchableOpacity
+                    onPress={() =>
+                      setValidate({
+                        ...passwordValidate,
+                        showConfirmPass: !passwordValidate.showConfirmPass,
+                      })
+                    }>
+                    {passwordValidate.showConfirmPass ? (
+                      <Image
+                        source={AppImages.EYECLOSE}
+                        width={23}
+                        height={15}
+                      />
+                    ) : (
+                      <Image source={AppImages.EYE} />
+                    )}
+                  </TouchableOpacity>
+                </View>
+              }
+              onChangeText={(text: any) => {
+                setPassword({...passwordInput, password_confirmation: text});
+                setValidate({...passwordValidate, InvalidConfirmation: false});
+              }}
+            />
+
+            <ButtonView
+              title="Change Password"
+              onPress={() => {
+                if (isValidate()) {
+                  Change();
+                }
+              }}
+            />
+          </View>
+        </ScrollView>
       </View>
-
-      <TextField
-        fieldStyle={styles.field}
-        label={'Re-enter Password'}
-        labelStyle={styles.label}
-        style={styles.text}
-        paddingH-20
-        marginT-25
-        marginB-40
-        secureTextEntry={!passwordValidate.showConfirmPass}
-          trailingAccessory={
-            <View row center>
-              <Text marginR-10 red10>
-                {passwordValidate.InvalidConfirmation ? '*Required' : ''}
-              </Text>
-              <TouchableOpacity
-                onPress={() =>
-                  setValidate({
-                    ...passwordValidate,
-                    showConfirmPass: !passwordValidate.showConfirmPass,
-                  })
-                }>
-                {passwordValidate.showConfirmPass ? (
-                  <Image source={AppImages.EYECLOSE} width={23} height={15} />
-                ) : (
-                  <Image source={AppImages.EYE} />
-                )}
-              </TouchableOpacity>
-            </View>
-          }
-          onChangeText={(text: any) => {
-            setPassword({...passwordInput, password_confirmation: text});
-            setValidate({...passwordValidate, InvalidConfirmation: false});
-          }}
-      />
-
-      <ButtonView title="Change Password" onPress={() => {
-            if (isValidate()) {
-              Change();
-            }
-          }} />
-    </View>
     </KeyboardAvoidingView>
   );
 };

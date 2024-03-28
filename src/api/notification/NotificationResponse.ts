@@ -3,6 +3,7 @@ export type NotificationResponse = {
     data:   NotificationData[];
     total_count: number;
     total_page: number;
+    current_page: number;
 }
 
 export type NotificationData = {

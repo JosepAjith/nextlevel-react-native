@@ -14,7 +14,7 @@ import {useNavigation} from '@react-navigation/native';
 import AppColors from '../../constants/AppColors';
 import AppImages from '../../constants/AppImages';
 import ButtonView from '../../components/ButtonView';
-import {ScrollView, TouchableOpacity} from 'react-native';
+import {KeyboardAvoidingView, Platform, ScrollView, TouchableOpacity} from 'react-native';
 import {Header} from '../../components/Header';
 import {styles} from '../addtrip/styles';
 import {getUserDate, showToast} from '../../constants/commonUtils';
@@ -87,8 +87,8 @@ const JoinTrip: React.FC<Props> = ({route}: any) => {
         setJoin({
           ...joinInput,
           name: item.name,
-          phone: item.phone,
-          gender: item.gender,
+          phone: item.phone ? item.phone : '',
+          gender: item.gender? item.gender : '',
           vehicle: '',
           passenger: '',
           application_status: status
@@ -188,6 +188,10 @@ const JoinTrip: React.FC<Props> = ({route}: any) => {
   }, [joinData]);
 
   return (
+    <KeyboardAvoidingView
+    style={{ flex: 1 }} // Make sure it takes full height of the screen
+    behavior={Platform.OS === 'ios' ? 'padding' : 'padding'} // Adjust behavior for iOS
+  >
     <View flex backgroundColor={AppColors.Black}>
       <ScrollView>
         <View padding-20>
@@ -316,6 +320,7 @@ const JoinTrip: React.FC<Props> = ({route}: any) => {
         </View>
       </ScrollView>
     </View>
+    </KeyboardAvoidingView>
   );
 };
 export default JoinTrip;

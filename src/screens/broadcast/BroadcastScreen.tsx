@@ -12,7 +12,7 @@ import {RouteProp, useFocusEffect} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {useNavigation} from '@react-navigation/native';
 import AppColors from '../../constants/AppColors';
-import {FlatList, ScrollView, TouchableOpacity} from 'react-native';
+import {FlatList, KeyboardAvoidingView, Platform, ScrollView, TouchableOpacity} from 'react-native';
 import {Header} from '../../components/Header';
 import AppFonts from '../../constants/AppFonts';
 import {styles} from './styles';
@@ -49,7 +49,8 @@ const BroadcastScreen: React.FC<Props> = ({route}: any) => {
   const {NotifSendData, loadingSendNotif, NotifSendError} = useSelector(
     (state: RootState) => state.SendNotification,
   );
-  const {notification} = useSelector(
+  const [notifList, setNotifList] = useState([]);
+  const {notification, loadingNotifications} = useSelector(
     (state: RootState) => state.GetNotification,
   );
   const {loginUserId} = useSelector(
@@ -60,7 +61,9 @@ const BroadcastScreen: React.FC<Props> = ({route}: any) => {
     React.useCallback(() => {
       getMessages(1);
 
-      return () => {};
+      return () => {
+        setNotifList([]);
+      };
     }, []),
   );
 
@@ -68,19 +71,29 @@ const BroadcastScreen: React.FC<Props> = ({route}: any) => {
     dispatch(
       fetchNotifications({
         requestBody: {trip_id: id, 
-          // perpage: 10, page: page
+          // perpage: 10, 
+          page: page
         },
         uri: 'notification/message-show-from',
       }),
-    );
+    )
+    .then((response: any) => {
+      if (page === 1) {
+        setNotifList(response.payload.notification.data);
+      } else {
+        // Concatenate the new trips with the existing list
+        setNotifList(prevList => prevList.concat(response.payload.notification.data));
+      }
+    })
+    .catch((error: any) => {
+      // Handle error
+    });
   };
 
   const loadMoreMessages = () => {
-    if (notification?.total_page && notification?.total_count) {
-      const nextPage = notification.total_page + 1;
-      if (nextPage <= notification.total_page) {
-        getMessages(nextPage);
-      }
+    if (notification?.total_page && notification?.current_page < notification?.total_page) {
+      const nextPage = notification.current_page + 1;
+      getMessages(nextPage);
     }
   };
 
@@ -109,6 +122,10 @@ const BroadcastScreen: React.FC<Props> = ({route}: any) => {
   }, [NotifSendData]);
 
   return (
+    <KeyboardAvoidingView
+    style={{flex: 1}} // Make sure it takes full height of the screen
+    behavior={Platform.OS === 'ios' ? 'padding' : 'padding'} // Adjust behavior for iOS
+  >
     <View flex backgroundColor={AppColors.Black} padding-20>
       <Header
         title="BroadCast"
@@ -119,10 +136,12 @@ const BroadcastScreen: React.FC<Props> = ({route}: any) => {
         }}
       />
 
+      {loadingSendNotif && <BackgroundLoader/>}
+
       <View flex backgroundColor="#1B1E1D" style={styles.card}>
         <View flex>
           <FlatList
-            data={notification?.data}
+            data={notifList}
             inverted
             showsVerticalScrollIndicator={false}
             renderItem={({item, index}) => {
@@ -172,6 +191,7 @@ const BroadcastScreen: React.FC<Props> = ({route}: any) => {
         )}
       </View>
     </View>
+    </KeyboardAvoidingView>
   );
 };
 export default BroadcastScreen;
