@@ -1,15 +1,14 @@
-import React, {useRef, useState} from 'react';
-import {Image, Text, View} from 'react-native-ui-lib';
-import {RootStackParams} from '../../navigation';
-import {RouteProp} from '@react-navigation/native';
-import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {useNavigation} from '@react-navigation/native';
-import {RouteNames} from '../../navigation';
+import React, { useRef, useState } from 'react';
+import { Image, Text, View } from 'react-native-ui-lib';
+import { RootStackParams } from '../../navigation';
+import { RouteProp } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { useNavigation } from '@react-navigation/native';
+import { RouteNames } from '../../navigation';
 import AppImages from '../../constants/AppImages';
-import AppColors from '../../constants/AppColors';
 import PagerView from 'react-native-pager-view';
-import {styles} from './styles';
-import {ImageBackground, TouchableOpacity} from 'react-native';
+import { styles } from './styles';
+import { ImageBackground, TouchableOpacity } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import AppStrings from '../../constants/AppStrings';
 
@@ -23,7 +22,7 @@ export type OnboardScreenRouteProps = RouteProp<
   'OnboardScreen'
 >;
 
-interface Props {}
+interface Props { }
 
 const OnboardScreen: React.FC<Props> = () => {
   const navigation = useNavigation<OnboardScreenNavigationProps>();
@@ -45,8 +44,8 @@ const OnboardScreen: React.FC<Props> = () => {
   };
 
   const skipPage = async () => {
-      await AsyncStorage.setItem(AppStrings.IS_ONBOARD, 'true');
-      navigation.replace(RouteNames.LoginScreen);
+    await AsyncStorage.setItem(AppStrings.IS_ONBOARD, 'true');
+    navigation.replace(RouteNames.LoginScreen);
   };
 
   const renderIndicator = (pageIndex: number) => {
@@ -65,7 +64,7 @@ const OnboardScreen: React.FC<Props> = () => {
   };
 
   const renderOnboardPage = (key: string, source: any, text: string) => (
-    <ImageBackground key={key} source={source} style={{padding: 20}}>
+    <ImageBackground key={key} source={source} style={{ padding: 20 }}>
       <View right>
         <TouchableOpacity
           onPress={skipPage}>

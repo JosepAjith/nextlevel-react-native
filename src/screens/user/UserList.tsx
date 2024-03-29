@@ -78,6 +78,7 @@ const UserList: React.FC<Props> = () => {
   const itemWidth = (windowWidth - 50) / 2;
   const dispatch: ThunkDispatch<RootState, any, AnyAction> = useDispatch();
   const [userList, setUserList] = useState([]);
+  const [userCount, setUserCount] = useState(0);
   const {users, loadingUsers, usersError} = useSelector(
     (state: RootState) => state.UserList,
   );
@@ -118,6 +119,7 @@ const UserList: React.FC<Props> = () => {
       dispatch(fetchUserList({requestBody: request}))
         .then((response: any) => {
           if (page === 1) {
+            setUserCount(response.payload.users.total_count) 
             setUserList(response.payload.users.data);
           } else {
             // Concatenate the new trips with the existing list
@@ -206,6 +208,7 @@ const UserList: React.FC<Props> = () => {
             </TouchableOpacity>
           </View>
         </View>
+        <Text style={styles.name}>{'Total Users : ' + userCount}</Text>
         <FlatList
           data={userList}
           numColumns={2}
