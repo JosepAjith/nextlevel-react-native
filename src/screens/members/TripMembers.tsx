@@ -14,15 +14,15 @@ import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {useNavigation} from '@react-navigation/native';
 import AppColors from '../../constants/AppColors';
 import AppImages from '../../constants/AppImages';
-import {Dimensions, SectionList} from 'react-native';
+import {Dimensions, SectionList, TouchableOpacity} from 'react-native';
 import {Header} from '../../components/Header';
 import {styles} from '../mytrip/styles';
-import TripFilter from '../mytrip/TripFilter';
 import {useDispatch, useSelector} from 'react-redux';
 import {AnyAction, ThunkDispatch} from '@reduxjs/toolkit';
 import {RootState} from '../../../store';
 import {fetchMemberList} from '../../api/member/MemberListSlice';
 import AppFonts from '../../constants/AppFonts';
+import {MemberStatusChange, reset} from '../../api/member/MemberStatusSlice';
 
 const {TextField} = Incubator;
 
@@ -38,9 +38,13 @@ const TripMembers: React.FC<Props> = ({route}: any) => {
   const navigation = useNavigation<TripMembersNavigationProps>();
   const id = route.params.id;
   const userId = route.params.userId;
+  const status = route.params.status;
   const windowWidth = Dimensions.get('window').width;
   const itemWidth = (windowWidth - 50) / 2;
   const dispatch: ThunkDispatch<RootState, any, AnyAction> = useDispatch();
+  const {loginUserId} = useSelector(
+    (state: RootState) => state.GlobalVariables,
+  );
   const {members, loadingMembers, membersError} = useSelector(
     (state: RootState) => state.MemberList,
   );
@@ -57,9 +61,26 @@ const TripMembers: React.FC<Props> = ({route}: any) => {
     }, []),
   );
 
+  const UpdateStatus = (id: any, status: any) => {
+    let request = {
+      trip_booking_id: id,
+    };
+    dispatch(
+      MemberStatusChange({
+        requestBody: request,
+        uri: status == 'kickout' ? 'booking/kick-off-trip' : 'booking/waiting-list-to-onboard',
+      }),
+    )
+      .then(() => {
+        dispatch(reset());
+      })
+      .catch((err: any) => console.log(err));
+  };
+
   return (
     <View flex backgroundColor={AppColors.Black} padding-20>
-      {members.find(section => section.title === 'Joined')?.data.length ? (
+      {userId === loginUserId &&
+      members.find(section => section.title === 'Joined')?.data.length ? (
         <Header
           title="Trip Members"
           rightIcon={AppImages.CHAT}
@@ -76,17 +97,17 @@ const TripMembers: React.FC<Props> = ({route}: any) => {
       <View marginV-20 />
       <SectionList
         sections={members}
-        renderItem={({item, index}) => {
+        renderItem={({item, index, section}) => {
           return (
             <View row flex style={[styles.marshalView]}>
-              <View>
+              <View flex>
                 <Image
                   source={
                     item.image ? {uri: item.image} : AppImages.PLACEHOLDER
                   }
                   style={{
                     width: itemWidth,
-                    height: 130,
+                    height: '100%',
                     borderRadius: 5,
                   }}
                 />
@@ -105,9 +126,32 @@ const TripMembers: React.FC<Props> = ({route}: any) => {
                   Contact Info : {item.trip_book.phone}
                 </Text>
 
-                {/* <View style={styles.role}>
-                    <Text style={styles.roleText}>View Ride</Text>
-                    </View> */}
+                {userId === loginUserId &&
+                  section.title === 'Joined' &&
+                  status == 'ongoing' && (
+                    <TouchableOpacity
+                      onPress={() => UpdateStatus(item.trip_book.id,'kickout')}>
+                      <View
+                        style={[
+                          styles.role,
+                          {width: '60%', alignItems: 'center'},
+                        ]}>
+                        <Text style={styles.roleText}>Kick out</Text>
+                      </View>
+                    </TouchableOpacity>
+                  )}
+
+                {userId === loginUserId && section.title === 'Waiting list' && (
+                    <TouchableOpacity
+                    onPress={() => UpdateStatus(item.trip_book.id,'onboard')}>
+                  <View  style={[
+                    styles.role,
+                    {width: '60%', alignItems: 'center'},
+                  ]}>
+                    <Text style={styles.roleText}>Onboard</Text>
+                  </View>
+                  </TouchableOpacity>
+                )}
               </View>
             </View>
           );

@@ -93,7 +93,6 @@ const TripDetails: React.FC<Props> = ({route}: any) => {
     }
   }, [cancelData]);
 
-
   const renderDetails = (label: string, value: string) => (
     <View row marginB-10>
       <Text style={styles.rightText}>{label}</Text>
@@ -104,7 +103,11 @@ const TripDetails: React.FC<Props> = ({route}: any) => {
   return (
     <View flex backgroundColor={AppColors.Black}>
       <View padding-20>
-        <Header title="Trip Details" rightIcon={AppImages.REFRESH} rightOnpress={fetchDetails}/>
+        <Header
+          title="Trip Details"
+          rightIcon={AppImages.REFRESH}
+          rightOnpress={fetchDetails}
+        />
       </View>
 
       {(loadingTripDetails || loadingCancel) && <BackgroundLoader />}
@@ -129,6 +132,7 @@ const TripDetails: React.FC<Props> = ({route}: any) => {
                     navigation.navigate(RouteNames.TripMembers, {
                       id: tripDetails.data.id,
                       userId: tripDetails.data.user.id,
+                      status: tripDetails.data.trip_status
                     })
                   }
                   style={{
@@ -211,21 +215,24 @@ const TripDetails: React.FC<Props> = ({route}: any) => {
                 moment(tripDetails.data.joining_start_date),
                 moment(tripDetails.data.joining_deadline),
               ) &&
-                tripDetails.data.trip_status != 'expired' && tripDetails.data.trip_status != 'completed' && (
+                tripDetails.data.trip_status != 'expired' &&
+                tripDetails.data.trip_status != 'completed' &&
+                tripDetails.data.trip_status != 'cancelled' && (
                   <View row marginB-20>
                     {tripDetails.data.trip_book &&
                     (tripDetails.data.trip_book.application_status ===
                       'support' ||
                       tripDetails.data.trip_book.application_status ===
                         'joined' ||
-                        tripDetails.data.trip_book.application_status ===
+                      tripDetails.data.trip_book.application_status ===
                         'waiting list') ? (
                       <>
                         <TouchableOpacity
                           onPress={() =>
                             navigation.navigate(RouteNames.JoinTrip, {
                               id: tripDetails.data.trip_book.id,
-                              status: tripDetails.data.trip_book.application_status,
+                              status:
+                                tripDetails.data.trip_book.application_status,
                               type: 'edit',
                             })
                           }>
@@ -253,7 +260,8 @@ const TripDetails: React.FC<Props> = ({route}: any) => {
                           onPress={() =>
                             navigation.navigate(RouteNames.JoinTrip, {
                               id: tripDetails.data.trip_book.id,
-                              status: tripDetails.data.trip_book.application_status,
+                              status:
+                                tripDetails.data.trip_book.application_status,
                               type: 'edit',
                             })
                           }>
@@ -280,15 +288,19 @@ const TripDetails: React.FC<Props> = ({route}: any) => {
                             navigation.navigate(RouteNames.JoinTrip, {
                               id: tripDetails.data.id,
                               status:
-                                type == tripDetails.data.level 
-                                  ? ''
-                                  : 'support',
+                                tripDetails.data.level === 'Get To Gether'
+                                ? ''
+                                : type === tripDetails.data.level
+                                ? ''
+                                : 'support',
                               type: 'join',
                             })
                           }>
                           <View style={styles.yellowButton}>
                             <Text style={styles.text2}>
-                              {type == tripDetails.data.level
+                              {tripDetails.data.level === 'Get To Gether'
+                                ? 'Sign in'
+                                : type === tripDetails.data.level
                                 ? 'Sign in'
                                 : 'Support Sign in'}
                             </Text>

@@ -25,6 +25,8 @@ import MarkAttendanceSlice from './src/api/markAttendance/MarkAttendanceSlice';
 import SendNotificationSlice from './src/api/notification/SendNotificationSlice';
 import GetNotificationSlice from './src/api/notification/GetNotificationSlice';
 import DeleteNotificationSlice from './src/api/notification/DeleteNotificationSlice';
+import MemberStatusSlice from './src/api/member/MemberStatusSlice';
+import ShareUrlSlice from './src/api/share/ShareUrlSlice';
 
 
 const rootReducer = combineReducers({
@@ -53,7 +55,9 @@ const rootReducer = combineReducers({
   MarkAttendance: MarkAttendanceSlice,
   SendNotification: SendNotificationSlice,
   GetNotification: GetNotificationSlice,
-  DeleteNotification: DeleteNotificationSlice
+  DeleteNotification: DeleteNotificationSlice,
+  MemberStatus: MemberStatusSlice,
+  ShareUrl: ShareUrlSlice
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

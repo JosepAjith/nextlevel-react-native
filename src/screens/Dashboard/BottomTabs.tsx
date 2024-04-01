@@ -155,7 +155,7 @@ const BottomTabs = () => {
           renderTab('Add Trip', AppImages.ADDTRIP)}
         {renderTab('Profile', AppImages.PROFILE)}
       </View>
-      {openFilter && <TripFilter close={FilterClose} />}
+      {openFilter && <TripFilter close={FilterClose} selected={filterValue}/>}
     </View>
   );
 };

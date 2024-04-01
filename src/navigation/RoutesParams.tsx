@@ -21,7 +21,7 @@ export type RootStackParams = {
   AddCar: {id: any};
   MarshalList: undefined;
   UserList: undefined;
-  TripMembers: {id: any,userId: any};
+  TripMembers: {id: any,userId: any, status: any};
 JoinTrip: {id: any, status:any, type:any};
 NotificationScreen: undefined;
 BroadcastScreen: {id: any,userId: any};

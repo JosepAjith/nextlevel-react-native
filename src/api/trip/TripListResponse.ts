@@ -32,6 +32,7 @@ export type TripListResponse = {
     user:               User;
     meeting_time:       string;
     trip_book_joined_count:    number;
+    share_url:          string;
     trip_images:        TripImage[];
     trip_book:          TripBook
 }

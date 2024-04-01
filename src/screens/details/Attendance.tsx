@@ -87,7 +87,7 @@ const Attendance = ({
   }, [TripDeleteData]);
 
   const ClosingTrip = (id: any) => {
-    dispatch(changeTripStatus({requestBody: {id: id, trip_status: 'expired'}}))
+    dispatch(changeTripStatus({requestBody: {id: id, trip_status: 'completed'}}))
       .then(() => {
         dispatch(changeReset());
       })
@@ -115,7 +115,7 @@ const Attendance = ({
       application_status: '',
     });
     dispatch(fetchMemberList({requestBody: request}));
-  }, [userId == loginUserId && TripStatus != 'expired']);
+  }, [userId == loginUserId && (TripStatus != 'expired' || TripStatus != 'completed' || TripStatus != 'cancelled')]);
 
   useEffect(() => {
     if (members && members.length > 0) {
@@ -124,6 +124,7 @@ const Attendance = ({
         .map(group => {
           if (group.title === 'Joined') {
             return group.data.map(member => ({
+              attendance_id: member.attendance_id,
               user_id: member.id,
               user_name: member.name,
               trip_id: TripId,
@@ -146,13 +147,13 @@ const Attendance = ({
   const markingAttendance = () => {
     const modifiedAttendInput = {
       data: AttendInput.data
-        .filter(item => item.is_present === 1)
+        .filter(item => (item.attendance_id === null && item.is_present === 1) || (item.attendance_id != null && item.is_present === 0))
         .map(item => {
-          const {user_name, ...rest} = item;
+          const {user_name, attendance_id, ...rest} = item;
           return rest;
         }),
     };
-    console.log(modifiedAttendInput)
+// console.log(modifiedAttendInput)
     dispatch(
       markAttendance({
         requestBody: modifiedAttendInput,
@@ -177,7 +178,7 @@ const Attendance = ({
 
   return (
     <>
-      {currentDate.isAfter(deadlineDate) && TripStatus != 'expired' && (
+      {currentDate.isAfter(deadlineDate) && (TripStatus != 'expired' || TripStatus != 'completed' || TripStatus != 'cancelled') && (
         <View style={styles.deadline} marginB-10>
           <View row center marginH-20>
             <Image
@@ -192,7 +193,7 @@ const Attendance = ({
           </View>
         </View>
       )}
-      {currentDate.isBefore(StartDate) && TripStatus != 'expired' && (
+      {currentDate.isBefore(StartDate) && (TripStatus != 'expired' || TripStatus != 'completed' || TripStatus != 'cancelled') && (
         <View style={styles.deadline} marginB-10>
           <View row center marginH-20>
             <Image
@@ -207,7 +208,7 @@ const Attendance = ({
           </View>
         </View>
       )}
-      {(TripStatus == 'expired' || TripStatus == 'completed') && (
+      {(TripStatus == 'expired' || TripStatus == 'completed' || TripStatus == 'cancelled') && (
         <View style={styles.deadline} marginB-10>
           <View row center marginH-20>
             <Image
@@ -220,7 +221,7 @@ const Attendance = ({
           </View>
         </View>
       )}
-      {userId == loginUserId && TripStatus != 'expired' && TripStatus != 'completed' && (
+      {userId == loginUserId && TripStatus != 'expired' && TripStatus != 'completed' && TripStatus != 'cancelled' && (
         <View style={styles.deadline}>
           <View row marginH-15 style={{justifyContent:'space-between'}}>
             <TouchableOpacity

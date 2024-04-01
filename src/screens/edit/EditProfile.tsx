@@ -205,15 +205,6 @@ const EditProfile: React.FC<Props> = () => {
       showToast("Interest Field required")
       return false;
     }
-    if (profileInput.referred_by == '') {
-      setValidate({
-        ...profileValidate,
-        InvalidRefer: true,
-        error: '*Required',
-      });
-      showToast("Refer Field required")
-      return false;
-    }
 
     return true;
   }
@@ -505,13 +496,7 @@ const EditProfile: React.FC<Props> = () => {
             value={profileInput.referred_by}
             onChangeText={(text: any) => {
               setProfile({...profileInput, referred_by: text});
-              setValidate({...profileValidate, InvalidRefer: false});
             }}
-            trailingAccessory={
-              <Text red10>
-                {profileValidate.InvalidRefer ? '*Required' : ''}
-              </Text>
-            }
           />
 
           <ButtonView

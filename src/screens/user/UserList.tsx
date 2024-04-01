@@ -34,8 +34,8 @@ import {RootState} from '../../../store';
 import {fetchUserList} from '../../api/user/UserListSlice';
 import DropdownComponent from '../../components/DropdownComponent';
 import {Dropdown} from 'react-native-element-dropdown';
-import { reset, updateRole } from '../../api/levelUpdate/UpdateRoleSlice';
-import { showToast } from '../../constants/commonUtils';
+import {reset, updateRole} from '../../api/levelUpdate/UpdateRoleSlice';
+import {showToast} from '../../constants/commonUtils';
 import BackgroundLoader from '../../components/BackgroundLoader';
 
 const {TextField} = Incubator;
@@ -104,43 +104,44 @@ const UserList: React.FC<Props> = () => {
       FetchList(1);
 
       return () => {
-        setUserList([])
+        setUserList([]);
       };
     }, [search, filterValue]),
   );
 
   const FetchList = (page: number) => {
-    if(IsNetConnected){
+    if (IsNetConnected) {
       let request = JSON.stringify({
         level: filterValue ? [filterValue] : User,
         page: page,
-        title: search
+        title: search,
       });
       dispatch(fetchUserList({requestBody: request}))
         .then((response: any) => {
           if (page === 1) {
-            setUserCount(response.payload.users.total_count) 
+            setUserCount(response.payload.users.total_count);
             setUserList(response.payload.users.data);
           } else {
             // Concatenate the new trips with the existing list
-            setUserList(prevList => prevList.concat(response.payload.users.data));
+            setUserList(prevList =>
+              prevList.concat(response.payload.users.data),
+            );
           }
         })
         .catch((error: any) => {
           // Handle error
         });
-      }
- 
-  }
-
+    }
+  };
 
   const updatingRole = async (id: number, level: string) => {
     let request = {
-        id: id,
-      level:level}
+      id: id,
+      level: level,
+    };
     dispatch(
       updateRole({
-        requestBody: request
+        requestBody: request,
       }),
     )
       .then(() => {
@@ -153,7 +154,7 @@ const UserList: React.FC<Props> = () => {
     if (updateRoleData != null) {
       if (!loadingRoleUpdate && !roleUpdateError && updateRoleData.status) {
         showToast(updateRoleData.message);
-        FetchList(1)
+        FetchList(1);
       } else {
         showToast(updateRoleData.message);
       }
@@ -170,14 +171,18 @@ const UserList: React.FC<Props> = () => {
   return (
     <View flex backgroundColor={AppColors.Black}>
       <View flex padding-20>
-        <Header title="User List" rightIcon={AppImages.REFRESH} rightOnpress={() => {
-          setSearch('');
-          dispatch({type: 'SET_FILTER_VALUE', payload: ''});
-          setUserList([]);
-          FetchList(1);
-        }}/>
+        <Header
+          title="User List"
+          rightIcon={AppImages.REFRESH}
+          rightOnpress={() => {
+            setSearch('');
+            dispatch({type: 'SET_FILTER_VALUE', payload: ''});
+            setUserList([]);
+            FetchList(1);
+          }}
+        />
 
-        {loadingUsers && <BackgroundLoader/>}
+        {loadingUsers && <BackgroundLoader />}
 
         <View row centerV>
           <View flex>
@@ -208,7 +213,7 @@ const UserList: React.FC<Props> = () => {
             </TouchableOpacity>
           </View>
         </View>
-        <Text style={styles.name}>{'Total Users : ' + userCount}</Text>
+        <Text style={[styles.name,{bottom:10}]}>{'Total Users : ' + userCount}</Text>
         <FlatList
           data={userList}
           numColumns={2}
@@ -222,56 +227,55 @@ const UserList: React.FC<Props> = () => {
                     dispatch({type: 'SET_USER_ID', payload: item.id});
                     navigation.navigate(RouteNames.ProfileScreen);
                   }}>
-                  <View center style={[styles.marshalView, {width: itemWidth}]}>
+                  <View style={[styles.marshalView, {width: itemWidth}]}>
                     <Image
-                      source={item.image ? {uri: item.image} : AppImages.PLACEHOLDER}
+                      source={
+                        item.image ? {uri: item.image} : AppImages.PLACEHOLDER
+                      }
                       style={{
                         width: '100%',
                         height: 100,
                         borderRadius: 5,
                       }}
                     />
-                    <View paddingV-10>
-                      <View center>
+                  
+                      <View center paddingT-10>
                         <Text style={styles.name}>{item.name}</Text>
                         <Text style={styles.email}>{item.email}</Text>
                         <Text style={styles.email}>{item.level}</Text>
                       </View>
-                      {/* <View style={styles.role}>
-                        <Text style={styles.roleText}>Update Role</Text>
-                        <Image source={AppImages.DOWN} marginL-10 />
-                      </View> */}
-                      <View >
-                      <Dropdown
-                        style={styles.role}
-                        placeholderStyle={styles.roleText}
-                        selectedTextStyle={styles.roleText}
-                        inputSearchStyle={styles.roleText}
-                        itemTextStyle={{fontSize:12,color:'black'}}
-                        data={Level}
-                        search
-                        maxHeight={300}
-                        labelField={'type'}
-                        valueField={'id'}
-                        placeholder="Update Role"
-                        searchPlaceholder="Search..."
-                        onChange={items => {
-                          updatingRole(item.id, items.type)
-                        }}
-                        renderRightIcon={() => (
-                          <View row centerV>
-                            <Text red10></Text>
-                            <Image
-                              source={AppImages.DOWN}
-                              tintColor="#3F4E59"
-                              width={11}
-                              height={6}
-                            />
-                          </View>
-                        )}
-                      />
+                    
+                      <View center>
+                        <Dropdown
+                          style={styles.role}
+                          placeholderStyle={styles.roleText}
+                          selectedTextStyle={styles.roleText}
+                          inputSearchStyle={styles.roleText}
+                          itemTextStyle={{fontSize: 12, color: 'black'}}
+                          data={Level}
+                          search
+                          maxHeight={300}
+                          labelField={'type'}
+                          valueField={'id'}
+                          placeholder="Update Role"
+                          value={item.level}
+                          searchPlaceholder="Search..."
+                          onChange={items => {
+                            updatingRole(item.id, items.type);
+                          }}
+                          renderRightIcon={() => (
+                            <View row centerV>
+                              <Text red10></Text>
+                              <Image
+                                source={AppImages.DOWN}
+                                tintColor="#3F4E59"
+                                width={11}
+                                height={6}
+                              />
+                            </View>
+                          )}
+                        />
                       </View>
-                    </View>
                   </View>
                 </TouchableOpacity>
               </View>
@@ -280,7 +284,7 @@ const UserList: React.FC<Props> = () => {
           onEndReached={loadMoreTrips}
         />
       </View>
-      {filter && <TripFilter close={() => setFilter(false)} />}
+      {filter && <TripFilter close={() => setFilter(false)} selected={filterValue}/>}
     </View>
   );
 };

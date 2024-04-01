@@ -73,6 +73,7 @@ const Level = [
   {type: 'Intermediate+', id: 'Intermediate+'},
   {type: 'Advance Exam', id: 'Advance Exam'},
   {type: 'Advanced', id: 'Advanced'},
+  {type: 'Get To Gether', id: 'Get To Gether'}
 ];
 
 const AddTripScreen: React.FC<Props> = ({route, id, initial}: Props) => {

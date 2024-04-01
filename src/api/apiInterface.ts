@@ -13,6 +13,7 @@ import { UpdateRoleResponse } from './levelUpdate/UpdateRoleSlice';
 import { LoginResponse } from './login/LoginCreateSlice';
 import { MarkAttendanceResponse } from './markAttendance/MarkAttendanceSlice';
 import { MemberListData } from './member/MemberListResponse';
+import { MemberStatusResponse } from './member/MemberStatusSlice';
 import { DeleteNotifResponse } from './notification/DeleteNotificationSlice';
 import { NotificationData, NotificationResponse } from './notification/NotificationResponse';
 import { SendNotifResponse } from './notification/SendNotificationSlice';
@@ -474,6 +475,44 @@ export const deleteNotif = async (
   requestBody: any,
 ): Promise<NetworkResponse<DeleteNotifResponse>> => {
   const response = await apiClient('notification/notification-delete', 'POST', requestBody);
+
+  if (response && response.status) {
+    const json = await response.data;
+    return {
+      kind: 'success',
+      body: json,
+    };
+  } else {
+    return {
+      kind: 'failure',
+    };
+  }
+};
+
+//API FOR KickOff and ONBOARD
+export const MemberStatusChange = async (
+  requestBody: any, uri: any
+): Promise<NetworkResponse<MemberStatusResponse>> => {
+  const response = await apiClient(uri, 'POST', requestBody);
+
+  if (response && response.status) {
+    const json = await response.data;
+    return {
+      kind: 'success',
+      body: json,
+    };
+  } else {
+    return {
+      kind: 'failure',
+    };
+  }
+};
+
+//API FOR sharing url
+export const urlShare = async (
+  requestBody: any
+): Promise<NetworkResponse<MemberStatusResponse>> => {
+  const response = await apiClient('save-random-token', 'POST', requestBody);
 
   if (response && response.status) {
     const json = await response.data;

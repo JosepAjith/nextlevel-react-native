@@ -14,7 +14,7 @@ import AppColors from '../../constants/AppColors';
 import {useDispatch} from 'react-redux';
 const deviceHeight = Dimensions.get('window').height;
 
-const TripFilter = (props: {close: any}) => {
+const TripFilter = (props: {close: any, selected: any}) => {
   const dispatch = useDispatch();
   const close = props.close;
   const [chip, setChip] = useState<number>(null);
@@ -31,12 +31,16 @@ const TripFilter = (props: {close: any}) => {
     {id: 9, status: 'Explorer'},
     {id: 10, status: 'Marshal'},
     {id: 11, status: 'Super Marshal'},
-    {id: 12, status: 'Get To Gether'},
+    {id: 12, status: 'Get To Gether'}
   ]);
 
   useEffect(() => {
     openModal();
   }, []);
+
+  useEffect(() => {
+    setSelected(props.selected)
+  }, [props.selected]);
 
   const modalY = useRef(new Animated.Value(deviceHeight)).current;
 
@@ -112,14 +116,14 @@ const TripFilter = (props: {close: any}) => {
             }}
             labelStyle={[
               styles.chipLabel,
-              {color: chip == index ? 'white' : 'black'},
+              {color: selected == item.status ? 'white' : 'black'},
             ]}
             containerStyle={[
               styles.chip,
               {
                 backgroundColor:
-                  chip == index ? AppColors.Orange : 'transparent',
-                borderColor: chip == index ? AppColors.Orange : 'black',
+                selected == item.status ? AppColors.Orange : 'transparent',
+                borderColor: selected == item.status ? AppColors.Orange : 'black',
                 marginRight: 10,
                 marginBottom: 10,
                 padding: 5,

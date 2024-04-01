@@ -150,9 +150,9 @@ export const styles = StyleSheet.create({
     borderRadius:5,
     paddingVertical:5,
     paddingHorizontal:10,
-    marginTop:10,
+    marginVertical:10,
     height:30,
-    width:'90%'
+    width:'70%'
   },
   roleText:{
     fontSize:12,
