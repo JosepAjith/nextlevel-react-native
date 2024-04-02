@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Button, Image, Text, View} from 'react-native-ui-lib';
 import AppStyles from '../constants/AppStyles';
 import {
@@ -6,6 +6,7 @@ import {
   Easing,
   ImageBackground,
   LayoutAnimation,
+  Linking,
   Platform,
   TouchableOpacity,
   UIManager,

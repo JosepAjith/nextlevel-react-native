@@ -52,7 +52,7 @@ const TripDetails: React.FC<Props> = ({route}: any) => {
   const {cancelData, loadingCancel, cancelError} = useSelector(
     (state: RootState) => state.TripCancel,
   );
-
+console.log(tripDetails)
   useFocusEffect(
     React.useCallback(() => {
       fetchDetails();
@@ -132,7 +132,7 @@ const TripDetails: React.FC<Props> = ({route}: any) => {
                     navigation.navigate(RouteNames.TripMembers, {
                       id: tripDetails.data.id,
                       userId: tripDetails.data.user.id,
-                      status: tripDetails.data.trip_status
+                      status: tripDetails.data.trip_status,
                     })
                   }
                   style={{
@@ -211,10 +211,16 @@ const TripDetails: React.FC<Props> = ({route}: any) => {
                 )}
               </View>
 
-              {moment(new Date()).isBetween(
-                moment(tripDetails.data.joining_start_date),
-                moment(tripDetails.data.joining_deadline),
-              ) &&
+              {(tripDetails.data.trip_book
+                ? tripDetails.data.trip_book.application_status != 'kick-off' &&
+                  moment(new Date()).isBetween(
+                    moment(tripDetails.data.joining_start_date),
+                    moment(tripDetails.data.joining_deadline),
+                  )
+                : moment(new Date()).isBetween(
+                    moment(tripDetails.data.joining_start_date),
+                    moment(tripDetails.data.joining_deadline),
+                  )) &&
                 tripDetails.data.trip_status != 'expired' &&
                 tripDetails.data.trip_status != 'completed' &&
                 tripDetails.data.trip_status != 'cancelled' && (
@@ -289,10 +295,10 @@ const TripDetails: React.FC<Props> = ({route}: any) => {
                               id: tripDetails.data.id,
                               status:
                                 tripDetails.data.level === 'Get To Gether'
-                                ? ''
-                                : type === tripDetails.data.level
-                                ? ''
-                                : 'support',
+                                  ? ''
+                                  : type === tripDetails.data.level
+                                  ? ''
+                                  : 'support',
                               type: 'join',
                             })
                           }>
@@ -338,6 +344,10 @@ const TripDetails: React.FC<Props> = ({route}: any) => {
                 }
                 tripEndTime={
                   tripDetails.data.date + ' ' + tripDetails.data.finish_time
+                }
+                application_status={
+                  tripDetails.data.trip_book &&
+                  tripDetails.data.trip_book.application_status
                 }
               />
             </View>

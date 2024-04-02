@@ -30,6 +30,7 @@ interface Props {
   navigation: any;
   tripStartTime: any;
   tripEndTime: any;
+  application_status?: any;
 }
 
 const Attendance = ({
@@ -41,13 +42,13 @@ const Attendance = ({
   TripStatus,
   tripStartTime,
   tripEndTime,
+  application_status
 }: Props) => {
   const currentDate = moment();
   const deadlineDate = moment(deadline);
   const StartDate = moment(startDate);
   const TripStart = moment(tripStartTime);
   const TripEnd = moment(tripEndTime);
-  const [mark, setMark] = useState(false);
   const {loginUserId} = useSelector(
     (state: RootState) => state.GlobalVariables,
   );
@@ -122,6 +123,7 @@ const Attendance = ({
       // Populate data array in AttendanceRequest
       const userData = members
         .map(group => {
+       
           if (group.title === 'Joined') {
             return group.data.map(member => ({
               attendance_id: member.attendance_id,
@@ -143,6 +145,8 @@ const Attendance = ({
       }));
     }
   }, [members]);
+
+  console.log(AttendInput,'000000')
 
   const markingAttendance = () => {
     const modifiedAttendInput = {
@@ -178,6 +182,21 @@ const Attendance = ({
 
   return (
     <>
+       {application_status == 'kick-off' && (
+        <View style={styles.deadline} marginB-10>
+          <View row center marginH-20>
+            <Image
+              source={AppImages.DEADLINE}
+              width={24}
+              height={24}
+              marginR-10
+            />
+            <Text style={styles.text2}>
+              "You are kick off from this trip"
+            </Text>
+          </View>
+        </View>
+      )}
       {currentDate.isAfter(deadlineDate) && (TripStatus != 'expired' || TripStatus != 'completed' || TripStatus != 'cancelled') && (
         <View style={styles.deadline} marginB-10>
           <View row center marginH-20>

@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   Button,
   Checkbox,
@@ -23,6 +23,8 @@ import {RootState} from '../../../store';
 import {fetchMemberList} from '../../api/member/MemberListSlice';
 import AppFonts from '../../constants/AppFonts';
 import {MemberStatusChange, reset} from '../../api/member/MemberStatusSlice';
+import {showToast} from '../../constants/commonUtils';
+import CustomAlert from '../../components/CustomAlert';
 
 const {TextField} = Incubator;
 
@@ -48,6 +50,22 @@ const TripMembers: React.FC<Props> = ({route}: any) => {
   const {members, loadingMembers, membersError} = useSelector(
     (state: RootState) => state.MemberList,
   );
+  const {statusData, loadingStatus, statusError} = useSelector(
+    (state: RootState) => state.MemberStatus,
+  );
+  const [showAlert, setShowAlert] = useState(false);
+  const [selectedMember, setSelectedMember] = useState(null);
+ 
+  const handleConfirm = () => {
+    if (selectedMember) {
+      UpdateStatus(selectedMember.trip_book_id, selectedMember.action);
+      setShowAlert(false);
+    }
+  };
+
+  const handleCancel = () => {
+    setShowAlert(false);
+  };
 
   useFocusEffect(
     React.useCallback(() => {
@@ -58,7 +76,7 @@ const TripMembers: React.FC<Props> = ({route}: any) => {
       dispatch(fetchMemberList({requestBody: request}));
 
       return () => {};
-    }, []),
+    }, [statusData]),
   );
 
   const UpdateStatus = (id: any, status: any) => {
@@ -68,7 +86,10 @@ const TripMembers: React.FC<Props> = ({route}: any) => {
     dispatch(
       MemberStatusChange({
         requestBody: request,
-        uri: status == 'kickout' ? 'booking/kick-off-trip' : 'booking/waiting-list-to-onboard',
+        uri:
+          status == 'kickout'
+            ? 'booking/kick-off-trip'
+            : 'booking/waiting-list-to-onboard',
       }),
     )
       .then(() => {
@@ -76,6 +97,16 @@ const TripMembers: React.FC<Props> = ({route}: any) => {
       })
       .catch((err: any) => console.log(err));
   };
+
+  useEffect(() => {
+    if (statusData != null) {
+      if (!loadingStatus && !statusError && statusData.status) {
+        showToast(statusData.message);
+      } else {
+        showToast(statusData.message);
+      }
+    }
+  }, [statusData]);
 
   return (
     <View flex backgroundColor={AppColors.Black} padding-20>
@@ -130,29 +161,55 @@ const TripMembers: React.FC<Props> = ({route}: any) => {
                   section.title === 'Joined' &&
                   status == 'ongoing' && (
                     <TouchableOpacity
-                      onPress={() => UpdateStatus(item.trip_book.id,'kickout')}>
+                      onPress={() => {
+                        setSelectedMember({
+                          trip_book_id: item.trip_book.id,
+                          action: 'kickout',
+                        });
+                        setShowAlert(true);
+                      }}>
                       <View
                         style={[
                           styles.role,
                           {width: '60%', alignItems: 'center'},
                         ]}>
-                        <Text style={styles.roleText}>Kick out</Text>
+                        <Text style={styles.roleText}>Kick off</Text>
                       </View>
                     </TouchableOpacity>
                   )}
 
                 {userId === loginUserId && section.title === 'Waiting list' && (
-                    <TouchableOpacity
-                    onPress={() => UpdateStatus(item.trip_book.id,'onboard')}>
-                  <View  style={[
-                    styles.role,
-                    {width: '60%', alignItems: 'center'},
-                  ]}>
-                    <Text style={styles.roleText}>Onboard</Text>
-                  </View>
+                  <TouchableOpacity
+                    onPress={() => {
+                      setSelectedMember({
+                        trip_book_id: item.trip_book.id,
+                        action: 'onboard',
+                      });
+                      setShowAlert(true);
+                    }}>
+                    <View
+                      style={[
+                        styles.role,
+                        {width: '60%', alignItems: 'center'},
+                      ]}>
+                      <Text style={styles.roleText}>Onboard</Text>
+                    </View>
                   </TouchableOpacity>
                 )}
               </View>
+
+              {selectedMember != null && (
+                <CustomAlert
+                  visible={showAlert}
+                  message={
+                    selectedMember.action === 'kickout'
+                      ? 'Are you sure you want to kick off this member?'
+                      : 'Are you sure you want to onboard this member?'
+                  }
+                  onCancel={handleCancel}
+                  onConfirm={handleConfirm}
+                />
+              )}
             </View>
           );
         }}
