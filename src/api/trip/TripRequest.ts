@@ -17,6 +17,7 @@ export class TripRequest{
     description: string = '';
     passenger: string = '';
     image: Image[] = [];
+    users: User[] = [];
   }
 
   export class Image {
@@ -25,4 +26,10 @@ export class TripRequest{
     size: string = '';
     type: string = '';
     uri: string = '';
+  }
+
+  export class User {
+    id: number = 0;
+    name: string = '';
+    image: string = '';
   }

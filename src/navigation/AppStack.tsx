@@ -26,10 +26,59 @@ import NotificationScreen from '../screens/notification/NotificationScreen';
 import BroadcastScreen from '../screens/broadcast/BroadcastScreen';
 import MapScreen from '../screens/map/MapScreen';
 import DeleteAccount from '../screens/settings/DeleteAccount';
+import { Linking, Platform } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import AppStrings from '../constants/AppStrings';
+import UserPicker from '../screens/addtrip/UserPicker';
 
 const Stack = createNativeStackNavigator();
 
+const linking = {
+  prefixes: ['nxtlevel://', 'https://next-level.prompttechdemohosting.com'], // Add your desired prefixes here
+};
+
 const AppStack = () => {
+
+  const navigation = useNavigation();
+
+  useEffect(() => {
+    // Add deep linking handling here
+    Linking.addEventListener('url', handleDeepLink);
+    Linking.getInitialURL().then((url) => {
+      if (url) {
+        handleDeepLink({ url });
+      }
+    });
+  }, []);
+
+  const handleDeepLink = async ({ url }) => {
+    // Parse the URL and extract information if needed
+    console.log('Received deep link:', url);
+    const route = url.replace(/.*?:\/\//g, '');
+    const id = route.match(/\/([^\/]+)\/?$/)[1];
+    
+    // Check if the app is installed
+    const isAppInstalled = await Linking.canOpenURL(url);
+    if(isAppInstalled){
+    await AsyncStorage.setItem(AppStrings.DEEP_LINK_ID, String(id))
+    }
+    else{
+      redirectToAppStore();
+    }
+  }
+
+  // Function to redirect to the app store
+  const redirectToAppStore = () => {
+    const appStoreUrl = Platform.OS === 'ios' ?
+      'https://apps.apple.com/app-id/your-app-id' : // Replace 'your-app-id' with your iOS app's ID
+      'market://details?id=com.bnbcnxtlevel.app'; // Replace 'com.yourpackage.name' with your Android app's package name
+
+    Linking.openURL(appStoreUrl)
+      .then(() => console.log('Redirected to app store'))
+      .catch(error => console.error('Error redirecting to app store: ', error));
+  };
+
   return (
     <Stack.Navigator
       screenOptions={{
@@ -85,6 +134,7 @@ const AppStack = () => {
       />
       <Stack.Screen name={RouteNames.MapScreen} component={MapScreen} />
       <Stack.Screen name={RouteNames.DeleteAccount} component={DeleteAccount} />
+      <Stack.Screen name={RouteNames.UserPicker} component={UserPicker} />
     </Stack.Navigator>
   );
 };

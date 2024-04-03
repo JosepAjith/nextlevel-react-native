@@ -18,7 +18,9 @@ import Navigation from './src/navigation/Navigation';
 import {RouteNames} from './src/navigation/Routes';
 
 export default class App extends React.Component {
+
   componentDidMount(): void {
+    
     PushNotification.createChannel(
       {
         channelId: 'nxtlevel_channel_id', // Replace with your chosen channel ID

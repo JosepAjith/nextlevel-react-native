@@ -15,7 +15,12 @@ import AppColors from '../../constants/AppColors';
 import {styles} from './styles';
 import AppImages from '../../constants/AppImages';
 import ButtonView from '../../components/ButtonView';
-import {KeyboardAvoidingView, Platform, ScrollView, TouchableOpacity} from 'react-native';
+import {
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  TouchableOpacity,
+} from 'react-native';
 import {Header} from '../../components/Header';
 import AppFonts from '../../constants/AppFonts';
 import {TripRequest} from '../../api/trip/TripRequest';
@@ -36,6 +41,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {createTrip, reset} from '../../api/trip/TripCreateSlice';
 import moment from 'moment';
 import BackgroundLoader from '../../components/BackgroundLoader';
+import UserPicker from './UserPicker';
 
 const {TextField} = Incubator;
 
@@ -73,7 +79,7 @@ const Level = [
   {type: 'Intermediate+', id: 'Intermediate+'},
   {type: 'Advance Exam', id: 'Advance Exam'},
   {type: 'Advanced', id: 'Advanced'},
-  {type: 'Get To Gether', id: 'Get To Gether'}
+  {type: 'Get To Gether', id: 'Get To Gether'},
 ];
 
 const AddTripScreen: React.FC<Props> = ({route, id, initial}: Props) => {
@@ -99,7 +105,25 @@ const AddTripScreen: React.FC<Props> = ({route, id, initial}: Props) => {
     (state: RootState) => state.GlobalVariables,
   );
 
- 
+  // useEffect(() => {
+  //   if (
+  //     tripInput.level == 'Intermediate Exam' ||
+  //     tripInput.level == 'Advance Exam'
+  //   ) {
+  //     navigation.navigate(RouteNames.UserPicker,{level:tripInput.level, onSelectUsers: handleSelectedUsers});
+  //   }
+  // }, [
+  //   tripInput.level == 'Intermediate Exam',
+  //   tripInput.level == 'Advance Exam',
+  // ]);
+
+  // const handleSelectedUsers = (selectedUsers) => {
+  //   setTrip({
+  //     ...tripInput,
+  //     users: selectedUsers,
+  //   });
+  // };
+
   useEffect(() => {
     if (routeId !== 0 && typeof tripDetails?.data === 'object') {
       const item = tripDetails?.data;
@@ -146,7 +170,7 @@ const AddTripScreen: React.FC<Props> = ({route, id, initial}: Props) => {
         InvalidImage: true,
         error: '*Required',
       });
-      showToast("Image field required")
+      showToast('Image field required');
       return false;
     }
 
@@ -156,7 +180,7 @@ const AddTripScreen: React.FC<Props> = ({route, id, initial}: Props) => {
         InvalidTitle: true,
         error: '*Required',
       });
-      showToast("Title field required")
+      showToast('Title field required');
       return false;
     }
 
@@ -166,7 +190,7 @@ const AddTripScreen: React.FC<Props> = ({route, id, initial}: Props) => {
         InvalidCity: true,
         error: '*Required',
       });
-      showToast("City field required")
+      showToast('City field required');
       return false;
     }
 
@@ -176,7 +200,7 @@ const AddTripScreen: React.FC<Props> = ({route, id, initial}: Props) => {
         InvalidArea: true,
         error: '*Required',
       });
-      showToast("Area field required")
+      showToast('Area field required');
       return false;
     }
 
@@ -186,7 +210,7 @@ const AddTripScreen: React.FC<Props> = ({route, id, initial}: Props) => {
         InvalidPlace: true,
         error: '*Required',
       });
-      showToast("Place field required")
+      showToast('Place field required');
       return false;
     }
 
@@ -196,7 +220,7 @@ const AddTripScreen: React.FC<Props> = ({route, id, initial}: Props) => {
         InvalidLevel: true,
         error: '*Required',
       });
-      showToast("Level field required")
+      showToast('Level field required');
       return false;
     }
 
@@ -206,7 +230,7 @@ const AddTripScreen: React.FC<Props> = ({route, id, initial}: Props) => {
         InvalidCapacity: true,
         error: '*Required',
       });
-      showToast("Capacity field required")
+      showToast('Capacity field required');
       return false;
     }
 
@@ -216,7 +240,7 @@ const AddTripScreen: React.FC<Props> = ({route, id, initial}: Props) => {
         InvalidDate: true,
         error: '*Required',
       });
-      showToast("Date field required")
+      showToast('Date field required');
       return false;
     }
 
@@ -226,7 +250,7 @@ const AddTripScreen: React.FC<Props> = ({route, id, initial}: Props) => {
         InvalidMeet: true,
         error: '*Required',
       });
-      showToast("Meeting Time field required")
+      showToast('Meeting Time field required');
       return false;
     }
 
@@ -236,7 +260,7 @@ const AddTripScreen: React.FC<Props> = ({route, id, initial}: Props) => {
         InvalidStart: true,
         error: '*Required',
       });
-      showToast("Start time field required")
+      showToast('Start time field required');
       return false;
     }
 
@@ -246,7 +270,7 @@ const AddTripScreen: React.FC<Props> = ({route, id, initial}: Props) => {
         InvalidFinish: true,
         error: '*Required',
       });
-      showToast("Finish time field required")
+      showToast('Finish time field required');
       return false;
     }
 
@@ -256,7 +280,7 @@ const AddTripScreen: React.FC<Props> = ({route, id, initial}: Props) => {
         InvalidJoinDate: true,
         error: '*Required',
       });
-      showToast("Joining date field required")
+      showToast('Joining date field required');
       return false;
     }
 
@@ -266,7 +290,7 @@ const AddTripScreen: React.FC<Props> = ({route, id, initial}: Props) => {
         InvalidDeadline: true,
         error: '*Required',
       });
-      showToast("Deadline date field required")
+      showToast('Deadline date field required');
       return false;
     }
 
@@ -276,7 +300,7 @@ const AddTripScreen: React.FC<Props> = ({route, id, initial}: Props) => {
         InvalidDescrip: true,
         error: '*Required',
       });
-      showToast("Description field required")
+      showToast('Description field required');
       return false;
     }
 
@@ -286,15 +310,14 @@ const AddTripScreen: React.FC<Props> = ({route, id, initial}: Props) => {
         InvalidPassengers: true,
         error: '*Required',
       });
-      showToast("Passenger field required")
+      showToast('Passenger field required');
       return false;
     }
     return true;
   }
 
   const AddingTrip = async () => {
-
-    console.log(tripInput.image)
+    console.log(tripInput.image);
     let formData = new FormData();
     if (routeId != 0) {
       formData.append('id', routeId);
@@ -358,7 +381,6 @@ const AddTripScreen: React.FC<Props> = ({route, id, initial}: Props) => {
   };
 
   useEffect(() => {
-    console.log(addTripData)
     if (addTripData != null) {
       if (!loadingAddTrip && !addTripError && addTripData.status) {
         showToast(addTripData.message);
@@ -395,503 +417,513 @@ const AddTripScreen: React.FC<Props> = ({route, id, initial}: Props) => {
     setValidate({...tripValidate, InvalidPlace: false});
   };
 
-
   return (
     <KeyboardAvoidingView
-    style={{ flex: 1 }} // Make sure it takes full height of the screen
-    behavior={Platform.OS === 'ios' ? 'padding' : 'padding'} // Adjust behavior for iOS
-  >
-    <View flex backgroundColor={AppColors.Black}>
-      {loadingAddTrip && <BackgroundLoader />}
-      <ScrollView>
-        <View padding-20>
-          {routeId == 0 ? (
-            <Header leftIcon={false} title="Create Trip" />
-          ) : (
-            <Header title="Update Trip" />
-          )}
+      style={{flex: 1}} // Make sure it takes full height of the screen
+      behavior={Platform.OS === 'ios' ? 'padding' : 'padding'} // Adjust behavior for iOS
+    >
+      <View flex backgroundColor={AppColors.Black}>
+        {loadingAddTrip && <BackgroundLoader />}
+        <ScrollView>
+          <View padding-20>
+            {routeId == 0 ? (
+              <Header leftIcon={false} title="Create Trip" />
+            ) : (
+              <Header title="Update Trip" />
+            )}
 
-          <TouchableOpacity onPress={() => setImageClick(!isImageClick)}>
-            <View center style={styles.imageView}>
-              {tripInput.image.length > 0 ? (
-                <>
-                  <ScrollView horizontal>
-                    {tripInput.image.map((image, index) => (
-                      <View key={index}>
-                        <Image
-                          key={index}
-                          source={{uri: image.uri}}
-                          style={{
-                            width: 100,
-                            height: 100,
-                            borderRadius: 20,
-                            marginRight: 10,
-                          }}
-                        />
-                        <View absT>
-                          <TouchableOpacity onPress={() => removeImage(index)}>
-                            <Image
-                              source={AppImages.DELETE}
-                              width={25}
-                              height={25}
-                            />
-                          </TouchableOpacity>
+            <TouchableOpacity onPress={() => setImageClick(!isImageClick)}>
+              <View center style={styles.imageView}>
+                {tripInput.image.length > 0 ? (
+                  <>
+                    <ScrollView horizontal>
+                      {tripInput.image.map((image, index) => (
+                        <View key={index}>
+                          <Image
+                            key={index}
+                            source={{uri: image.uri}}
+                            style={{
+                              width: 100,
+                              height: 100,
+                              borderRadius: 20,
+                              marginRight: 10,
+                            }}
+                          />
+                          <View absT>
+                            <TouchableOpacity
+                              onPress={() => removeImage(index)}>
+                              <Image
+                                source={AppImages.DELETE}
+                                width={25}
+                                height={25}
+                              />
+                            </TouchableOpacity>
+                          </View>
                         </View>
-                      </View>
-                    ))}
-                  </ScrollView>
-                  <Text style={styles.add}>+ Add Photos</Text>
-                </>
-              ) : (
-                <>
-                  <Image source={AppImages.GALLERY} width={34} height={30} />
-                  <Text style={styles.add}>+ Add Photos</Text>
-                  <Text style={styles.click}>
-                    (Click From camera or browse to upload)
+                      ))}
+                    </ScrollView>
+                    <Text style={styles.add}>+ Add Photos</Text>
+                  </>
+                ) : (
+                  <>
+                    <Image source={AppImages.GALLERY} width={34} height={30} />
+                    <Text style={styles.add}>+ Add Photos</Text>
+                    <Text style={styles.click}>
+                      (Click From camera or browse to upload)
+                    </Text>
+                  </>
+                )}
+                <Text red10>
+                  {tripValidate.InvalidImage ? '*Required' : ''}
+                </Text>
+              </View>
+            </TouchableOpacity>
+
+            <TextField
+              fieldStyle={styles.field}
+              label={'Title'}
+              placeholder={'Enter title'}
+              placeholderTextColor={'#999999'}
+              labelStyle={styles.label}
+              style={styles.text}
+              paddingH-20
+              marginB-20
+              value={tripInput.title}
+              onChangeText={(text: any) => {
+                setTrip({...tripInput, title: text});
+                setValidate({...tripValidate, InvalidTitle: false});
+              }}
+              trailingAccessory={
+                <Text red10>
+                  {tripValidate.InvalidTitle ? '*Required' : ''}
+                </Text>
+              }
+            />
+
+            <Text style={styles.label}>City</Text>
+            <DropdownComponent
+              data={Emirates}
+              item={tripInput.city}
+              label="type"
+              value="id"
+              onChange={(item: any) => {
+                setTrip({...tripInput, city: item});
+                setValidate({...tripValidate, InvalidCity: false});
+              }}
+              error={tripValidate.InvalidCity}
+            />
+
+            <TextField
+              fieldStyle={styles.field}
+              label={'Area'}
+              placeholder={'Enter area details'}
+              placeholderTextColor={'#999999'}
+              labelStyle={styles.label}
+              style={styles.text}
+              paddingH-20
+              marginB-20
+              value={tripInput.area_details}
+              onChangeText={(text: any) => {
+                setTrip({...tripInput, area_details: text});
+                setValidate({...tripValidate, InvalidArea: false});
+              }}
+              trailingAccessory={
+                <Text red10>{tripValidate.InvalidArea ? '*Required' : ''}</Text>
+              }
+            />
+
+            <TouchableOpacity
+              onPress={() =>
+                navigation.navigate(RouteNames.MapScreen, {
+                  setPlaceLocation,
+                  type: routeId == 0 ? 'add' : 'edit',
+                  lat: tripInput.latitude,
+                  long: tripInput.longitude,
+                })
+              }>
+              <TextField
+                fieldStyle={[
+                  styles.field,
+                  {height: tripInput.details_place ? 100 : 50},
+                  tripInput.details_place
+                    ? {paddingVertical: 10}
+                    : {paddingVertical: 0},
+                ]}
+                label={'Place Details'}
+                placeholder={'Choose Place details'}
+                placeholderTextColor={'#999999'}
+                labelStyle={styles.label}
+                style={styles.text}
+                paddingH-20
+                marginB-20
+                textAlignVertical={tripInput.details_place ? 'top' : 'auto'}
+                editable={false}
+                multiline={true}
+                value={tripInput.details_place}
+                // onChangeText={(text: any) => {
+                //   setTrip({...tripInput, details_place: text});
+                //   setValidate({...tripValidate, InvalidPlace: false});
+                // }}
+                trailingAccessory={
+                  <Text red10>
+                    {tripValidate.InvalidPlace ? '*Required' : ''}
                   </Text>
-                </>
-              )}
-              <Text red10>{tripValidate.InvalidImage ? '*Required' : ''}</Text>
-            </View>
-          </TouchableOpacity>
+                }
+              />
+            </TouchableOpacity>
 
-          <TextField
-            fieldStyle={styles.field}
-            label={'Title'}
-            placeholder={'Enter title'}
-            placeholderTextColor={'#999999'}
-            labelStyle={styles.label}
-            style={styles.text}
-            paddingH-20
-            marginB-20
-            value={tripInput.title}
-            onChangeText={(text: any) => {
-              setTrip({...tripInput, title: text});
-              setValidate({...tripValidate, InvalidTitle: false});
-            }}
-            trailingAccessory={
-              <Text red10>{tripValidate.InvalidTitle ? '*Required' : ''}</Text>
-            }
-          />
+            <Text style={styles.label}>Level</Text>
+            <DropdownComponent
+              data={Level}
+              item={tripInput.level}
+              label="type"
+              value="id"
+              onChange={(item: any) => {
+                setTrip({...tripInput, level: item});
+                setValidate({...tripValidate, InvalidLevel: false});
+              }}
+              error={tripValidate.InvalidLevel}
+            />
 
-          <Text style={styles.label}>City</Text>
-          <DropdownComponent
-            data={Emirates}
-            item={tripInput.city}
-            label="type"
-            value="id"
-            onChange={(item: any) => {
-              setTrip({...tripInput, city: item});
-              setValidate({...tripValidate, InvalidCity: false});
-            }}
-            error={tripValidate.InvalidCity}
-          />
-
-          <TextField
-            fieldStyle={styles.field}
-            label={'Area'}
-            placeholder={'Enter area details'}
-            placeholderTextColor={'#999999'}
-            labelStyle={styles.label}
-            style={styles.text}
-            paddingH-20
-            marginB-20
-            value={tripInput.area_details}
-            onChangeText={(text: any) => {
-              setTrip({...tripInput, area_details: text});
-              setValidate({...tripValidate, InvalidArea: false});
-            }}
-            trailingAccessory={
-              <Text red10>{tripValidate.InvalidArea ? '*Required' : ''}</Text>
-            }
-          />
-
-          <TouchableOpacity
-            onPress={() =>
-              navigation.navigate(RouteNames.MapScreen, {
-                setPlaceLocation,
-                type: routeId == 0 ? 'add' : 'edit',
-                lat: tripInput.latitude,
-                long: tripInput.longitude,
-              })
-            }>
             <TextField
-              fieldStyle={[
-                styles.field,
-                {height: tripInput.details_place ? 100 : 50},
-                tripInput.details_place
-                  ? {paddingVertical: 10}
-                  : {paddingVertical: 0},
-              ]}
-              label={'Place Details'}
-              placeholder={'Choose Place details'}
+              fieldStyle={styles.field}
+              label={'Capacity'}
+              placeholder={'Enter capacity'}
               placeholderTextColor={'#999999'}
               labelStyle={styles.label}
               style={styles.text}
               paddingH-20
               marginB-20
-              textAlignVertical={tripInput.details_place ? 'top' : 'auto'}
-              editable={false}
-              multiline={true}
-              value={tripInput.details_place}
-              // onChangeText={(text: any) => {
-              //   setTrip({...tripInput, details_place: text});
-              //   setValidate({...tripValidate, InvalidPlace: false});
-              // }}
+              keyboardType={'number-pad'}
+              value={tripInput.capacity}
+              onChangeText={(text: any) => {
+                setTrip({...tripInput, capacity: text});
+                setValidate({...tripValidate, InvalidCapacity: false});
+              }}
               trailingAccessory={
                 <Text red10>
-                  {tripValidate.InvalidPlace ? '*Required' : ''}
+                  {tripValidate.InvalidCapacity ? '*Required' : ''}
                 </Text>
               }
             />
-          </TouchableOpacity>
 
-          <Text style={styles.label}>Level</Text>
-          <DropdownComponent
-            data={Level}
-            item={tripInput.level}
-            label="type"
-            value="id"
-            onChange={(item: any) => {
-              setTrip({...tripInput, level: item});
-              setValidate({...tripValidate, InvalidLevel: false});
-            }}
-            error={tripValidate.InvalidLevel}
-          />
+            <TouchableOpacity
+              onPress={() =>
+                setValidate({...tripValidate, isDatePickerVisible: true})
+              }>
+              <TextField
+                fieldStyle={styles.field}
+                label={'Date'}
+                placeholder={'Select Date'}
+                placeholderTextColor={'#999999'}
+                labelStyle={styles.label}
+                style={styles.text}
+                paddingH-20
+                marginB-20
+                editable={false}
+                value={tripInput.date}
+                trailingAccessory={
+                  <Text red10>
+                    {tripValidate.InvalidDate ? '*Required' : ''}
+                  </Text>
+                }
+              />
+              <DateTimePickerModal
+                isVisible={tripValidate.isDatePickerVisible}
+                mode="date"
+                minimumDate={new Date()}
+                onConfirm={(date: any) => {
+                  setTrip({...tripInput, date: getUserDate(date)});
+                  setValidate({
+                    ...tripValidate,
+                    InvalidDate: false,
+                    isDatePickerVisible: false,
+                  });
+                }}
+                onCancel={() =>
+                  setValidate({...tripValidate, isDatePickerVisible: false})
+                }
+              />
+            </TouchableOpacity>
 
-          <TextField
-            fieldStyle={styles.field}
-            label={'Capacity'}
-            placeholder={'Enter capacity'}
-            placeholderTextColor={'#999999'}
-            labelStyle={styles.label}
-            style={styles.text}
-            paddingH-20
-            marginB-20
-            keyboardType={'number-pad'}
-            value={tripInput.capacity}
-            onChangeText={(text: any) => {
-              setTrip({...tripInput, capacity: text});
-              setValidate({...tripValidate, InvalidCapacity: false});
-            }}
-            trailingAccessory={
-              <Text red10>
-                {tripValidate.InvalidCapacity ? '*Required' : ''}
-              </Text>
-            }
-          />
+            <TouchableOpacity
+              onPress={() =>
+                setValidate({...tripValidate, isMeetPickerVisible: true})
+              }>
+              <TextField
+                fieldStyle={styles.field}
+                label={'Meeting Time'}
+                placeholder={'Select meeting time'}
+                placeholderTextColor={'#999999'}
+                labelStyle={styles.label}
+                style={styles.text}
+                paddingH-20
+                marginB-20
+                editable={false}
+                value={tripInput.meeting_time}
+                trailingAccessory={
+                  <Text red10>
+                    {tripValidate.InvalidMeet ? '*Required' : ''}
+                  </Text>
+                }
+              />
+              <DateTimePickerModal
+                isVisible={tripValidate.isMeetPickerVisible}
+                mode="time"
+                onConfirm={(date: any) => {
+                  setTrip({...tripInput, meeting_time: getUserTime(date)});
+                  setValidate({
+                    ...tripValidate,
+                    InvalidMeet: false,
+                    isMeetPickerVisible: false,
+                  });
+                }}
+                onCancel={() =>
+                  setValidate({...tripValidate, isMeetPickerVisible: false})
+                }
+              />
+            </TouchableOpacity>
 
-          <TouchableOpacity
-            onPress={() =>
-              setValidate({...tripValidate, isDatePickerVisible: true})
-            }>
+            <TouchableOpacity
+              onPress={() =>
+                setValidate({...tripValidate, isStartPickerVisible: true})
+              }>
+              <TextField
+                fieldStyle={styles.field}
+                label={'Start Time'}
+                placeholder={'Select start time'}
+                placeholderTextColor={'#999999'}
+                labelStyle={styles.label}
+                style={styles.text}
+                paddingH-20
+                marginB-20
+                editable={false}
+                value={tripInput.start_time}
+                trailingAccessory={
+                  <Text red10>
+                    {tripValidate.InvalidStart ? '*Required' : ''}
+                  </Text>
+                }
+              />
+              <DateTimePickerModal
+                isVisible={tripValidate.isStartPickerVisible}
+                mode="time"
+                onConfirm={(date: any) => {
+                  setTrip({...tripInput, start_time: getUserTime(date)});
+                  setValidate({
+                    ...tripValidate,
+                    InvalidStart: false,
+                    isStartPickerVisible: false,
+                  });
+                }}
+                onCancel={() =>
+                  setValidate({...tripValidate, isStartPickerVisible: false})
+                }
+              />
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              onPress={() =>
+                setValidate({...tripValidate, isFinishPickerVisible: true})
+              }>
+              <TextField
+                fieldStyle={styles.field}
+                label={'Finish Time'}
+                placeholder={'Select finish time'}
+                placeholderTextColor={'#999999'}
+                labelStyle={styles.label}
+                style={styles.text}
+                paddingH-20
+                marginB-20
+                editable={false}
+                value={tripInput.finish_time}
+                trailingAccessory={
+                  <Text red10>
+                    {tripValidate.InvalidFinish ? '*Required' : ''}
+                  </Text>
+                }
+              />
+              <DateTimePickerModal
+                isVisible={tripValidate.isFinishPickerVisible}
+                mode="time"
+                onConfirm={(date: any) => {
+                  setTrip({...tripInput, finish_time: getUserTime(date)});
+                  setValidate({
+                    ...tripValidate,
+                    InvalidFinish: false,
+                    isFinishPickerVisible: false,
+                  });
+                }}
+                onCancel={() =>
+                  setValidate({...tripValidate, isFinishPickerVisible: false})
+                }
+              />
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              onPress={() => {
+                if (tripInput.joining_deadline == '') {
+                  showToast('First select deadline date');
+                } else {
+                  setValidate({...tripValidate, isJoinPickerVisible: true});
+                }
+              }}>
+              <TextField
+                fieldStyle={styles.field}
+                label={'Joining Start Date & Time'}
+                placeholder={'Select joining date & time'}
+                placeholderTextColor={'#999999'}
+                labelStyle={styles.label}
+                style={styles.text}
+                paddingH-20
+                marginB-20
+                editable={false}
+                value={tripInput.joining_start_date}
+                trailingAccessory={
+                  <Text red10>
+                    {tripValidate.InvalidJoinDate ? '*Required' : ''}
+                  </Text>
+                }
+              />
+              <DateTimePickerModal
+                isVisible={tripValidate.isJoinPickerVisible}
+                mode="datetime"
+                minimumDate={new Date()}
+                maximumDate={moment(
+                  tripInput.joining_deadline,
+                  'DD-MM-YYYY',
+                ).toDate()}
+                onConfirm={(date: any) => {
+                  setTrip({
+                    ...tripInput,
+                    joining_start_date: getDateTime(date),
+                  });
+                  setValidate({
+                    ...tripValidate,
+                    InvalidJoinDate: false,
+                    isJoinPickerVisible: false,
+                  });
+                }}
+                onCancel={() =>
+                  setValidate({...tripValidate, isJoinPickerVisible: false})
+                }
+              />
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              onPress={() => {
+                if (tripInput.date == '') {
+                  showToast('First select trip date');
+                } else {
+                  setValidate({...tripValidate, isDeadlinePickerVisible: true});
+                }
+              }}>
+              <TextField
+                fieldStyle={styles.field}
+                label={'Joining Deadline Date & Time'}
+                placeholder={'Select deadline'}
+                placeholderTextColor={'#999999'}
+                labelStyle={styles.label}
+                style={styles.text}
+                paddingH-20
+                marginB-20
+                editable={false}
+                value={tripInput.joining_deadline}
+                trailingAccessory={
+                  <Text red10>
+                    {tripValidate.InvalidDeadline ? '*Required' : ''}
+                  </Text>
+                }
+              />
+              <DateTimePickerModal
+                isVisible={tripValidate.isDeadlinePickerVisible}
+                mode="datetime"
+                minimumDate={new Date()}
+                maximumDate={moment(tripInput.date, 'DD-MM-YYYY').toDate()}
+                onConfirm={(date: any) => {
+                  setTrip({...tripInput, joining_deadline: getDateTime(date)});
+                  setValidate({
+                    ...tripValidate,
+                    InvalidDeadline: false,
+                    isDeadlinePickerVisible: false,
+                  });
+                }}
+                onCancel={() =>
+                  setValidate({...tripValidate, isDeadlinePickerVisible: false})
+                }
+              />
+            </TouchableOpacity>
+
             <TextField
-              fieldStyle={styles.field}
-              label={'Date'}
-              placeholder={'Select Date'}
+              fieldStyle={[styles.field, {height: 100}]}
+              label={'Description'}
+              placeholder={'Enter description'}
               placeholderTextColor={'#999999'}
               labelStyle={styles.label}
               style={styles.text}
-              paddingH-20
+              padding-20
               marginB-20
-              editable={false}
-              value={tripInput.date}
-              trailingAccessory={
-                <Text red10>{tripValidate.InvalidDate ? '*Required' : ''}</Text>
-              }
-            />
-            <DateTimePickerModal
-              isVisible={tripValidate.isDatePickerVisible}
-              mode="date"
-              minimumDate={new Date()}
-              onConfirm={(date: any) => {
-                setTrip({...tripInput, date: getUserDate(date)});
-                setValidate({
-                  ...tripValidate,
-                  InvalidDate: false,
-                  isDatePickerVisible: false,
-                });
+              textAlignVertical={'top'}
+              value={tripInput.description}
+              onChangeText={(text: any) => {
+                setTrip({...tripInput, description: text});
+                setValidate({...tripValidate, InvalidDescrip: false});
               }}
-              onCancel={() =>
-                setValidate({...tripValidate, isDatePickerVisible: false})
-              }
-            />
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            onPress={() =>
-              setValidate({...tripValidate, isMeetPickerVisible: true})
-            }>
-            <TextField
-              fieldStyle={styles.field}
-              label={'Meeting Time'}
-              placeholder={'Select meeting time'}
-              placeholderTextColor={'#999999'}
-              labelStyle={styles.label}
-              style={styles.text}
-              paddingH-20
-              marginB-20
-              editable={false}
-              value={tripInput.meeting_time}
-              trailingAccessory={
-                <Text red10>{tripValidate.InvalidMeet ? '*Required' : ''}</Text>
-              }
-            />
-            <DateTimePickerModal
-              isVisible={tripValidate.isMeetPickerVisible}
-              mode="time"
-              onConfirm={(date: any) => {
-                setTrip({...tripInput, meeting_time: getUserTime(date)});
-                setValidate({
-                  ...tripValidate,
-                  InvalidMeet: false,
-                  isMeetPickerVisible: false,
-                });
-              }}
-              onCancel={() =>
-                setValidate({...tripValidate, isMeetPickerVisible: false})
-              }
-            />
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            onPress={() =>
-              setValidate({...tripValidate, isStartPickerVisible: true})
-            }>
-            <TextField
-              fieldStyle={styles.field}
-              label={'Start Time'}
-              placeholder={'Select start time'}
-              placeholderTextColor={'#999999'}
-              labelStyle={styles.label}
-              style={styles.text}
-              paddingH-20
-              marginB-20
-              editable={false}
-              value={tripInput.start_time}
               trailingAccessory={
                 <Text red10>
-                  {tripValidate.InvalidStart ? '*Required' : ''}
+                  {tripValidate.InvalidDescrip ? '*Required' : ''}
                 </Text>
               }
             />
-            <DateTimePickerModal
-              isVisible={tripValidate.isStartPickerVisible}
-              mode="time"
-              onConfirm={(date: any) => {
-                setTrip({...tripInput, start_time: getUserTime(date)});
-                setValidate({
-                  ...tripValidate,
-                  InvalidStart: false,
-                  isStartPickerVisible: false,
-                });
-              }}
-              onCancel={() =>
-                setValidate({...tripValidate, isStartPickerVisible: false})
-              }
-            />
-          </TouchableOpacity>
 
-          <TouchableOpacity
-            onPress={() =>
-              setValidate({...tripValidate, isFinishPickerVisible: true})
-            }>
             <TextField
               fieldStyle={styles.field}
-              label={'Finish Time'}
-              placeholder={'Select finish time'}
+              label={'Passengers Allowed'}
+              placeholder={'Enter passengers allowed'}
               placeholderTextColor={'#999999'}
               labelStyle={styles.label}
               style={styles.text}
               paddingH-20
               marginB-20
-              editable={false}
-              value={tripInput.finish_time}
+              keyboardType={'number-pad'}
+              value={tripInput.passenger}
+              onChangeText={(text: any) => {
+                setTrip({...tripInput, passenger: text});
+                setValidate({...tripValidate, InvalidPassengers: false});
+              }}
               trailingAccessory={
                 <Text red10>
-                  {tripValidate.InvalidFinish ? '*Required' : ''}
+                  {tripValidate.InvalidPassengers ? '*Required' : ''}
                 </Text>
               }
             />
-            <DateTimePickerModal
-              isVisible={tripValidate.isFinishPickerVisible}
-              mode="time"
-              onConfirm={(date: any) => {
-                setTrip({...tripInput, finish_time: getUserTime(date)});
-                setValidate({
-                  ...tripValidate,
-                  InvalidFinish: false,
-                  isFinishPickerVisible: false,
-                });
+
+            <ButtonView
+              title={routeId == 0 ? 'Create Trip' : 'Update Trip'}
+              onPress={() => {
+                if (isValidate()) {
+                  AddingTrip();
+                }
               }}
-              onCancel={() =>
-                setValidate({...tripValidate, isFinishPickerVisible: false})
-              }
             />
-          </TouchableOpacity>
+          </View>
+        </ScrollView>
 
-          <TouchableOpacity
-            onPress={() =>{
-              if (tripInput.joining_deadline == '') {
-                showToast('First select deadline date');
-              } else {
-                setValidate({...tripValidate, isJoinPickerVisible: true})
-              }
-            }
-              
-            }>
-            <TextField
-              fieldStyle={styles.field}
-              label={'Joining Start Date & Time'}
-              placeholder={'Select joining date & time'}
-              placeholderTextColor={'#999999'}
-              labelStyle={styles.label}
-              style={styles.text}
-              paddingH-20
-              marginB-20
-              editable={false}
-              value={tripInput.joining_start_date}
-              trailingAccessory={
-                <Text red10>
-                  {tripValidate.InvalidJoinDate ? '*Required' : ''}
-                </Text>
-              }
-            />
-            <DateTimePickerModal
-              isVisible={tripValidate.isJoinPickerVisible}
-              mode="datetime"
-              minimumDate={new Date()}
-              maximumDate={moment(tripInput.joining_deadline, 'DD-MM-YYYY').toDate()}
-              onConfirm={(date: any) => {
-                setTrip({...tripInput, joining_start_date: getDateTime(date)});
-                setValidate({
-                  ...tripValidate,
-                  InvalidJoinDate: false,
-                  isJoinPickerVisible: false,
-                });
-              }}
-              onCancel={() =>
-                setValidate({...tripValidate, isJoinPickerVisible: false})
-              }
-            />
-          </TouchableOpacity>
+        {isImageClick && (
+          <ImageSelector
+            close={() => setImageClick(false)}
+            isItem={(item: any) => {
+              setTrip(prevTripInput => ({
+                ...prevTripInput,
+                image: [...prevTripInput.image, ...item],
+              }));
 
-          <TouchableOpacity
-            onPress={() =>{
-              if (tripInput.date == '') {
-                showToast('First select trip date');
-              } else {
-                setValidate({...tripValidate, isDeadlinePickerVisible: true})
-              }
-            }
-             
-            }>
-            <TextField
-              fieldStyle={styles.field}
-              label={'Joining Deadline Date & Time'}
-              placeholder={'Select deadline'}
-              placeholderTextColor={'#999999'}
-              labelStyle={styles.label}
-              style={styles.text}
-              paddingH-20
-              marginB-20
-              editable={false}
-              value={tripInput.joining_deadline}
-              trailingAccessory={
-                <Text red10>
-                  {tripValidate.InvalidDeadline ? '*Required' : ''}
-                </Text>
-              }
-            />
-            <DateTimePickerModal
-              isVisible={tripValidate.isDeadlinePickerVisible}
-              mode="datetime"
-              minimumDate={new Date()}
-              maximumDate={moment(tripInput.date, 'DD-MM-YYYY').toDate()}
-              onConfirm={(date: any) => {
-                setTrip({...tripInput, joining_deadline: getDateTime(date)});
-                setValidate({
-                  ...tripValidate,
-                  InvalidDeadline: false,
-                  isDeadlinePickerVisible: false,
-                });
-              }}
-              onCancel={() =>
-                setValidate({...tripValidate, isDeadlinePickerVisible: false})
-              }
-            />
-          </TouchableOpacity>
-
-          <TextField
-            fieldStyle={[styles.field, {height: 100}]}
-            label={'Description'}
-            placeholder={'Enter description'}
-            placeholderTextColor={'#999999'}
-            labelStyle={styles.label}
-            style={styles.text}
-            padding-20
-            marginB-20
-            textAlignVertical={'top'}
-            value={tripInput.description}
-            onChangeText={(text: any) => {
-              setTrip({...tripInput, description: text});
-              setValidate({...tripValidate, InvalidDescrip: false});
+              setValidate({...tripValidate, InvalidImage: false});
             }}
-            trailingAccessory={
-              <Text red10>
-                {tripValidate.InvalidDescrip ? '*Required' : ''}
-              </Text>
-            }
+            multi={true}
           />
-
-          <TextField
-            fieldStyle={styles.field}
-            label={'Passengers Allowed'}
-            placeholder={'Enter passengers allowed'}
-            placeholderTextColor={'#999999'}
-            labelStyle={styles.label}
-            style={styles.text}
-            paddingH-20
-            marginB-20
-            keyboardType={'number-pad'}
-            value={tripInput.passenger}
-            onChangeText={(text: any) => {
-              setTrip({...tripInput, passenger: text});
-              setValidate({...tripValidate, InvalidPassengers: false});
-            }}
-            trailingAccessory={
-              <Text red10>
-                {tripValidate.InvalidPassengers ? '*Required' : ''}
-              </Text>
-            }
-          />
-
-          <ButtonView
-            title={routeId == 0 ? 'Create Trip' : 'Update Trip'}
-            onPress={() => {
-              if (isValidate()) {
-                AddingTrip();
-              }
-            }}
-          />
-        </View>
-      </ScrollView>
-
-      {isImageClick && (
-        <ImageSelector
-          close={() => setImageClick(false)}
-          isItem={(item: any) => {
-            setTrip(prevTripInput => ({
-              ...prevTripInput,
-              image: [...prevTripInput.image, ...item],
-            }));
-
-            setValidate({...tripValidate, InvalidImage: false});
-          }}
-          multi={true}
-        />
-      )}
-    </View>
+        )}
+      </View>
     </KeyboardAvoidingView>
   );
 };

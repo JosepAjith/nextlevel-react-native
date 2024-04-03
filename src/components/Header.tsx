@@ -3,15 +3,17 @@ import AppImages from '../constants/AppImages';
 import AppStyles from '../constants/AppStyles';
 import {TouchableOpacity} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
+import { RouteNames } from '../navigation';
 
 interface Props {
   title: string;
   rightIcon?: any;
   leftIcon?: any;
   rightOnpress?: any;
+  isDeepLink?: any
 }
 
-export const Header = ({title, rightIcon, leftIcon, rightOnpress}: Props) => {
+export const Header = ({title, rightIcon, leftIcon, rightOnpress, isDeepLink}: Props) => {
   const navigation = useNavigation();
   return (
     <View row centerV>
@@ -19,7 +21,7 @@ export const Header = ({title, rightIcon, leftIcon, rightOnpress}: Props) => {
         {leftIcon == false ? (
           <View />
         ) : (
-          <TouchableOpacity onPress={() => navigation.goBack()}>
+          <TouchableOpacity onPress={() => {isDeepLink ? navigation.replace(RouteNames.BottomTabs) : navigation.goBack()}}>
             <View style={{paddingVertical: 10}}>
               <Image source={AppImages.BACK} />
             </View>

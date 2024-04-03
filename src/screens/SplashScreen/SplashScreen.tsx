@@ -23,25 +23,30 @@ const SplashScreen: React.FC<Props> = () => {
   const [count, setCount] = useState(0);
   const navigation = useNavigation<SplashScreenNavigationProps>();
 
-
   setTimeout(async () => {
-
-    if ((await AsyncStorage.getItem(AppStrings.IS_ONBOARD)) == null) {
-      navigation.replace(RouteNames.OnboardScreen);
-    } else if ((await AsyncStorage.getItem(AppStrings.IS_LOGIN)) == null) {
-      navigation.replace(RouteNames.LoginScreen);
-    }
-    else {
-      navigation.replace(RouteNames.BottomTabs)
+    if ((await AsyncStorage.getItem(AppStrings.DEEP_LINK_ID)) == null) {
+      if ((await AsyncStorage.getItem(AppStrings.IS_ONBOARD)) == null) {
+        navigation.replace(RouteNames.OnboardScreen);
+      } else if ((await AsyncStorage.getItem(AppStrings.IS_LOGIN)) == null) {
+        navigation.replace(RouteNames.LoginScreen);
+      } else {
+        navigation.replace(RouteNames.BottomTabs);
+      }
+    } else {
+      if ((await AsyncStorage.getItem(AppStrings.IS_LOGIN)) == null) {
+        navigation.replace(RouteNames.LoginScreen);
+      } else {
+        navigation.replace(RouteNames.TripDetails, {
+          id: Number(await AsyncStorage.getItem(AppStrings.DEEP_LINK_ID)),isDeepLink: true
+        });
+        await AsyncStorage.removeItem(AppStrings.DEEP_LINK_ID)
+      }
     }
   }, 2000);
 
   return (
     <View flex center backgroundColor={AppColors.Black}>
-
-        <Image source={AppImages.NXTLEVEL}/>
-   
-
+      <Image source={AppImages.NXTLEVEL} />
     </View>
   );
 };

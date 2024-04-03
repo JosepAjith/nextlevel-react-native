@@ -14,7 +14,7 @@ export type RootStackParams = {
   MyTripScreen: undefined;
   AddTripScreen: {id: any};
   ProfileScreen: undefined;
-  TripDetails: {id:any};
+  TripDetails: {id:any, isDeepLink: any};
   SettingsScreen: undefined;
   AboutScreen: undefined;
   EditProfile: undefined;
@@ -27,4 +27,5 @@ NotificationScreen: undefined;
 BroadcastScreen: {id: any,userId: any};
 MapScreen: {setPlaceLocation?: any, type: any, lat: any, long: any};
 DeleteAccount: undefined;
+UserPicker:{level: any,onSelectUsers: any}
 };

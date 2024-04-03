@@ -25,5 +25,6 @@ export const RouteNames = {
   NotificationScreen: 'NotificationScreen',
   BroadcastScreen: 'BroadcastScreen',
   MapScreen: 'MapScreen',
-  DeleteAccount: 'DeleteAccount'
+  DeleteAccount: 'DeleteAccount',
+  UserPicker:'UserPicker'
 } as const;

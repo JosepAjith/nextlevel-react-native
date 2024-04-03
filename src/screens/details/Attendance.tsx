@@ -146,7 +146,6 @@ const Attendance = ({
     }
   }, [members]);
 
-  console.log(AttendInput,'000000')
 
   const markingAttendance = () => {
     const modifiedAttendInput = {

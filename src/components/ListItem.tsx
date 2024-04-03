@@ -59,6 +59,8 @@ const ListItem = ({item, index, navigation}: Props) => {
   };
 
   const shareUrl = async (url: any) => {
+
+  //  const deepLink = 'com.bnbcnxtlevel.app://next-level.prompttechdemohosting.com';
     const shareOptions = {
       title: 'Share file',
       message: 'Join here ==>',
@@ -85,7 +87,7 @@ const ListItem = ({item, index, navigation}: Props) => {
     <TouchableOpacity
       onPress={() => {
         dispatch({type: 'SET_CHIP', payload: 1});
-        navigation.navigate(RouteNames.TripDetails, {id: item.id});
+        navigation.navigate(RouteNames.TripDetails, {id: item.id, isDeepLink: false});
       }}>
       <View style={styles.view}>
         <ImageBackground

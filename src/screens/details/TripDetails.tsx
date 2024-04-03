@@ -7,7 +7,7 @@ import {useNavigation} from '@react-navigation/native';
 import AppColors from '../../constants/AppColors';
 import {styles} from './styles';
 import AppImages from '../../constants/AppImages';
-import {ScrollView, TouchableOpacity} from 'react-native';
+import {BackHandler, ScrollView, TouchableOpacity} from 'react-native';
 import {Header} from '../../components/Header';
 import CarouselView from '../../components/CarousalView';
 import Attendance from './Attendance';
@@ -42,6 +42,7 @@ interface Props {}
 const TripDetails: React.FC<Props> = ({route}: any) => {
   const navigation = useNavigation<TripDetailsNavigationProps>();
   const id = route.params.id;
+  const isDeepLink = route.params.isDeepLink;
   const {type, loginUserId} = useSelector(
     (state: RootState) => state.GlobalVariables,
   );
@@ -52,10 +53,23 @@ const TripDetails: React.FC<Props> = ({route}: any) => {
   const {cancelData, loadingCancel, cancelError} = useSelector(
     (state: RootState) => state.TripCancel,
   );
-console.log(tripDetails)
+
   useFocusEffect(
     React.useCallback(() => {
       fetchDetails();
+      if (isDeepLink) {
+        // Add back handler for deep link
+        const backHandler = BackHandler.addEventListener(
+          'hardwareBackPress',
+          () => {
+            navigation.replace(RouteNames.BottomTabs); // Navigate to bottom tabs
+            return true; // Prevent default behavior
+          },
+        );
+
+        // Clean-up function
+        return () => backHandler.remove();
+      }
       // Clean-up function
       return () => {};
     }, [cancelData]),
@@ -107,6 +121,7 @@ console.log(tripDetails)
           title="Trip Details"
           rightIcon={AppImages.REFRESH}
           rightOnpress={fetchDetails}
+          isDeepLink={isDeepLink}
         />
       </View>
 
