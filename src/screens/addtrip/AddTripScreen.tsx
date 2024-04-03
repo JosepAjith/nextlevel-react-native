@@ -105,24 +105,12 @@ const AddTripScreen: React.FC<Props> = ({route, id, initial}: Props) => {
     (state: RootState) => state.GlobalVariables,
   );
 
-  // useEffect(() => {
-  //   if (
-  //     tripInput.level == 'Intermediate Exam' ||
-  //     tripInput.level == 'Advance Exam'
-  //   ) {
-  //     navigation.navigate(RouteNames.UserPicker,{level:tripInput.level, onSelectUsers: handleSelectedUsers});
-  //   }
-  // }, [
-  //   tripInput.level == 'Intermediate Exam',
-  //   tripInput.level == 'Advance Exam',
-  // ]);
-
-  // const handleSelectedUsers = (selectedUsers) => {
-  //   setTrip({
-  //     ...tripInput,
-  //     users: selectedUsers,
-  //   });
-  // };
+  const handleSelectedUsers = (selectedUsers: any) => {
+    setTrip(prevTripInput => ({
+      ...prevTripInput,
+      users: [...prevTripInput.image, ...selectedUsers],
+    }));
+  };
 
   useEffect(() => {
     if (routeId !== 0 && typeof tripDetails?.data === 'object') {
@@ -581,6 +569,12 @@ const AddTripScreen: React.FC<Props> = ({route, id, initial}: Props) => {
               onChange={(item: any) => {
                 setTrip({...tripInput, level: item});
                 setValidate({...tripValidate, InvalidLevel: false});
+                if (
+                  item == 'Intermediate Exam' ||
+                  item == 'Advance Exam'
+                ) {
+                  navigation.navigate(RouteNames.UserPicker,{level:item, selectUsers: tripInput.users, onSelectUsers: handleSelectedUsers});
+                }
               }}
               error={tripValidate.InvalidLevel}
             />
