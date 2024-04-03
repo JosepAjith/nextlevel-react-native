@@ -1,28 +1,34 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Checkbox, Image, Incubator, Picker, View } from "react-native-ui-lib";
 import AppImages from "../../constants/AppImages";
 import { AnyAction, ThunkDispatch } from "@reduxjs/toolkit";
 import { RootState } from "../../../store";
 import { useDispatch, useSelector } from "react-redux";
-import { useFocusEffect } from "@react-navigation/native";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { fetchUserList } from "../../api/user/UserListSlice";
 import AppColors from "../../constants/AppColors";
 import { Header } from "../../components/Header";
 import BackgroundLoader from "../../components/BackgroundLoader";
 import { Dimensions, FlatList, Text, TouchableOpacity } from "react-native";
 import { styles } from "../mytrip/styles";
+import ButtonView from "../../components/ButtonView";
 const {TextField} = Incubator;
 
 const UserPicker = ({route}: any) => {
+    const navigation = useNavigation();
     const windowWidth = Dimensions.get('window').width;
     const level= route.params.level;
+    const selectUsers= route.params.selectUsers;
+    const onSelectUsers= route.params.onSelectUsers;
   const itemWidth = (windowWidth - 50) / 2;
     const dispatch: ThunkDispatch<RootState, any, AnyAction> = useDispatch();
     const [userList, setUserList] = useState([]);
+    const [selectedUsers, setSelectedUsers] = useState<any[]>([]);
     const [search, setSearch] = useState('');
     const {users, loadingUsers, usersError} = useSelector(
       (state: RootState) => state.UserList,
     );
+
     useFocusEffect(
         React.useCallback(() => {
           FetchList(1);
@@ -32,6 +38,11 @@ const UserPicker = ({route}: any) => {
           };
         }, [search]),
       );
+
+      useEffect(() => {
+        // Update selectedUsers when selectUsers changes
+        setSelectedUsers(selectUsers);
+    }, [selectUsers]);
 
       const FetchList = (page: number) => {
           let request = JSON.stringify({
@@ -127,14 +138,42 @@ const UserPicker = ({route}: any) => {
                     
                   </View>}
                   color="white"
-                  style={{borderRadius: 2}}
-                  containerStyle={{marginBottom: 20}}/>
+                  style={{borderRadius: 2,}}
+                  containerStyle={{marginBottom: 20}}
+                  value={selectedUsers.some((user) => user.id === item.id)} // Check if the user is already selected
+                //   onValueChange={(isChecked: any) => {
+                //     if (selectedUsers.some((user) => user.id === item.id)) {
+                //       // If user is already selected, remove it from selectedUsers
+                //       setSelectedUsers(selectedUsers.filter((user) => user.id !== item.id));
+                //     } else {
+                //       // If user is not selected, add it to selectedUsers
+                //       setSelectedUsers([...selectedUsers, item]);
+                //     }
+                //   }}
+
+                  onValueChange={(isChecked: boolean) => {
+                    if (isChecked) {
+                        // If user is not already selected, add it to selectedUsers
+                        setSelectedUsers([...selectedUsers, { id: item.id, name: item.name, image: item.image }]);
+                    } else {
+                        // If user is selected, remove it from selectedUsers
+                        setSelectedUsers(selectedUsers.filter((user) => user.id !== item.id));
+                    }
+                }}
+                  />
                     
                 </View>
               );
             }}
+          
             onEndReached={loadMoreTrips}
           />
+
+          <ButtonView title="Confirm"  onPress={() => {
+              // Pass selectedUsers back to the previous screen
+              onSelectUsers(selectedUsers);
+              navigation.goBack();
+            }}/>
         </View>
       </View>
     )
