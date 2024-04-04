@@ -28,7 +28,7 @@ const UserPicker = ({route}: any) => {
     const {users, loadingUsers, usersError} = useSelector(
       (state: RootState) => state.UserList,
     );
-
+console.log(selectUsers,')))))))))))))))))')
     useFocusEffect(
         React.useCallback(() => {
           FetchList(1);
@@ -40,8 +40,10 @@ const UserPicker = ({route}: any) => {
       );
 
       useEffect(() => {
+        if(selectUsers.length != 0){
         // Update selectedUsers when selectUsers changes
         setSelectedUsers(selectUsers);
+        }
     }, [selectUsers]);
 
       const FetchList = (page: number) => {

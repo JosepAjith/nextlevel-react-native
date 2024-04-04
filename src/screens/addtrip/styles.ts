@@ -62,4 +62,14 @@ export const styles = StyleSheet.create({
         // textDecorationLine:'underline',
         color:AppColors.Orange
     },
+    chip: {
+        borderColor: 'white',
+        borderWidth: 1,
+        marginRight:20
+      },
+      chipLabel:{
+        fontSize:12,
+        fontFamily:AppFonts.REGULAR,
+        color:'white'
+      },
 });

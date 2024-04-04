@@ -34,7 +34,8 @@ export type TripListResponse = {
     trip_book_joined_count:    number;
     share_url:          string;
     trip_images:        TripImage[];
-    trip_book:          TripBook
+    trip_book:          TripBook;
+    trip_invitation:    TripInvitation[];
 }
 
 export type TripBook = {
@@ -58,6 +59,17 @@ export type TripImage = {
     image:      string;
     created_at: string;
     updated_at: string;
+}
+
+export type TripInvitation = {
+    id:         number;
+    level:      string;
+    trip_id:    number;
+    user_id:    number;
+    created_by: number;
+    created_at: Date;
+    updated_at: Date;
+    users:      User[];
 }
 
 export type User = {

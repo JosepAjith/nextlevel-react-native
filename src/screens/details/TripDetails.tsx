@@ -365,6 +365,19 @@ const TripDetails: React.FC<Props> = ({route}: any) => {
                   tripDetails.data.trip_book.application_status
                 }
               />
+
+{tripDetails.data.trip_invitation.length != 0 &&
+              <View style={styles.deadline} marginT-20 paddingH-20>
+                <Text style={styles.text2}>Trip Invitation</Text>
+                {tripDetails.data.trip_invitation.map((item,index)=>(
+                  <View key={index} marginT-10 row centerV>
+                    <Image source={item.users[0].image ? {uri:item.users[0].image} : AppImages.NOIMAGE} style={{width:30,height:30, borderRadius:20}}/>
+                    <Text style={styles.text2} marginL-10>{item.users[0].name}</Text>
+                    </View>
+                ))}
+              </View>
+               
+}
             </View>
           </ScrollView>
         </View>

@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {
-  Button,
-  Checkbox,
+  Chip,
   Image,
   Incubator,
   Text,
@@ -22,7 +21,6 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import {Header} from '../../components/Header';
-import AppFonts from '../../constants/AppFonts';
 import {TripRequest} from '../../api/trip/TripRequest';
 import {TripValidation} from '../../api/trip/TripValidation';
 import ImageSelector from '../../components/ImageSelector';
@@ -41,7 +39,6 @@ import {useDispatch, useSelector} from 'react-redux';
 import {createTrip, reset} from '../../api/trip/TripCreateSlice';
 import moment from 'moment';
 import BackgroundLoader from '../../components/BackgroundLoader';
-import UserPicker from './UserPicker';
 
 const {TextField} = Incubator;
 
@@ -106,9 +103,23 @@ const AddTripScreen: React.FC<Props> = ({route, id, initial}: Props) => {
   );
 
   const handleSelectedUsers = (selectedUsers: any) => {
+    if (selectedUsers.length !== 0) {
+      setTrip(prevTripInput => ({
+        ...prevTripInput,
+        users: [
+          ...prevTripInput.users,
+          ...selectedUsers.filter((selectedUser: any) => 
+            !prevTripInput.users.some((user: any) => user.id === selectedUser.id)
+          )
+        ],
+      }));
+    }
+  };
+
+  const removeUser = (userId: any) => {
     setTrip(prevTripInput => ({
       ...prevTripInput,
-      users: [...prevTripInput.image, ...selectedUsers],
+      users: prevTripInput.users.filter(user => user.id !== userId),
     }));
   };
 
@@ -144,6 +155,17 @@ const AddTripScreen: React.FC<Props> = ({route, id, initial}: Props) => {
           fileCopyUri: '',
         })),
       }));
+        setTrip(prevTripInput => ({
+          ...prevTripInput,
+          users: [
+            ...prevTripInput.users,
+            ...item.trip_invitation.map(inviteItem => ({
+              id: inviteItem.users[0].id,
+              name: inviteItem.users[0].name,
+              image: inviteItem.users[0].image 
+            }))
+          ],
+        }));
     }
   }, [routeId, tripDetails]);
 
@@ -209,6 +231,11 @@ const AddTripScreen: React.FC<Props> = ({route, id, initial}: Props) => {
         error: '*Required',
       });
       showToast('Level field required');
+      return false;
+    }
+
+    if ((tripInput.level == 'Intermediate Exam' || tripInput.level == 'Advance Exam') && tripInput.users.length == 0) {
+      showToast('Users is required if level is ' + tripInput.level);
       return false;
     }
 
@@ -305,7 +332,6 @@ const AddTripScreen: React.FC<Props> = ({route, id, initial}: Props) => {
   }
 
   const AddingTrip = async () => {
-    console.log(tripInput.image);
     let formData = new FormData();
     if (routeId != 0) {
       formData.append('id', routeId);
@@ -324,6 +350,11 @@ const AddTripScreen: React.FC<Props> = ({route, id, initial}: Props) => {
     formData.append('longitude', tripInput.longitude);
     formData.append('latitude', tripInput.latitude);
     formData.append('level', tripInput.level);
+    if(tripInput.level == 'Intermediate Exam' || tripInput.level == 'Advance Exam'){
+      tripInput.users.forEach((user, index) => {
+        formData.append(`users_id[]`, user.id);
+      });
+    }
     formData.append('capacity', tripInput.capacity);
     formData.append(
       'date',
@@ -355,7 +386,7 @@ const AddTripScreen: React.FC<Props> = ({route, id, initial}: Props) => {
     );
     formData.append('description', tripInput.description);
     formData.append('passenger', tripInput.passenger);
-
+console.log(formData)
     dispatch(
       createTrip({
         requestBody: formData,
@@ -369,6 +400,7 @@ const AddTripScreen: React.FC<Props> = ({route, id, initial}: Props) => {
   };
 
   useEffect(() => {
+    console.log(addTripData)
     if (addTripData != null) {
       if (!loadingAddTrip && !addTripError && addTripData.status) {
         showToast(addTripData.message);
@@ -578,6 +610,29 @@ const AddTripScreen: React.FC<Props> = ({route, id, initial}: Props) => {
               }}
               error={tripValidate.InvalidLevel}
             />
+
+<View
+        style={{
+          flexDirection: 'row',
+          flexWrap: 'wrap',
+        }}>
+        {tripInput.users && tripInput.users.map((item, index) => (
+          <Chip
+            key={index}
+            borderRadius={22}
+            label={item.name}
+            labelStyle={styles.chipLabel}
+            iconStyle={{width: 16, height: 16}}
+            avatarProps={{source: {uri:item.image}, size: 28}}
+            onDismiss={() => removeUser(item.id)}
+            dismissIconStyle={{width: 10, height: 10,}}
+            dismissColor='white'
+            containerStyle={[
+              styles.chip
+            ,{padding:3, marginBottom:10}]}
+          />
+        ))}
+      </View>
 
             <TextField
               fieldStyle={styles.field}
