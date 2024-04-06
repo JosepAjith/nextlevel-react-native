@@ -76,7 +76,7 @@ export const styles = StyleSheet.create({
     color: AppColors.Black,
   },
   statusView:{
-    backgroundColor:'#BBFD79',
+    // backgroundColor:'#BBFD79',
     padding:5,
     borderRadius:15,
     marginLeft:5

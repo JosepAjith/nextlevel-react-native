@@ -1,5 +1,5 @@
-import React, {useEffect, useState} from 'react';
-import {Button, Image, Text, View} from 'react-native-ui-lib';
+import React, { useEffect, useState } from 'react';
+import { Button, Image, Text, View } from 'react-native-ui-lib';
 import AppStyles from '../constants/AppStyles';
 import {
   Animated,
@@ -16,10 +16,10 @@ import {
   getDateTime,
   getUserDate,
 } from '../constants/commonUtils';
-import {RouteNames} from '../navigation';
-import {styles} from '../screens/home/styles';
+import { RouteNames } from '../navigation';
+import { styles } from '../screens/home/styles';
 import AppImages from '../constants/AppImages';
-import {useDispatch} from 'react-redux';
+import { useDispatch } from 'react-redux';
 import Share from 'react-native-share';
 import { reset, urlShare } from '../api/share/ShareUrlSlice';
 import { RootState } from '../../store';
@@ -37,7 +37,7 @@ if (Platform.OS === 'android') {
   }
 }
 
-const ListItem = ({item, index, navigation}: Props) => {
+const ListItem = ({ item, index, navigation }: Props) => {
   const [expandedItems, setExpandedItems] = useState([]);
   const dispatch: ThunkDispatch<RootState, any, AnyAction> = useDispatch();
   const [arrowRotation, setArrowRotation] = useState(new Animated.Value(0));
@@ -60,7 +60,7 @@ const ListItem = ({item, index, navigation}: Props) => {
 
   const shareUrl = async (url: any) => {
 
-  //  const deepLink = 'com.bnbcnxtlevel.app://next-level.prompttechdemohosting.com';
+    //  const deepLink = 'com.bnbcnxtlevel.app://next-level.prompttechdemohosting.com';
     const shareOptions = {
       title: 'Share file',
       message: 'Join here ==>',
@@ -71,7 +71,7 @@ const ListItem = ({item, index, navigation}: Props) => {
       const ShareResponse = await Share.open(shareOptions);
       dispatch(
         urlShare({
-          requestBody: {url:url}
+          requestBody: { url: url }
         }),
       )
         .then(() => {
@@ -86,18 +86,18 @@ const ListItem = ({item, index, navigation}: Props) => {
   return (
     <TouchableOpacity
       onPress={() => {
-        dispatch({type: 'SET_CHIP', payload: 1});
-        navigation.navigate(RouteNames.TripDetails, {id: item.id, isDeepLink: false});
+        dispatch({ type: 'SET_CHIP', payload: 1 });
+        navigation.navigate(RouteNames.TripDetails, { id: item.id, isDeepLink: false });
       }}>
       <View style={styles.view}>
         <ImageBackground
           source={
             item.trip_images.length != 0 && item.trip_images[0].image != ''
-              ? {uri: item.trip_images[0].image}
+              ? { uri: item.trip_images[0].image }
               : AppImages.NOIMAGE
           }
           // source={AppImages.HOME1}
-          style={{width: '100%', height: 150}}
+          style={{ width: '100%', height: 150 }}
           imageStyle={{
             borderTopLeftRadius: 10,
             borderTopRightRadius: 10,
@@ -111,8 +111,8 @@ const ListItem = ({item, index, navigation}: Props) => {
           </View>
 
           <View flex right centerV margin-20>
-            <TouchableOpacity onPress={()=>shareUrl(item.share_url)}>
-            <Image source={AppImages.SHARE} width={30} height={30} /></TouchableOpacity>
+            <TouchableOpacity onPress={() => shareUrl(item.share_url)}>
+              <Image source={AppImages.SHARE} width={30} height={30} /></TouchableOpacity>
           </View>
 
           <TouchableOpacity
@@ -150,50 +150,50 @@ const ListItem = ({item, index, navigation}: Props) => {
 
           <View row right flex centerV>
             <Text style={styles.text1}>Status</Text>
-            <View style={styles.statusView}>
-              <Text style={styles.statusText}>{item.trip_status}</Text>
-            </View>
+            <View style={styles.statusView} backgroundColor={item.trip_status == 'completed' ? '#BBFD79' : item.trip_status == 'ongoing' ? 'orange' : item.trip_status == 'upcoming' ? 'yellow' : item.trip_status == 'cancelled' ? 'red' : '#BBFD79'}>
+            <Text style={styles.statusText}>{item.trip_status}</Text>
           </View>
         </View>
-        {expandedItems[index] && (
-          <View style={styles.bottomView}>
-            <View row marginB-10>
-              <Text style={styles.rightText}>Organizer</Text>
-              <Text style={styles.leftText}>{item.user.name}</Text>
-            </View>
-
-            <View row marginB-10>
-              <Text style={styles.rightText}>Meeting Time</Text>
-              <Text style={styles.leftText}>
-                {formattedTime(item.meeting_time)}
-              </Text>
-            </View>
-
-            <View row marginB-10>
-              <Text style={styles.rightText}>Trip Date</Text>
-              <Text style={styles.leftText}>{getUserDate(item.date)}</Text>
-            </View>
-
-            <View row marginB-10>
-              <Text style={styles.rightText}>City</Text>
-              <Text style={styles.leftText}>{item.city}</Text>
-            </View>
-
-            <View row marginB-10>
-              <Text style={styles.rightText}>Area</Text>
-              <Text style={styles.leftText}>{item.area_details}</Text>
-            </View>
-
-            <View row marginB-10>
-              <Text style={styles.rightText}>Joining deadline</Text>
-              <Text style={styles.leftText}>
-                {getDateTime(item.joining_deadline)}
-              </Text>
-            </View>
-          </View>
-        )}
       </View>
-    </TouchableOpacity>
+      {expandedItems[index] && (
+        <View style={styles.bottomView}>
+          <View row marginB-10>
+            <Text style={styles.rightText}>Organizer</Text>
+            <Text style={styles.leftText}>{item.user.name}</Text>
+          </View>
+
+          <View row marginB-10>
+            <Text style={styles.rightText}>Meeting Time</Text>
+            <Text style={styles.leftText}>
+              {formattedTime(item.meeting_time)}
+            </Text>
+          </View>
+
+          <View row marginB-10>
+            <Text style={styles.rightText}>Trip Date</Text>
+            <Text style={styles.leftText}>{getUserDate(item.date)}</Text>
+          </View>
+
+          <View row marginB-10>
+            <Text style={styles.rightText}>City</Text>
+            <Text style={styles.leftText}>{item.city}</Text>
+          </View>
+
+          <View row marginB-10>
+            <Text style={styles.rightText}>Area</Text>
+            <Text style={styles.leftText}>{item.area_details}</Text>
+          </View>
+
+          <View row marginB-10>
+            <Text style={styles.rightText}>Joining deadline</Text>
+            <Text style={styles.leftText}>
+              {getDateTime(item.joining_deadline)}
+            </Text>
+          </View>
+        </View>
+      )}
+    </View>
+    </TouchableOpacity >
   );
 };
 

@@ -9,7 +9,7 @@ export const styles = StyleSheet.create({
         color: AppColors.Black,
       },
       statusView:{
-        backgroundColor:'#BBFD79',
+        // backgroundColor:'#BBFD79',
         paddingHorizontal:10,
         paddingVertical:5,
         borderRadius:15,
@@ -42,7 +42,7 @@ export const styles = StyleSheet.create({
         fontFamily: AppFonts.REGULAR,
         color: "#FAFAFF",
         lineHeight:18,
-        textAlign:'justify'
+        textAlign:'auto'
       },
       rightText: {
         fontSize: 13,

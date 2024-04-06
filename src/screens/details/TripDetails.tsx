@@ -135,7 +135,7 @@ const TripDetails: React.FC<Props> = ({route}: any) => {
               <View row centerV>
                 <View flex row centerV>
                   <Text style={styles.title}>{tripDetails.data.title}</Text>
-                  <View style={styles.statusView}>
+                  <View style={styles.statusView} backgroundColor={tripDetails.data.trip_status == 'completed' ? '#BBFD79' : tripDetails.data.trip_status == 'ongoing' ? 'orange' : tripDetails.data.trip_status == 'upcoming' ? 'yellow' : tripDetails.data.trip_status == 'cancelled' ? 'red' : '#BBFD79'}>
                     <Text style={styles.statusText}>
                       {tripDetails.data.trip_status}
                     </Text>
@@ -175,13 +175,7 @@ const TripDetails: React.FC<Props> = ({route}: any) => {
                 </View>
               </View>
 
-              <View>
-                <Text style={styles.descrip}>
-                  {tripDetails.data.description}
-                </Text>
-              </View>
-
-              <View marginV-20>
+              <View marginB-20>
                 {renderDetails('Organized By', tripDetails.data.user.name)}
                 {renderDetails('Trip Date', getUserDate(tripDetails.data.date))}
                 {renderDetails(
@@ -378,6 +372,13 @@ const TripDetails: React.FC<Props> = ({route}: any) => {
               </View>
                
 }
+
+<View>
+  <Text style={styles.rightText} marginB-5>Description :- </Text>
+                <Text style={[styles.leftText,{textAlign:'auto'}]}>
+                  {tripDetails.data.description}
+                </Text>
+              </View>
             </View>
           </ScrollView>
         </View>
