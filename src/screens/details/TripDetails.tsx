@@ -305,7 +305,7 @@ const TripDetails: React.FC<Props> = ({route}: any) => {
                               status:
                                 tripDetails.data.level === 'Get To Gether'
                                   ? ''
-                                  : type === tripDetails.data.level
+                                  : type.toLowerCase() === tripDetails.data.level.toLowerCase()
                                   ? ''
                                   : 'support',
                               type: 'join',
@@ -315,7 +315,7 @@ const TripDetails: React.FC<Props> = ({route}: any) => {
                             <Text style={styles.text2}>
                               {tripDetails.data.level === 'Get To Gether'
                                 ? 'Sign in'
-                                : type === tripDetails.data.level
+                                : type.toLowerCase() === tripDetails.data.level.toLowerCase()
                                 ? 'Sign in'
                                 : 'Support Sign in'}
                             </Text>
@@ -361,7 +361,7 @@ const TripDetails: React.FC<Props> = ({route}: any) => {
               />
 
 {tripDetails.data.trip_invitation.length != 0 &&
-              <View style={styles.deadline} marginT-20 paddingH-20>
+              <View style={styles.deadline} marginT-10 paddingH-20>
                 <Text style={styles.text2}>Trip Invitation</Text>
                 {tripDetails.data.trip_invitation.map((item,index)=>(
                   <View key={index} marginT-10 row centerV>
@@ -373,7 +373,7 @@ const TripDetails: React.FC<Props> = ({route}: any) => {
                
 }
 
-<View>
+<View marginT-10>
   <Text style={styles.rightText} marginB-5>Description :- </Text>
                 <Text style={[styles.leftText,{textAlign:'auto'}]}>
                   {tripDetails.data.description}

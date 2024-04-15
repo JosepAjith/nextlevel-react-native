@@ -152,6 +152,7 @@ const AddCar: React.FC<Props> = ({ route }: any) => {
   }
 
   const addingCar = async () => {
+    console.log(carInput.image)
     let formData = new FormData();
     if (id != 0) {
       formData.append('id', carInput.id);
@@ -169,7 +170,7 @@ const AddCar: React.FC<Props> = ({ route }: any) => {
     formData.append('make', carInput.make);
     formData.append('trim', carInput.trim);
     formData.append('model_series', carInput.model_series);
-
+console.log(formData._parts[2])
     dispatch(
       createCar({
         requestBody: formData,

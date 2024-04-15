@@ -216,6 +216,8 @@ const TripMembers: React.FC<Props> = ({route}: any) => {
         renderSectionHeader={({section}) => {
           const {title, data} = section;
           return (
+            <>
+            {data.length != 0 && 
             <View>
               <Text
                 style={{
@@ -238,6 +240,7 @@ const TripMembers: React.FC<Props> = ({route}: any) => {
                 </Text>
               )}
             </View>
+            }</>
           );
         }}
       />

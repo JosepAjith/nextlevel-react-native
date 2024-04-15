@@ -10,6 +10,7 @@ import AppImages from '../../constants/AppImages';
 import {ScrollView, TouchableOpacity} from 'react-native';
 import {Header} from '../../components/Header';
 import Logout from './Logout';
+import DeviceInfo from 'react-native-device-info';
 
 const {TextField} = Incubator;
 
@@ -29,6 +30,7 @@ const SettingsScreen: React.FC<Props> = () => {
   const navigation = useNavigation<SettingsScreenNavigationProps>();
   const [isPersonal, setPersonal] = useState(false);
   const [isLogout, setLogOut] = useState(false);
+  const version = DeviceInfo.getVersion();
 
   const renderOption = (image: any, text: string, onPress: () => void) => (
     <TouchableOpacity onPress={onPress} style={styles.view}>
@@ -102,6 +104,10 @@ const SettingsScreen: React.FC<Props> = () => {
         {renderOption(AppImages.LOGOUT, 'Log out', () => {
           setLogOut(!isLogout);
         })}  
+
+<View marginV-20 center>
+          <Text style={styles.version}>Version {version}</Text>
+        </View>
         </View>
         </ScrollView>
          {isLogout && <Logout close={() => setLogOut(false)} navigation={navigation}/>}

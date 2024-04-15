@@ -67,5 +67,10 @@ export const styles = StyleSheet.create({
         fontSize:14,
         fontFamily:AppFonts.REGULAR
     },
+    version:{
+        fontSize:13,
+        fontFamily:AppFonts.MEDIUM,
+        color:'white'
+    },
 });
 

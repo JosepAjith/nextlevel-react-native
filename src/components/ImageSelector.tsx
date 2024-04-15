@@ -123,6 +123,7 @@ const ImageSelector = (props: {close: any,isItem: any, multi?: any}) => {
               type: responses.type,
               uri: resizedImage.uri,
             };
+            console.log(selectedImage,'compressed image')
             if(multi == true){
             isItem([selectedImage]);
             }
