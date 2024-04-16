@@ -148,7 +148,7 @@ const ImageSelector = (props: {close: any,isItem: any, multi?: any}) => {
           <Text style={[AppStyles.title,{color:'black'}]}>Select image using : </Text>
           <View row marginV-10>
             <TouchableOpacity onPress={handleCameraCapture} style={{flex:1,alignItems:'center'}}>
-              <Image source={AppImages.CAMERA} width={40} height={40}/>
+              <Image source={AppImages.CAMERA} width={42} height={42}/>
               <Text style={AppStyles.text}>Camera</Text>
            </TouchableOpacity>
 
