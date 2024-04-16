@@ -24,11 +24,13 @@ export const apiClient = async (
           Authorization:
             'Bearer ' + (await AsyncStorage.getItem(AppStrings.ACCESS_TOKEN)),
         },
-        timeout: 5000
+        timeout: 30000
       });
       return response;
     } catch (error) {
-      if (error.response) {
+      if (error.code === 'ERR_NETWORK') {
+        showToast('Request timed out');
+      } else if (error.response) {
         // Update UI accordingly
         showToast(error.response.data.message);
         console.log(error.response.data);
@@ -59,14 +61,16 @@ export const SimpleApiClient = async (
         Accept: 'application/json',
         'Content-Type': 'application/json',
       },
-      timeout: 5000
+      timeout: 30000
     });
     return response;
   } catch (error) {
-    if (error.response) {
+    if (error.code === 'ERR_NETWORK') {
+      showToast('Request timed out');
+    } else if (error.response) {
       // Update UI accordingly
       showToast(error.response.data.message);
-      console.log(error.response.data, error.response.status);
+      console.log(error.response.data);
     } else if (error.request) {
       showToast(error.request);
     } else {
@@ -85,6 +89,7 @@ export const ApiFormData = async (
   requestBody: any,
 ) => {
   const isConnected = await NetInfo.fetch().then(state => state.isConnected);
+  console.log(isConnected,'data')
   if (isConnected) {
   try {
     const response = await axios(BASE_URL + endPoint, {
@@ -96,11 +101,13 @@ export const ApiFormData = async (
         Authorization:
           'Bearer ' + (await AsyncStorage.getItem(AppStrings.ACCESS_TOKEN)),
       },
-      timeout: 5000
+       timeout: 30000
     });
     return response;
   } catch (error) {
-    if (error.response) {
+    if (error.code === 'ERR_NETWORK') {
+      showToast('Request timed out');
+    } else if (error.response) {
       // Update UI accordingly
       showToast(error.response.data.message);
       console.log(error.response.data);
@@ -124,7 +131,7 @@ export const getWithAuthCall = async (endPoint: string) => {
       Authorization:
         'Bearer ' + (await AsyncStorage.getItem(AppStrings.ACCESS_TOKEN)),
     },
-    timeout: 5000
+    timeout: 30000
   });
   return response;
 };

@@ -287,7 +287,7 @@ const Attendance = ({
             </TouchableOpacity>
           </View>
 
-          {currentDate.isBetween(TripStart, TripEnd) && (
+          {currentDate.isSameOrAfter(TripStart) && (TripStatus != 'expired' || TripStatus != 'completed' || TripStatus != 'cancelled') && (
             <>
               <View style={styles.divider} />
 

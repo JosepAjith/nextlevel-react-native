@@ -266,7 +266,6 @@ export const createTrip = async (
   requestBody: any, uri: any
 ): Promise<NetworkResponse<AddTripResponse>> => {
   const response = await ApiFormData(uri, 'POST', requestBody);
-
   if (response && response.status) {
     const json = await response.data;
     return {

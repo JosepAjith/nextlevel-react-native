@@ -24,7 +24,6 @@ export const createTrip = createAsyncThunk<
 >('createTrip', async ({requestBody, uri}) => {
   if (requestBody != null) {
     const response = await apiInterface.createTrip(requestBody, uri);
-    
     if (response.kind == 'success') {
       return {
         addTripData: response.body ?? null,

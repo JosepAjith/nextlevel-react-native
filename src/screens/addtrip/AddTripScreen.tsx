@@ -125,8 +125,9 @@ const AddTripScreen: React.FC<Props> = ({route, id, initial}: Props) => {
 
   useEffect(() => {
     if (routeId !== 0 && typeof tripDetails?.data === 'object') {
-      const item = tripDetails?.data;
-      setTrip({
+      const item = tripDetails.data;
+      // Create a new object to hold the updated trip details
+      const updatedTrip = {
         ...tripInput,
         title: item.title,
         city: item.city,
@@ -144,28 +145,34 @@ const AddTripScreen: React.FC<Props> = ({route, id, initial}: Props) => {
         joining_deadline: getDateTime(item.joining_deadline),
         description: item.description,
         passenger: String(item.passenger),
-      });
-      setTrip(prevTripInput => ({
-        ...prevTripInput,
-        image: item.trip_images.map(imageItem => ({
+      };
+  
+      // If trip images exist, filter and update the image property
+      if (item.trip_images) {
+        const filteredImages = item.trip_images.filter(
+          imageItem => imageItem.image && imageItem.image !== '/empty.jpg'
+        );
+        updatedTrip.image = filteredImages.map(imageItem => ({
           uri: imageItem.image,
           type: 'image/png',
           name: 'image.png',
           size: '',
           fileCopyUri: '',
-        })),
-      }));
-        setTrip(prevTripInput => ({
-          ...prevTripInput,
-          users: [
-            ...prevTripInput.users,
-            ...item.trip_invitation.map(inviteItem => ({
-              id: inviteItem.users[0].id,
-              name: inviteItem.users[0].name,
-              image: inviteItem.users[0].image 
-            }))
-          ],
         }));
+      }
+  
+      // Update the users property
+      updatedTrip.users = [
+        ...tripInput.users,
+        ...item.trip_invitation.map(inviteItem => ({
+          id: inviteItem.users[0].id,
+          name: inviteItem.users[0].name,
+          image: inviteItem.users[0].image,
+        })),
+      ];
+  
+      // Set the updated trip details into tripInput
+      setTrip(updatedTrip);
     }
   }, [routeId, tripDetails]);
 

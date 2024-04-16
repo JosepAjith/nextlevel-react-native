@@ -71,9 +71,9 @@ const AddCar: React.FC<Props> = ({ route }: any) => {
       const carDetails = profileDetails.user.cars.find(
         (car: any) => car.id === id,
       );
-      if (carDetails) {
-        // Set the car details into carInput
-        setCar({
+      if (carDetails) {  
+        // Create a new object to hold the updated car details
+        const updatedCar = {
           ...carInput,
           id: id,
           model_name: carDetails.model_name,
@@ -81,18 +81,24 @@ const AddCar: React.FC<Props> = ({ route }: any) => {
           make: carDetails.make,
           trim: carDetails.trim,
           model_series: carDetails.model_series,
-          image: {
+        };
+        
+        // If image exists and is not '/empty.jpg', add it to the updatedCar object
+        if (carDetails.image && carDetails.image !== '/empty.jpg') {
+          updatedCar.image = {
             uri: carDetails.image,
             type: 'image/png',
             name: 'image.png',
             size: '',
             fileCopyUri: '',
-          },
-        });
+          };
+        }
+  
+        // Set the updated car details into carInput
+        setCar(updatedCar);
       }
     }
   }, [id, profileDetails]);
-
 
   function isValidate(): boolean {
     if (!IsNetConnected) {
