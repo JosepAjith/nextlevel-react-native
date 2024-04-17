@@ -55,52 +55,68 @@ export const styles = StyleSheet.create({
     bottom: -10,
   },
   text1: {
-    fontSize: 14,
+    fontSize: 12,
     fontFamily: AppFonts.REGULAR,
     color: AppColors.Black,
   },
   capty: {
-    fontSize: 10,
+    fontSize: 8,
     fontFamily: AppFonts.REGULAR,
     color: 'white',
   },
-  capView:{
-    backgroundColor:AppColors.Black,
-    padding:5,
-    marginLeft:5,
-    borderRadius:15
+  capView: {
+    backgroundColor: AppColors.Black,
+    padding: 5,
+    marginLeft: 5,
+    borderRadius: 15,
   },
   statusText: {
-    fontSize: 10,
+    fontSize: 8,
     fontFamily: AppFonts.MEDIUM,
     color: AppColors.Black,
   },
-  statusView:{
+  statusView: {
     // backgroundColor:'#BBFD79',
-    padding:5,
-    borderRadius:15,
-    marginLeft:5
+    padding: 5,
+    borderRadius: 15,
+    marginLeft: 5,
   },
   leftText: {
     fontSize: 12,
     fontFamily: AppFonts.REGULAR,
-    color: "#000000",
-    flex:1
+    color: '#000000',
+    flex: 1,
   },
   rightText: {
     fontSize: 12,
     fontFamily: AppFonts.MEDIUM,
-    color: "#000000",
-    flex:1
+    color: '#000000',
+    flex: 1,
   },
-  bottomView:{
-    borderTopColor:AppColors.Orange,
-    borderTopWidth:1,
-    backgroundColor:'white',
-    paddingTop:10,
-    paddingHorizontal:15,
-    borderBottomLeftRadius:10,
-    borderBottomRightRadius:10
-  }
-
+  bottomView: {
+    borderTopColor: AppColors.Orange,
+    borderTopWidth: 1,
+    backgroundColor: 'white',
+    paddingTop: 10,
+    paddingHorizontal: 15,
+    borderBottomLeftRadius: 10,
+    borderBottomRightRadius: 10,
+  },
+  levelView: {
+    backgroundColor: 'white',
+    borderWidth: 0.4,
+    borderColor: 'black',
+    width: 60,
+    height: 10,
+    borderRadius: 10,
+    flexDirection: 'row',
+    marginLeft:5,
+    top:1,
+  },
+  separator: {
+    borderLeftColor: 'black',
+    borderLeftWidth: 0.4,
+    borderRightColor: 'black',
+    borderRightWidth: 0.4,
+  },
 });

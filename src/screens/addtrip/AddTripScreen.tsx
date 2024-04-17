@@ -74,7 +74,7 @@ const Level = [
   {type: 'Intermediate Exam', id: 'Intermediate Exam'},
   {type: 'Intermediate', id: 'Intermediate'},
   {type: 'Intermediate+', id: 'Intermediate+'},
-  {type: 'Advance Exam', id: 'Advance Exam'},
+  {type: 'Advanced Exam', id: 'Advanced Exam'},
   {type: 'Advanced', id: 'Advanced'},
   {type: 'Get To Gether', id: 'Get To Gether'},
 ];

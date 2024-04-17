@@ -80,10 +80,14 @@ const BottomTabs = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const type = await AsyncStorage.getItem(AppStrings.TYPE);
       const id = await AsyncStorage.getItem(AppStrings.LOGIN_USER_ID);
-      if (type !== null) {
-        dispatch({type: 'SET_TYPE', payload: type});
+      const type = await dispatch(fetchProfileDetails({requestBody: ''}));
+      const types = await AsyncStorage.getItem(AppStrings.TYPE);
+        if (fetchProfileDetails.fulfilled.match(type)) {
+        dispatch({type: 'SET_TYPE', payload: type.payload.profileDetails.user.level});
+      }
+      else{
+        dispatch({type: 'SET_TYPE', payload: types});
       }
       if (id !== null) {
         dispatch({type: 'SET_LOGIN_USER_ID', payload: Number(id)});

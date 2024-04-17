@@ -101,5 +101,5 @@ marginLeft:20
         padding:8,
         borderRadius:5,
         backgroundColor:'rgba(228,228,228,0.6)'
-      }
+      },
 });

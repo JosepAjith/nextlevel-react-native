@@ -26,7 +26,7 @@ const TripFilter = (props: {close: any, selected: any}) => {
     {id: 4, status: 'Intermediate'},
     {id: 5, status: 'Intermediate Exam'},
     {id: 6, status: 'Intermediate+'},
-    {id: 7, status: 'Advance Exam'},
+    {id: 7, status: 'Advanced Exam'},
     {id: 8, status: 'Advanced'},
     {id: 9, status: 'Explorer'},
     {id: 10, status: 'Marshal'},

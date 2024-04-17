@@ -49,15 +49,15 @@ export type UserListRouteProps = RouteProp<RootStackParams, 'UserList'>;
 
 interface Props {}
 const User = [
-  'First Join',
-  'newbie',
-  'newbie+',
-  'Intermediate Exam',
-  'Intermediate Exam',
-  'Intermediate+',
-  'Advance Exam',
-  'Advanced',
-  'Explorer',
+  "First Join",
+  "newbie",
+  "newbie+",
+  "Intermediate Exam",
+  "Intermediate",
+  "Intermediate+",
+  "Advanced Exam",
+  "Advanced",
+  "Explorer"
 ];
 
 const Level = [
@@ -67,7 +67,7 @@ const Level = [
   {type: 'Intermediate Exam', id: 'Intermediate Exam'},
   {type: 'Intermediate', id: 'Intermediate'},
   {type: 'Intermediate+', id: 'Intermediate+'},
-  {type: 'Advance Exam', id: 'Advance Exam'},
+  {type: 'Advanced Exam', id: 'Advanced Exam'},
   {type: 'Advanced', id: 'Advanced'},
 ];
 
@@ -152,6 +152,7 @@ const UserList: React.FC<Props> = () => {
 
   useEffect(() => {
     if (updateRoleData != null) {
+      console.log(updateRoleData)
       if (!loadingRoleUpdate && !roleUpdateError && updateRoleData.status) {
         showToast(updateRoleData.message);
         FetchList(1);

@@ -27,6 +27,7 @@ import {cancelTrip, reset} from '../../api/joinTrip/TripCancelSlice';
 import BackgroundLoader from '../../components/BackgroundLoader';
 import ButtonView from '../../components/ButtonView';
 import {deleteReset, deleteTrip} from '../../api/trip/TripDeleteSlice';
+import LevelView from '../../components/LevelView';
 
 const {TextField} = Incubator;
 
@@ -135,7 +136,19 @@ const TripDetails: React.FC<Props> = ({route}: any) => {
               <View row centerV>
                 <View flex row centerV>
                   <Text style={styles.title}>{tripDetails.data.title}</Text>
-                  <View style={styles.statusView} backgroundColor={tripDetails.data.trip_status == 'completed' ? '#BBFD79' : tripDetails.data.trip_status == 'ongoing' ? 'orange' : tripDetails.data.trip_status == 'upcoming' ? 'yellow' : tripDetails.data.trip_status == 'cancelled' ? 'red' : '#BBFD79'}>
+                  <View
+                    style={styles.statusView}
+                    backgroundColor={
+                      tripDetails.data.trip_status == 'completed'
+                        ? '#BBFD79'
+                        : tripDetails.data.trip_status == 'ongoing'
+                        ? 'orange'
+                        : tripDetails.data.trip_status == 'upcoming'
+                        ? 'yellow'
+                        : tripDetails.data.trip_status == 'cancelled'
+                        ? 'red'
+                        : '#BBFD79'
+                    }>
                     <Text style={styles.statusText}>
                       {tripDetails.data.trip_status}
                     </Text>
@@ -170,8 +183,9 @@ const TripDetails: React.FC<Props> = ({route}: any) => {
                   </View>
                 </View>
 
-                <View>
+                <View row centerV>
                   <Text style={styles.text1}>{tripDetails.data.level}</Text>
+                  <LevelView level={tripDetails.data.level} />
                 </View>
               </View>
 
@@ -193,6 +207,10 @@ const TripDetails: React.FC<Props> = ({route}: any) => {
                 {renderDetails(
                   'Finish Time',
                   formattedTime(tripDetails.data.finish_time),
+                )}
+                {renderDetails(
+                  'Total Support Count',
+                  tripDetails.data.trip_book_support_count.toString(),
                 )}
                 <View row marginB-10>
                   <Text style={styles.rightText}>Starting Point</Text>
@@ -305,7 +323,8 @@ const TripDetails: React.FC<Props> = ({route}: any) => {
                               status:
                                 tripDetails.data.level === 'Get To Gether'
                                   ? ''
-                                  : type.toLowerCase() === tripDetails.data.level.toLowerCase()
+                                  : type.toLowerCase() ===
+                                    tripDetails.data.level.toLowerCase()
                                   ? ''
                                   : 'support',
                               type: 'join',
@@ -315,7 +334,8 @@ const TripDetails: React.FC<Props> = ({route}: any) => {
                             <Text style={styles.text2}>
                               {tripDetails.data.level === 'Get To Gether'
                                 ? 'Sign in'
-                                : type.toLowerCase() === tripDetails.data.level.toLowerCase()
+                                : type.toLowerCase() ===
+                                  tripDetails.data.level.toLowerCase()
                                 ? 'Sign in'
                                 : 'Support Sign in'}
                             </Text>
@@ -360,22 +380,32 @@ const TripDetails: React.FC<Props> = ({route}: any) => {
                 }
               />
 
-{tripDetails.data.trip_invitation.length != 0 &&
-              <View style={styles.deadline} marginT-10 paddingH-20>
-                <Text style={styles.text2}>Trip Invitation</Text>
-                {tripDetails.data.trip_invitation.map((item,index)=>(
-                  <View key={index} marginT-10 row centerV>
-                    <Image source={item.users[0].image ? {uri:item.users[0].image} : AppImages.NOIMAGE} style={{width:30,height:30, borderRadius:20}}/>
-                    <Text style={styles.text2} marginL-10>{item.users[0].name}</Text>
+              {tripDetails.data.trip_invitation.length != 0 && (
+                <View style={styles.deadline} marginT-10 paddingH-20>
+                  <Text style={styles.text2}>Trip Invitation</Text>
+                  {tripDetails.data.trip_invitation.map((item, index) => (
+                    <View key={index} marginT-10 row centerV>
+                      <Image
+                        source={
+                          item.users[0].image
+                            ? {uri: item.users[0].image}
+                            : AppImages.NOIMAGE
+                        }
+                        style={{width: 30, height: 30, borderRadius: 20}}
+                      />
+                      <Text style={styles.text2} marginL-10>
+                        {item.users[0].name}
+                      </Text>
                     </View>
-                ))}
-              </View>
-               
-}
+                  ))}
+                </View>
+              )}
 
-<View marginT-10>
-  <Text style={styles.rightText} marginB-5>Description :- </Text>
-                <Text style={[styles.leftText,{textAlign:'auto'}]}>
+              <View marginT-10>
+                <Text style={styles.rightText} marginB-5>
+                  Description{' '}
+                </Text>
+                <Text style={[styles.leftText, {textAlign: 'auto'}]}>
                   {tripDetails.data.description}
                 </Text>
               </View>
