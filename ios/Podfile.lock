@@ -1109,6 +1109,8 @@ PODS:
     - React-Core
   - RNDateTimePicker (7.6.2):
     - React-Core
+  - RNDeviceInfo (10.13.1):
+    - React-Core
   - RNGestureHandler (2.15.0):
     - glog
     - RCT-Folly (= 2022.05.16.00)
@@ -1193,6 +1195,7 @@ DEPENDENCIES:
   - "RNCAsyncStorage (from `../node_modules/@react-native-async-storage/async-storage`)"
   - "RNCPushNotificationIOS (from `../node_modules/@react-native-community/push-notification-ios`)"
   - "RNDateTimePicker (from `../node_modules/@react-native-community/datetimepicker`)"
+  - RNDeviceInfo (from `../node_modules/react-native-device-info`)
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - RNPermissions (from `../node_modules/react-native-permissions`)
   - RNReanimated (from `../node_modules/react-native-reanimated`)
@@ -1330,6 +1333,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-community/push-notification-ios"
   RNDateTimePicker:
     :path: "../node_modules/@react-native-community/datetimepicker"
+  RNDeviceInfo:
+    :path: "../node_modules/react-native-device-info"
   RNGestureHandler:
     :path: "../node_modules/react-native-gesture-handler"
   RNPermissions:
@@ -1408,6 +1413,7 @@ SPEC CHECKSUMS:
   RNCAsyncStorage: 014a78b2cc8cc107c9e92ee428dc0c1ac3223416
   RNCPushNotificationIOS: 64218f3c776c03d7408284a819b2abfda1834bc8
   RNDateTimePicker: fc2e4f2795877d45e84d85659bebe627eba5c931
+  RNDeviceInfo: 4f9c7cfd6b9db1b05eb919620a001cf35b536423
   RNGestureHandler: deda62b8339496ba721a45e0f3e2d7a319932cee
   RNPermissions: 58ee5afa4777d05c5922b80cd85171d5ec9e0ce9
   RNReanimated: beb07f7f900543928467da8107c175d1e57a1049
