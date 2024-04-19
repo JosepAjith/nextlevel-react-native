@@ -7,7 +7,7 @@ import {useNavigation} from '@react-navigation/native';
 import AppColors from '../../constants/AppColors';
 import {styles} from './styles';
 import AppImages from '../../constants/AppImages';
-import {ScrollView, TouchableOpacity} from 'react-native';
+import {Linking, ScrollView, TouchableOpacity} from 'react-native';
 import {Header} from '../../components/Header';
 import Logout from './Logout';
 import DeviceInfo from 'react-native-device-info';
@@ -35,7 +35,7 @@ const SettingsScreen: React.FC<Props> = () => {
   const renderOption = (image: any, text: string, onPress: () => void) => (
     <TouchableOpacity onPress={onPress} style={styles.view}>
       <View row flex left centerV>
-        <Image source={image} width={24} height={24} />
+        <Image source={image} width={28} height={28} />
         <Text
           style={[styles.name, text === 'Log out' && {color: '#FF6565'}]}
           marginL-20>
@@ -97,7 +97,12 @@ const SettingsScreen: React.FC<Props> = () => {
           and safety. Embrace a diverse off-road community in the UAE's stunning
           landscapes.
         </Text>
-        <View marginV-20>
+
+        {renderOption(AppImages.PRIVACY, 'Privacy Policy', () =>
+          Linking.openURL('https://next-level.prompttechdemohosting.com/privacy-policy'),
+        )}
+
+        <View marginB-20>
           <Text style={styles.title}>Login</Text>
         </View>
         {renderOption(AppImages.DELETE, 'Delete Account', () => { navigation.navigate(RouteNames.DeleteAccount)})}

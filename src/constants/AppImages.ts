@@ -47,6 +47,7 @@ NONOTIF: require('../images/noNotif.png'),
 REMOVE: require('../images/remove.png'),
 PLACEHOLDER: require('../images/placeholder.png'),
 NOIMAGE: require('../images/nullImage.jpg'),
+PRIVACY: require('../images/privacy.png'),
 }
 
 export default AppImages;
