@@ -229,6 +229,10 @@ const TripDetails: React.FC<Props> = ({route}: any) => {
                 {renderDetails('City', tripDetails.data.city)}
                 {renderDetails('Area', tripDetails.data.area_details)}
                 {renderDetails(
+                  'Passengers allowed',
+                  tripDetails.data.passenger.toString(),
+                )}
+                {renderDetails(
                   'Joining start',
                   getDateTime(tripDetails.data.joining_start_date),
                 )}
@@ -336,7 +340,12 @@ const TripDetails: React.FC<Props> = ({route}: any) => {
                                 ? 'Sign in'
                                 : type.toLowerCase() ===
                                   tripDetails.data.level.toLowerCase()
-                                ? 'Sign in'
+                                ? Number(tripDetails.data.capacity) !==
+                                  Number(
+                                    tripDetails.data.trip_book_joined_count,
+                                  )
+                                  ? 'Sign in'
+                                  : 'Sign in waiting'
                                 : 'Support Sign in'}
                             </Text>
                           </View>

@@ -152,7 +152,6 @@ const UserList: React.FC<Props> = () => {
 
   useEffect(() => {
     if (updateRoleData != null) {
-      console.log(updateRoleData)
       if (!loadingRoleUpdate && !roleUpdateError && updateRoleData.status) {
         showToast(updateRoleData.message);
         FetchList(1);

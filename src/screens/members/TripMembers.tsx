@@ -158,8 +158,8 @@ const TripMembers: React.FC<Props> = ({route}: any) => {
                 </Text>
 
                 {userId === loginUserId &&
-                  section.title === 'Joined' &&
-                  status == 'ongoing' && (
+                  (section.title === 'Joined' || section.title === 'Support') &&
+                  (status == 'ongoing' || status == 'upcoming') && (
                     <TouchableOpacity
                       onPress={() => {
                         setSelectedMember({
@@ -178,7 +178,7 @@ const TripMembers: React.FC<Props> = ({route}: any) => {
                     </TouchableOpacity>
                   )}
 
-                {userId === loginUserId && section.title === 'Waiting list' && (
+                {userId === loginUserId && section.title === 'Waiting list' && (status == 'ongoing' || status == 'upcoming') && (
                   <TouchableOpacity
                     onPress={() => {
                       setSelectedMember({

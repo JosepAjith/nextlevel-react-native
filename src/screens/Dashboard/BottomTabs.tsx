@@ -71,14 +71,14 @@ const BottomTabs = () => {
 
   useFocusEffect(
     useCallback(() => {
-      dispatch(fetchProfileDetails({requestBody: ''}));
       dispatch({type: 'SET_FILTER_VALUE', payload: ''});
       dispatch({type: 'SET_CHIP', payload: 1});
       dispatch({type: 'SET_USER_ID', payload: 0});
     }, [dispatch]),
   );
 
-  useEffect(() => {
+  useFocusEffect(
+    useCallback(() => {
     const fetchData = async () => {
       const id = await AsyncStorage.getItem(AppStrings.LOGIN_USER_ID);
       const type = await dispatch(fetchProfileDetails({requestBody: ''}));
@@ -94,7 +94,8 @@ const BottomTabs = () => {
       }
     };
     fetchData();
-  }, []);
+  }, []),
+);
 
   const FilterClose = () => {
     dispatch({type: 'IS_FILTER', payload: false});

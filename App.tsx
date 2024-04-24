@@ -7,7 +7,7 @@
 
 import * as React from 'react';
 
-import {SafeAreaView, StyleSheet} from 'react-native';
+import {PermissionsAndroid, Platform, SafeAreaView, StyleSheet} from 'react-native';
 import PushNotification, {Importance} from 'react-native-push-notification';
 import PushNotificationIOS from '@react-native-community/push-notification-ios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -16,11 +16,12 @@ import {Provider} from 'react-redux';
 import AppStrings from './src/constants/AppStrings';
 import Navigation from './src/navigation/Navigation';
 import {RouteNames} from './src/navigation/Routes';
+import { showToast } from './src/constants/commonUtils';
 
 export default class App extends React.Component {
 
   componentDidMount(): void {
-    
+    this.checkApplicationPermission();
     PushNotification.createChannel(
       {
         channelId: 'nxtlevel_channel_id', // Replace with your chosen channel ID
@@ -94,6 +95,23 @@ export default class App extends React.Component {
     //     channelId: 'nxtlevel_channel_id',
     //   });
     // }, 5000); // Send the notification after 5 seconds
+  }
+
+   checkApplicationPermission = async () => {
+    const version = Platform.Version;
+    if (Platform.OS === 'android' && version > 31) {
+      try {
+        const granted = await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS,
+        );
+        if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+          showToast('Notification permission allowed');
+        } else {
+          showToast('Notification permission denied');
+        }
+      } catch (error) {
+      }
+    }
   }
 
   render() {
