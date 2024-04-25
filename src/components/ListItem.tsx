@@ -169,7 +169,7 @@ const ListItem = ({item, index, navigation}: Props) => {
                   ? 'red'
                   : '#BBFD79'
               }>
-              <Text style={styles.statusText}>{item.trip_status}</Text>
+              <Text style={styles.statusText}>{item.trip_status == 'completed' ? 'closed' : item.trip_status}</Text>
             </View>
           </View>
         </View>

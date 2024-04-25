@@ -48,6 +48,7 @@ REMOVE: require('../images/remove.png'),
 PLACEHOLDER: require('../images/placeholder.png'),
 NOIMAGE: require('../images/nullImage.jpg'),
 PRIVACY: require('../images/privacy.png'),
+LOGO: require('../images/logo.png'),
 }
 
 export default AppImages;

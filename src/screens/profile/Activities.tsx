@@ -19,6 +19,7 @@ const Activities = ({navigation, data, isReplace}: Props) => {
   const {type, userId} = useSelector(
     (state: RootState) => state.GlobalVariables,
   );
+
   const dispatch = useDispatch();
 
   const renderData = () => {
@@ -26,7 +27,7 @@ const Activities = ({navigation, data, isReplace}: Props) => {
       <TouchableOpacity
         onPress={() => {
           if (value > 0) {
-            navigation.navigate(RouteNames.UserTrips, {status: title});
+            navigation.navigate(RouteNames.UserTrips, {status: title, userId: userId});
           }
         }}>
         <View

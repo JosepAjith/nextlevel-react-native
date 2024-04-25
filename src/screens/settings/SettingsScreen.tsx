@@ -112,6 +112,7 @@ const SettingsScreen: React.FC<Props> = () => {
 
 <View marginV-20 center>
           <Text style={styles.version}>Version {version}</Text>
+          <Image source={AppImages.LOGO} marginT-20 width={130} height={80}/>
         </View>
         </View>
         </ScrollView>

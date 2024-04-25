@@ -26,6 +26,7 @@ interface Props {}
 const UserTrips: React.FC<Props> = ({route}: any) => {
   const navigation = useNavigation<UserTripsNavigationProps>();
   const status = route.params.status;
+  const userId = route.params.userId;
   const dispatch: ThunkDispatch<RootState, any, AnyAction> = useDispatch();
   const {trip, loadingTrip, tripError} = useSelector(
     (state: RootState) => state.TripList,
@@ -38,17 +39,27 @@ const UserTrips: React.FC<Props> = ({route}: any) => {
     React.useCallback(() => {
       fetchList();
 
-      return () => {
-      };
+      return () => {};
     }, []),
   );
 
   const fetchList = () => {
     if (IsNetConnected) {
-      let request = JSON.stringify({
-        status:status
-      });
-      dispatch(fetchTripList({requestBody: request, uri: 'user-trip/status-wise'}))
+      let request;
+      if (userId) {
+        request = JSON.stringify({
+          status: status,
+          id: userId,
+        });
+      } else {
+        request = JSON.stringify({
+          status: status,
+        });
+      }
+      console.log(request)
+      dispatch(
+        fetchTripList({requestBody: request, uri: 'user-trip/status-wise'}),
+      );
     }
   };
 
@@ -57,7 +68,9 @@ const UserTrips: React.FC<Props> = ({route}: any) => {
       <Header
         title={status + ' Trips'}
         rightIcon={AppImages.REFRESH}
-        rightOnpress={() => {fetchList()}}
+        rightOnpress={() => {
+          fetchList();
+        }}
       />
       {loadingTrip && <BackgroundLoader />}
 

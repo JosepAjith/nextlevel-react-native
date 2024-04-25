@@ -150,7 +150,7 @@ const TripDetails: React.FC<Props> = ({route}: any) => {
                         : '#BBFD79'
                     }>
                     <Text style={styles.statusText}>
-                      {tripDetails.data.trip_status}
+                      {tripDetails.data.trip_status == 'completed' ? 'closed' : tripDetails.data.trip_status}
                     </Text>
                   </View>
                 </View>

@@ -62,6 +62,7 @@ const ProfileScreen: React.FC<Props> = ({isReplace}: Props) => {
     }, []),
   );
 
+
   return (
     <ScrollView style={{backgroundColor: AppColors.Black}}>
       <View flex backgroundColor={AppColors.Black} padding-20>
