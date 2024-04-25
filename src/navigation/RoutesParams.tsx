@@ -27,5 +27,6 @@ NotificationScreen: undefined;
 BroadcastScreen: {id: any,userId: any};
 MapScreen: {setPlaceLocation?: any, type: any, lat: any, long: any};
 DeleteAccount: undefined;
-UserPicker:{level: any,onSelectUsers: any, selectUsers: any}
+UserPicker:{level: any,onSelectUsers: any, selectUsers: any};
+UserTrips: {status: any};
 };

@@ -177,7 +177,7 @@ const TripDetails: React.FC<Props> = ({route}: any) => {
                   <Text style={styles.text1}>Capacity</Text>
                   <View style={styles.capView}>
                     <Text style={styles.capty}>
-                      {tripDetails.data.trip_book_joined_count}/
+                      {tripDetails.data.trip_book_joined_count}{' '}/{' '}
                       {tripDetails.data.capacity}
                     </Text>
                   </View>

@@ -42,6 +42,7 @@ const MarshalList: React.FC<Props> = () => {
   const itemWidth = (windowWidth - 50) / 2;
   const dispatch: ThunkDispatch<RootState, any, AnyAction> = useDispatch();
   const [marshList, setMarshList] = useState([]);
+  const [marshalCount, setMarshalCount] = useState(0);
   const {users, loadingUsers, usersError} = useSelector(
     (state: RootState) => state.UserList,
   );
@@ -61,25 +62,28 @@ const MarshalList: React.FC<Props> = () => {
   );
 
   const FetchList = (page: number) => {
-    if(IsNetConnected){
-    let request = JSON.stringify({
-      level: Marshals,
-      page: page,
-      title: search
-    });
-    dispatch(fetchUserList({requestBody: request}))
-    .then((response: any) => {
-      if (page === 1) {
-        setMarshList(response.payload.users.data);
-      } else {
-        // Concatenate the new trips with the existing list
-        setMarshList(prevList => prevList.concat(response.payload.users.data));
-      }
-    })
-    .catch((error: any) => {
-      // Handle error
-    });
-  }
+    if (IsNetConnected) {
+      let request = JSON.stringify({
+        level: Marshals,
+        page: page,
+        title: search,
+      });
+      dispatch(fetchUserList({requestBody: request}))
+        .then((response: any) => {
+          if (page === 1) {
+            setMarshalCount(response.payload.users.total_count);
+            setMarshList(response.payload.users.data);
+          } else {
+            // Concatenate the new trips with the existing list
+            setMarshList(prevList =>
+              prevList.concat(response.payload.users.data),
+            );
+          }
+        })
+        .catch((error: any) => {
+          // Handle error
+        });
+    }
   };
 
   return (
@@ -110,6 +114,10 @@ const MarshalList: React.FC<Props> = () => {
           <Image source={AppImages.SEARCH} width={20} height={20} marginR-10 />
         }
       />
+
+      <Text style={[styles.name, {bottom: 10}]}>
+        {'Total Marshals : ' + marshalCount}
+      </Text>
 
       <FlatList
         data={marshList}

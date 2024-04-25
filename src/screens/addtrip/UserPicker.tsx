@@ -28,7 +28,7 @@ const UserPicker = ({route}: any) => {
     const {users, loadingUsers, usersError} = useSelector(
       (state: RootState) => state.UserList,
     );
-console.log(selectUsers,')))))))))))))))))')
+
     useFocusEffect(
         React.useCallback(() => {
           FetchList(1);

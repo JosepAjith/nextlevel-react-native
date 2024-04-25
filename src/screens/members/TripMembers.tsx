@@ -131,6 +131,10 @@ const TripMembers: React.FC<Props> = ({route}: any) => {
         renderItem={({item, index, section}) => {
           return (
             <View row flex style={[styles.marshalView]}>
+              <TouchableOpacity onPress={() => {
+                  dispatch({type: 'SET_USER_ID', payload: item.id});
+                  navigation.navigate(RouteNames.ProfileScreen);
+                }}>
               <View flex>
                 <Image
                   source={
@@ -143,6 +147,7 @@ const TripMembers: React.FC<Props> = ({route}: any) => {
                   }}
                 />
               </View>
+              </TouchableOpacity>
               <View padding-10 center flex>
                 <Text style={styles.name}>{item.name}</Text>
                 <Text style={styles.email}>{item.email}</Text>

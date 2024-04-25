@@ -28,6 +28,7 @@ import MapScreen from '../screens/map/MapScreen';
 import DeleteAccount from '../screens/settings/DeleteAccount';
 import { useNavigation } from '@react-navigation/native';
 import UserPicker from '../screens/addtrip/UserPicker';
+import UserTrips from '../screens/user/UserTrips';
 
 const Stack = createNativeStackNavigator();
 
@@ -93,6 +94,7 @@ const AppStack = () => {
       <Stack.Screen name={RouteNames.MapScreen} component={MapScreen} />
       <Stack.Screen name={RouteNames.DeleteAccount} component={DeleteAccount} />
       <Stack.Screen name={RouteNames.UserPicker} component={UserPicker} />
+      <Stack.Screen name={RouteNames.UserTrips} component={UserTrips} />
     </Stack.Navigator>
   );
 };
