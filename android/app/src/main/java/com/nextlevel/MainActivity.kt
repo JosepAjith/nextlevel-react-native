@@ -1,4 +1,4 @@
-package com.bnbcnxtlevel.app
+package com.nxtlevel.android
 
 import com.facebook.react.ReactActivity
 import com.facebook.react.ReactActivityDelegate

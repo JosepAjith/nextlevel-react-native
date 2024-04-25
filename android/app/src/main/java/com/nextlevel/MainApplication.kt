@@ -1,4 +1,4 @@
-package com.bnbcnxtlevel.app
+package com.nxtlevel.android
 
 import android.app.Application
 import com.facebook.react.PackageList
