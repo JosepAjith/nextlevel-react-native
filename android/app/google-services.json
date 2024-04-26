@@ -7,9 +7,9 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:1096238675733:android:22e02fdfab0be7dbdf5b1c",
+        "mobilesdk_app_id": "1:1096238675733:android:e0783ea5b02c6918df5b1c",
         "android_client_info": {
-          "package_name": "com.bnbcnxtlevel.app"
+          "package_name": "com.nxtlevel.android"
         }
       },
       "oauth_client": [],

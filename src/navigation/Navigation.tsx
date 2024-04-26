@@ -43,7 +43,7 @@ const Navigation = () => {
   const redirectToAppStore = () => {
     const appStoreUrl = Platform.OS === 'ios' ?
       'https://apps.apple.com/app-id/your-app-id' : // Replace 'your-app-id' with your iOS app's ID
-      'market://details?id=com.bnbcnxtlevel.app'; // Replace 'com.yourpackage.name' with your Android app's package name
+      'market://details?id=com.nxtlevel.android'; // Replace 'com.yourpackage.name' with your Android app's package name
 
     Linking.openURL(appStoreUrl)
       .then(() => console.log('Redirected to app store'))
