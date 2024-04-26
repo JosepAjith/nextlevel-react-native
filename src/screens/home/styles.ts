@@ -66,9 +66,11 @@ export const styles = StyleSheet.create({
   },
   capView: {
     backgroundColor: AppColors.Black,
-    padding: 5,
     marginLeft: 5,
-    borderRadius: 15,
+    borderRadius: 10,
+    marginTop: 5,
+    height:16,
+    width:30,
   },
   statusText: {
     fontSize: 8,
@@ -77,9 +79,11 @@ export const styles = StyleSheet.create({
   },
   statusView: {
     // backgroundColor:'#BBFD79',
-    padding: 5,
     borderRadius: 15,
     marginLeft: 5,
+    marginTop: 5,
+    width:50,
+    height:16,
   },
   leftText: {
     fontSize: 12,
@@ -107,11 +111,11 @@ export const styles = StyleSheet.create({
     borderWidth: 0.4,
     borderColor: 'black',
     width: 60,
-    height: 10,
+    height: 15,
     borderRadius: 10,
     flexDirection: 'row',
     marginLeft:5,
-    top:1,
+    marginTop:5
   },
   separator: {
     borderLeftColor: 'black',

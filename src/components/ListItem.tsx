@@ -139,24 +139,33 @@ const ListItem = ({item, index, navigation}: Props) => {
             />
           </TouchableOpacity>
         </ImageBackground>
-        <View row padding-15>
-          <View row left centerV flex>
-            <Text style={[styles.text1,{flex:1}]}>{item.level}</Text>
+        <View row padding-15 style={{justifyContent:'space-between'}}>
+          <View centerH>
+            <Text style={styles.text1}>{item.level}</Text>
             <LevelView level={item.level} />
           </View>
 
-          <View row flex center marginH-10>
+          <View centerH>
             <Text style={styles.text1}>Capacity</Text>
-            <View style={styles.capView}>
+            <View style={styles.capView} center>
               <Text style={styles.capty}>
                 {item.trip_book_joined_count}{' '}/{' '}{item.capacity}
               </Text>
             </View>
           </View>
 
-          <View row right flex centerV>
+          <View centerH>
+            <Text style={styles.text1}>Support</Text>
+            <View style={[styles.capView]} center>
+              <Text style={styles.capty}>
+                {item.trip_book_support_count}
+              </Text>
+            </View>
+          </View>
+
+          <View centerH>
             <Text style={styles.text1}>Status</Text>
-            <View
+            <View center
               style={styles.statusView}
               backgroundColor={
                 item.trip_status == 'completed'
@@ -192,12 +201,12 @@ const ListItem = ({item, index, navigation}: Props) => {
               <Text style={styles.leftText}>{getUserDate(item.date)}</Text>
             </View>
 
-            <View row marginB-10>
+            {/* <View row marginB-10>
               <Text style={styles.rightText}>Total Support Count</Text>
               <Text style={styles.leftText}>
                 {item.trip_book_support_count}
               </Text>
-            </View>
+            </View> */}
 
             <View row marginB-10>
               <Text style={styles.rightText}>City</Text>
