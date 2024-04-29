@@ -106,7 +106,7 @@ const ListItem = ({item, index, navigation}: Props) => {
             borderTopLeftRadius: 10,
             borderTopRightRadius: 10,
           }}>
-            <View style={{ ...StyleSheet.absoluteFillObject, backgroundColor: 'rgba(0, 0, 0, 0.4)' }} />
+            <View style={{ ...StyleSheet.absoluteFillObject, backgroundColor: 'rgba(0, 0, 0, 0.5)' }} />
           <View row margin-20>
             <Text style={styles.viewText}>{item.title}</Text>
             <View flex right>
