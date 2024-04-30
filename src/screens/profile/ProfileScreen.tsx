@@ -88,7 +88,7 @@ const ProfileScreen: React.FC<Props> = ({isReplace}: Props) => {
                 style={{borderRadius: 35}}
               />
             </View>
-            <Text style={styles.name}>{profileDetails?.user.name}</Text>
+            <Text style={styles.name}>{profileDetails?.user.nick_name}</Text>
             <View row marginV-10>
               <Text style={styles.rank}>Rank</Text>
               <View row centerV marginL-20>

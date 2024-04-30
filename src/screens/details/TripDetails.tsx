@@ -190,7 +190,7 @@ const TripDetails: React.FC<Props> = ({route}: any) => {
               </View>
 
               <View marginB-20>
-                {renderDetails('Organized By', tripDetails.data.user.name)}
+                {renderDetails('Organized By', tripDetails.data.user.nick_name)}
                 {renderDetails('Trip Date', getUserDate(tripDetails.data.date))}
                 {renderDetails(
                   'Post Date',

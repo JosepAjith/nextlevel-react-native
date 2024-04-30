@@ -262,9 +262,8 @@ const EditProfile: React.FC<Props> = () => {
   };
 
   const handleConfirm = (date: any) => {
+    setValidate({...profileValidate, isDatePickerVisible: false, InvalidDob: false});
     setProfile({...profileInput, dob: getUserDate(date)});
-    setValidate({...profileValidate, InvalidDob: false});
-    hideDatePicker();
   };
 
   const onCountrySelect = (country: { name: any; }) => {
@@ -348,6 +347,15 @@ const EditProfile: React.FC<Props> = () => {
             <DateTimePickerModal
               isVisible={profileValidate.isDatePickerVisible}
               mode="date"
+              date={
+                profileInput.dob
+                  ? new Date(
+                      moment(profileInput.dob, 'DD-MM-YYYY', false).format(
+                        'YYYY-MM-DD',
+                      ),
+                    )
+                  : new Date()
+              }
               onConfirm={handleConfirm}
               onCancel={hideDatePicker}
             />

@@ -80,7 +80,7 @@ export type User = {
     email_verified_at: string;
     created_at:        string;
     updated_at:        string;
-    nick_name:         null;
+    nick_name:         string;
     phone:             string;
     image:             string;
     type:              string;
@@ -95,5 +95,5 @@ export type User = {
     user_delete:       number;
     level:             string;
     is_admin:          string;
-    fcm_token:         null;
+    fcm_token:         string;
 }

@@ -21,5 +21,6 @@ export class TripValidation {
     isFinishPickerVisible: boolean = false;
     isJoinPickerVisible: boolean = false;
     isDeadlinePickerVisible: boolean = false;
+    dateVisible: any = new Date();
   }
   

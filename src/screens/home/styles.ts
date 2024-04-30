@@ -70,7 +70,7 @@ export const styles = StyleSheet.create({
     borderRadius: 10,
     marginTop: 5,
     height:16,
-    width:30,
+    width:50,
   },
   statusText: {
     fontSize: 8,

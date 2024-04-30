@@ -8,7 +8,7 @@ interface Props {
 }
 
 const Personal = ({data}: Props) => {
-
+console.log(data)
   return (
     <View style={styles.view}>
       <View row style={styles.divider}>

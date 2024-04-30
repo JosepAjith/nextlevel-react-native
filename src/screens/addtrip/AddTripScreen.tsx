@@ -1,11 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {
-  Chip,
-  Image,
-  Incubator,
-  Text,
-  View,
-} from 'react-native-ui-lib';
+import {Chip, Image, Incubator, Text, View} from 'react-native-ui-lib';
 import {RootStackParams, RouteNames} from '../../navigation';
 import {RouteProp} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
@@ -108,9 +102,12 @@ const AddTripScreen: React.FC<Props> = ({route, id, initial}: Props) => {
         ...prevTripInput,
         users: [
           ...prevTripInput.users,
-          ...selectedUsers.filter((selectedUser: any) => 
-            !prevTripInput.users.some((user: any) => user.id === selectedUser.id)
-          )
+          ...selectedUsers.filter(
+            (selectedUser: any) =>
+              !prevTripInput.users.some(
+                (user: any) => user.id === selectedUser.id,
+              ),
+          ),
         ],
       }));
     }
@@ -146,11 +143,11 @@ const AddTripScreen: React.FC<Props> = ({route, id, initial}: Props) => {
         description: item.description,
         passenger: String(item.passenger),
       };
-  
+
       // If trip images exist, filter and update the image property
       if (item.trip_images) {
         const filteredImages = item.trip_images.filter(
-          imageItem => imageItem.image && imageItem.image !== '/empty.jpg'
+          imageItem => imageItem.image && imageItem.image !== '/empty.jpg',
         );
         updatedTrip.image = filteredImages.map(imageItem => ({
           uri: imageItem.image,
@@ -160,7 +157,7 @@ const AddTripScreen: React.FC<Props> = ({route, id, initial}: Props) => {
           fileCopyUri: '',
         }));
       }
-  
+
       // Update the users property
       updatedTrip.users = [
         ...tripInput.users,
@@ -170,7 +167,7 @@ const AddTripScreen: React.FC<Props> = ({route, id, initial}: Props) => {
           image: inviteItem.users[0].image,
         })),
       ];
-  
+
       // Set the updated trip details into tripInput
       setTrip(updatedTrip);
     }
@@ -241,7 +238,11 @@ const AddTripScreen: React.FC<Props> = ({route, id, initial}: Props) => {
       return false;
     }
 
-    if ((tripInput.level == 'Intermediate Exam' || tripInput.level == 'Advance Exam') && tripInput.users.length == 0) {
+    if (
+      (tripInput.level == 'Intermediate Exam' ||
+        tripInput.level == 'Advance Exam') &&
+      tripInput.users.length == 0
+    ) {
       showToast('Users is required if level is ' + tripInput.level);
       return false;
     }
@@ -357,7 +358,10 @@ const AddTripScreen: React.FC<Props> = ({route, id, initial}: Props) => {
     formData.append('longitude', tripInput.longitude);
     formData.append('latitude', tripInput.latitude);
     formData.append('level', tripInput.level);
-    if(tripInput.level == 'Intermediate Exam' || tripInput.level == 'Advance Exam'){
+    if (
+      tripInput.level == 'Intermediate Exam' ||
+      tripInput.level == 'Advance Exam'
+    ) {
       tripInput.users.forEach((user, index) => {
         formData.append(`users_id[]`, user.id);
       });
@@ -393,7 +397,7 @@ const AddTripScreen: React.FC<Props> = ({route, id, initial}: Props) => {
     );
     formData.append('description', tripInput.description);
     formData.append('passenger', tripInput.passenger);
-console.log(formData)
+    console.log(formData);
     dispatch(
       createTrip({
         requestBody: formData,
@@ -407,7 +411,6 @@ console.log(formData)
   };
 
   useEffect(() => {
-    console.log(addTripData)
     if (addTripData != null) {
       if (!loadingAddTrip && !addTripError && addTripData.status) {
         showToast(addTripData.message);
@@ -608,38 +611,41 @@ console.log(formData)
               onChange={(item: any) => {
                 setTrip({...tripInput, level: item});
                 setValidate({...tripValidate, InvalidLevel: false});
-                if (
-                  item == 'Intermediate Exam' ||
-                  item == 'Advance Exam'
-                ) {
-                  navigation.navigate(RouteNames.UserPicker,{level:item, selectUsers: tripInput.users, onSelectUsers: handleSelectedUsers});
+                if (item == 'Intermediate Exam' || item == 'Advance Exam') {
+                  navigation.navigate(RouteNames.UserPicker, {
+                    level: item,
+                    selectUsers: tripInput.users,
+                    onSelectUsers: handleSelectedUsers,
+                  });
                 }
               }}
               error={tripValidate.InvalidLevel}
             />
 
-<View
-        style={{
-          flexDirection: 'row',
-          flexWrap: 'wrap',
-        }}>
-        {tripInput.users && tripInput.users.map((item, index) => (
-          <Chip
-            key={index}
-            borderRadius={22}
-            label={item.name}
-            labelStyle={styles.chipLabel}
-            iconStyle={{width: 16, height: 16}}
-            avatarProps={{source: {uri:item.image}, size: 28}}
-            onDismiss={() => removeUser(item.id)}
-            dismissIconStyle={{width: 10, height: 10,}}
-            dismissColor='white'
-            containerStyle={[
-              styles.chip
-            ,{padding:3, marginBottom:10}]}
-          />
-        ))}
-      </View>
+            <View
+              style={{
+                flexDirection: 'row',
+                flexWrap: 'wrap',
+              }}>
+              {tripInput.users &&
+                tripInput.users.map((item, index) => (
+                  <Chip
+                    key={index}
+                    borderRadius={22}
+                    label={item.name}
+                    labelStyle={styles.chipLabel}
+                    iconStyle={{width: 16, height: 16}}
+                    avatarProps={{source: {uri: item.image}, size: 28}}
+                    onDismiss={() => removeUser(item.id)}
+                    dismissIconStyle={{width: 10, height: 10}}
+                    dismissColor="white"
+                    containerStyle={[
+                      styles.chip,
+                      {padding: 3, marginBottom: 10},
+                    ]}
+                  />
+                ))}
+            </View>
 
             <TextField
               fieldStyle={styles.field}
@@ -687,14 +693,23 @@ console.log(formData)
               <DateTimePickerModal
                 isVisible={tripValidate.isDatePickerVisible}
                 mode="date"
+                date={
+                  tripInput.date
+                    ? new Date(
+                        moment(tripInput.date, 'DD-MM-YYYY', false).format(
+                          'YYYY-MM-DD',
+                        ),
+                      )
+                    : new Date()
+                }
                 minimumDate={new Date()}
                 onConfirm={(date: any) => {
-                  setTrip({...tripInput, date: getUserDate(date)});
                   setValidate({
                     ...tripValidate,
                     InvalidDate: false,
                     isDatePickerVisible: false,
                   });
+                  setTrip({...tripInput, date: getUserDate(date)});
                 }}
                 onCancel={() =>
                   setValidate({...tripValidate, isDatePickerVisible: false})
@@ -726,13 +741,20 @@ console.log(formData)
               <DateTimePickerModal
                 isVisible={tripValidate.isMeetPickerVisible}
                 mode="time"
+                date={
+                  tripInput.meeting_time
+                    ? new Date(
+                        moment(tripInput.meeting_time, 'h:mm A').format(),
+                      )
+                    : new Date()
+                }
                 onConfirm={(date: any) => {
-                  setTrip({...tripInput, meeting_time: getUserTime(date)});
                   setValidate({
                     ...tripValidate,
                     InvalidMeet: false,
                     isMeetPickerVisible: false,
                   });
+                  setTrip({...tripInput, meeting_time: getUserTime(date)});
                 }}
                 onCancel={() =>
                   setValidate({...tripValidate, isMeetPickerVisible: false})
@@ -764,13 +786,18 @@ console.log(formData)
               <DateTimePickerModal
                 isVisible={tripValidate.isStartPickerVisible}
                 mode="time"
+                date={
+                  tripInput.start_time
+                    ? new Date(moment(tripInput.start_time, 'h:mm A').format())
+                    : new Date()
+                }
                 onConfirm={(date: any) => {
-                  setTrip({...tripInput, start_time: getUserTime(date)});
                   setValidate({
                     ...tripValidate,
                     InvalidStart: false,
                     isStartPickerVisible: false,
                   });
+                  setTrip({...tripInput, start_time: getUserTime(date)});
                 }}
                 onCancel={() =>
                   setValidate({...tripValidate, isStartPickerVisible: false})
@@ -802,13 +829,18 @@ console.log(formData)
               <DateTimePickerModal
                 isVisible={tripValidate.isFinishPickerVisible}
                 mode="time"
+                date={
+                  tripInput.finish_time
+                    ? new Date(moment(tripInput.finish_time, 'h:mm A').format())
+                    : new Date()
+                }
                 onConfirm={(date: any) => {
-                  setTrip({...tripInput, finish_time: getUserTime(date)});
                   setValidate({
                     ...tripValidate,
                     InvalidFinish: false,
                     isFinishPickerVisible: false,
                   });
+                  setTrip({...tripInput, finish_time: getUserTime(date)});
                 }}
                 onCancel={() =>
                   setValidate({...tripValidate, isFinishPickerVisible: false})
@@ -844,20 +876,31 @@ console.log(formData)
               <DateTimePickerModal
                 isVisible={tripValidate.isJoinPickerVisible}
                 mode="datetime"
+                date={
+                  tripInput.joining_start_date
+                    ? new Date(
+                        moment(
+                          tripInput.joining_start_date,
+                          'DD-MM-YYYY h:mm A',
+                          true,
+                        ).format('YYYY-MM-DD HH:mm:ss'),
+                      )
+                    : new Date()
+                }
                 minimumDate={new Date()}
                 maximumDate={moment(
                   tripInput.joining_deadline,
                   'DD-MM-YYYY',
                 ).toDate()}
                 onConfirm={(date: any) => {
-                  setTrip({
-                    ...tripInput,
-                    joining_start_date: getDateTime(date),
-                  });
                   setValidate({
                     ...tripValidate,
                     InvalidJoinDate: false,
                     isJoinPickerVisible: false,
+                  });
+                  setTrip({
+                    ...tripInput,
+                    joining_start_date: getDateTime(date),
                   });
                 }}
                 onCancel={() =>
@@ -894,15 +937,26 @@ console.log(formData)
               <DateTimePickerModal
                 isVisible={tripValidate.isDeadlinePickerVisible}
                 mode="datetime"
+                date={
+                  tripInput.joining_deadline
+                    ? new Date(
+                        moment(
+                          tripInput.joining_deadline,
+                          'DD-MM-YYYY h:mm A',
+                          true,
+                        ).format('YYYY-MM-DD HH:mm:ss'),
+                      )
+                    : new Date()
+                }
                 minimumDate={new Date()}
                 maximumDate={moment(tripInput.date, 'DD-MM-YYYY').toDate()}
                 onConfirm={(date: any) => {
-                  setTrip({...tripInput, joining_deadline: getDateTime(date)});
                   setValidate({
                     ...tripValidate,
                     InvalidDeadline: false,
                     isDeadlinePickerVisible: false,
                   });
+                  setTrip({...tripInput, joining_deadline: getDateTime(date)});
                 }}
                 onCancel={() =>
                   setValidate({...tripValidate, isDeadlinePickerVisible: false})

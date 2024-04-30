@@ -158,7 +158,6 @@ const AddCar: React.FC<Props> = ({ route }: any) => {
   }
 
   const addingCar = async () => {
-    console.log(carInput.image)
     let formData = new FormData();
     if (id != 0) {
       formData.append('id', carInput.id);
@@ -209,9 +208,8 @@ console.log(formData._parts[2])
   };
 
   const handleConfirm = (date: any) => {
+    setValidate({ ...carValidate, isDatePickerVisible: false, InvalidYear: false });
     setCar({ ...carInput, purchased_year: getUserDate(date) });
-    setValidate({ ...carValidate, InvalidYear: false });
-    hideDatePicker();
   };
 
   return (
@@ -289,6 +287,15 @@ console.log(formData._parts[2])
             <DateTimePickerModal
               isVisible={carValidate.isDatePickerVisible}
               mode="date"
+              date={
+                carInput.purchased_year
+                  ? new Date(
+                      moment(carInput.purchased_year, 'DD-MM-YYYY', false).format(
+                        'YYYY-MM-DD',
+                      ),
+                    )
+                  : new Date()
+              }
               onConfirm={handleConfirm}
               onCancel={hideDatePicker}
             />
@@ -335,7 +342,7 @@ console.log(formData._parts[2])
           <TextField
             fieldStyle={styles.field}
             label={'Model Series'}
-            placeholder={'Enter modal'}
+            placeholder={'Enter model'}
             placeholderTextColor={'#999999'}
             labelStyle={styles.label}
             style={styles.text}

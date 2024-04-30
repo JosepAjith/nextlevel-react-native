@@ -149,7 +149,7 @@ const TripMembers: React.FC<Props> = ({route}: any) => {
               </View>
               </TouchableOpacity>
               <View padding-10 center flex>
-                <Text style={styles.name}>{item.name}</Text>
+                <Text style={styles.name}>{item.nick_name}</Text>
                 <Text style={styles.email}>{item.email}</Text>
                 <Text style={styles.email}>{item.level}</Text>
                 <Text style={[styles.name, {fontSize: 10}]} marginV-5>

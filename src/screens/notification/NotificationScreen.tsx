@@ -69,6 +69,7 @@ const NotificationScreen: React.FC<Props> = () => {
     );
   };
 
+
   const Delete = async (id: number) => {
     let request = {
       id: id,
@@ -79,6 +80,7 @@ const NotificationScreen: React.FC<Props> = () => {
   };
 
   useEffect(() => {
+    
     if (NotifDeleteData != null) {
       if (!loadingDeleteNotif && !NotifDeleteError && NotifDeleteData.status) {
         dispatch(
@@ -140,8 +142,8 @@ const NotificationScreen: React.FC<Props> = () => {
                       height={32}
                       style={{borderRadius: 16}}
                     />
-                    <View marginL-10>
-                      <Text style={styles.notifText}>{item.message}</Text>
+                    <View marginL-10 width={'90%'}>
+                      <Text style={styles.notifText}>{item.message}safsdf sfsdf sfsdfs</Text>
                       {/* <Text style={styles.notifText1}>{item.text}</Text> */}
                     </View>
                   </View>

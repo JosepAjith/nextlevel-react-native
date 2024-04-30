@@ -156,7 +156,7 @@ const ListItem = ({item, index, navigation}: Props) => {
 
           <View centerH>
             <Text style={styles.text1}>Support</Text>
-            <View style={[styles.capView]} center>
+            <View style={[styles.capView,{width:30}]} center>
               <Text style={styles.capty}>
                 {item.trip_book_support_count}
               </Text>
@@ -186,7 +186,7 @@ const ListItem = ({item, index, navigation}: Props) => {
           <View style={styles.bottomView}>
             <View row marginB-10>
               <Text style={styles.rightText}>Organizer</Text>
-              <Text style={styles.leftText}>{item.user.name}</Text>
+              <Text style={styles.leftText}>{item.user.nick_name}</Text>
             </View>
 
             <View row marginB-10>

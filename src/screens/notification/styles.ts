@@ -17,7 +17,8 @@ export const styles = StyleSheet.create({
     notifText:{
         fontFamily:AppFonts.INTER_MEDIUM,
         fontSize:16,
-        color:AppColors.Black
+        color:AppColors.Black,
+        textAlign:'auto'
     },
     notifText1:{
         fontFamily:AppFonts.INTER_REGULAR,
