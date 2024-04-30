@@ -213,7 +213,7 @@ const TripDetails: React.FC<Props> = ({route}: any) => {
                   tripDetails.data.trip_book_support_count.toString(),
                 )}
                 <View row marginB-10>
-                  <Text style={styles.rightText}>Starting Point</Text>
+                  <Text style={styles.rightText}>Meeting Point</Text>
                   <TouchableOpacity
                     style={{flex: 1}}
                     onPress={() =>

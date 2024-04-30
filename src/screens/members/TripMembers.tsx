@@ -231,7 +231,7 @@ const TripMembers: React.FC<Props> = ({route}: any) => {
                   color: 'white',
                 }}
                 marginB-10>
-                Status: {title}
+                Status: {title == 'Joined' ? 'Main Convey' : title}
               </Text>
               {data.length == 0 && (
                 <Text

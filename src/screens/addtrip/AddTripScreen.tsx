@@ -576,8 +576,8 @@ console.log(formData)
                     ? {paddingVertical: 10}
                     : {paddingVertical: 0},
                 ]}
-                label={'Place Details'}
-                placeholder={'Choose Place details'}
+                label={'Meeting Point Location'}
+                placeholder={'Choose Location'}
                 placeholderTextColor={'#999999'}
                 labelStyle={styles.label}
                 style={styles.text}
