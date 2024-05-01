@@ -102,6 +102,8 @@ android {
     buildTypes {
         debug {
             signingConfig signingConfigs.debug
+                 // Disable autoVerify for debug builds
+            manifestPlaceholders = [autoVerify: "true"]
         }
         release {
             // Caution! In production, you need to generate your own keystore file.
@@ -109,6 +111,8 @@ android {
             signingConfig signingConfigs.release
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
+                   // Enable autoVerify for debug builds
+            manifestPlaceholders = [autoVerify: "true"]
         }
     }
 }
