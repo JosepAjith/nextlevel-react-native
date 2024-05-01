@@ -110,8 +110,7 @@ const TripMembers: React.FC<Props> = ({route}: any) => {
 
   return (
     <View flex backgroundColor={AppColors.Black} padding-20>
-      {userId === loginUserId &&
-      members.find(section => section.title === 'Joined')?.data.length ? (
+      {members.find(section => section.title === 'Joined')?.data.length ? (
         <Header
           title="Trip Members"
           rightIcon={AppImages.CHAT}

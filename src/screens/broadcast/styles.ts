@@ -25,6 +25,12 @@ message:{
     fontFamily:AppFonts.INTER_REGULAR,
     lineHeight:24
 },
+empty:{
+    color:'white',
+    fontSize:16,
+    fontFamily:AppFonts.INTER_MEDIUM,
+    lineHeight:24
+},
 typeView:{
 backgroundColor:'white',
 borderColor:'#979C9E',

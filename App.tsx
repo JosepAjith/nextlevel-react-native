@@ -17,10 +17,33 @@ import AppStrings from './src/constants/AppStrings';
 import Navigation from './src/navigation/Navigation';
 import {RouteNames} from './src/navigation/Routes';
 import { showToast } from './src/constants/commonUtils';
+import SpInAppUpdates, { IAUUpdateKind, StartUpdateOptions } from 'sp-react-native-in-app-updates';
 
 export default class App extends React.Component {
 
   componentDidMount(): void {
+    // //in app updates
+    const inAppUpdates = new SpInAppUpdates(false);
+    if (!__DEV__) {
+      inAppUpdates.checkNeedsUpdate({}).then(result => {
+        if (result.shouldUpdate) {
+          const updateOptions: StartUpdateOptions = Platform.select({
+            ios: {
+              title: 'Update available',
+              message: "There is a new version of the app available on the App Store, do you want to update it?",
+              buttonUpgradeText: 'Update',
+              buttonCancelText: 'Cancel',
+            },
+            android: {
+              updateType: IAUUpdateKind.IMMEDIATE,
+            },
+          });
+          inAppUpdates.startUpdate(updateOptions);
+        }
+      });
+    }
+
+    // Notifications 
     this.checkApplicationPermission();
     PushNotification.createChannel(
       {
@@ -114,6 +137,7 @@ export default class App extends React.Component {
     }
   }
 
+ 
   render() {
     return (
       <SafeAreaView style={styles.container}>

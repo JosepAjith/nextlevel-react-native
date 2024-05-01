@@ -135,6 +135,12 @@ const NotificationScreen: React.FC<Props> = () => {
                       <Image source={AppImages.REMOVE} />
                     </TouchableOpacity>
                   )}>
+                    <TouchableOpacity onPress={()=>{if(item.is_broad_cast){
+                      navigation.navigate(RouteNames.TripDetails, {
+                        id: item.trip_id,
+                        isDeepLink: false,
+                      });
+                    }}}>
                   <View row style={styles.notiFView}>
                     <Image
                       source={AppImages.PLACEHOLDER}
@@ -143,10 +149,11 @@ const NotificationScreen: React.FC<Props> = () => {
                       style={{borderRadius: 16}}
                     />
                     <View marginL-10 width={'90%'}>
-                      <Text style={styles.notifText}>{item.message}safsdf sfsdf sfsdfs</Text>
+                      <Text style={styles.notifText}>{item.message}</Text>
                       {/* <Text style={styles.notifText1}>{item.text}</Text> */}
                     </View>
                   </View>
+                  </TouchableOpacity>
                 </Swipeable>
               );
             }}

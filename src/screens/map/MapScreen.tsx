@@ -132,10 +132,6 @@ const MapScreen: React.FC<Props> = ({route}: any) => {
     <View flex>
       <MapView
         style={{flex: 1}}
-        showsMyLocationButton={true}
-        showsPointsOfInterest={true}
-        showsUserLocation={true}
-        followsUserLocation={true}
         mapType={mapType}
         region={{
           latitude: location?.latitude || 0, // Default latitude (or any value)

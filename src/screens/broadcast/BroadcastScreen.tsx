@@ -56,7 +56,7 @@ const BroadcastScreen: React.FC<Props> = ({route}: any) => {
   const {loginUserId} = useSelector(
     (state: RootState) => state.GlobalVariables,
   );
-
+console.log(notification)
   useFocusEffect(
     React.useCallback(() => {
       getMessages(1);
@@ -140,6 +140,11 @@ const BroadcastScreen: React.FC<Props> = ({route}: any) => {
 
       <View flex backgroundColor="#1B1E1D" style={styles.card}>
         <View flex>
+          {notification?.data.length == 0 ?
+          <View flex center>
+          <Text style={styles.empty}>No messages found.</Text>
+          </View>
+        :
           <FlatList
             data={notifList}
             inverted
@@ -166,6 +171,7 @@ const BroadcastScreen: React.FC<Props> = ({route}: any) => {
             }}
             onStartReached={loadMoreMessages}
           />
+}
         </View>
 
         {userId == loginUserId && (
