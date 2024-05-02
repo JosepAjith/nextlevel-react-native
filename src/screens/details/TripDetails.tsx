@@ -18,6 +18,8 @@ import {fetchTripDetails} from '../../api/trip/TripDetailsSlice';
 import {
   formattedTime,
   getDateTime,
+  getMonthDate,
+  getMonthDateTime,
   getUserDate,
   getUserTime,
   showToast,
@@ -191,10 +193,10 @@ const TripDetails: React.FC<Props> = ({route}: any) => {
 
               <View marginB-20>
                 {renderDetails('Organized By', tripDetails.data.user.nick_name)}
-                {renderDetails('Trip Date', getUserDate(tripDetails.data.date))}
+                {renderDetails('Trip Date', getMonthDate(tripDetails.data.date))}
                 {renderDetails(
                   'Post Date',
-                  getUserDate(tripDetails.data.created_at),
+                  getMonthDate(tripDetails.data.created_at),
                 )}
                 {renderDetails(
                   'Meeting Time',
@@ -234,11 +236,11 @@ const TripDetails: React.FC<Props> = ({route}: any) => {
                 )}
                 {renderDetails(
                   'Joining start',
-                  getDateTime(tripDetails.data.joining_start_date),
+                  getMonthDateTime(tripDetails.data.joining_start_date),
                 )}
                 {renderDetails(
                   'Joining deadline',
-                  getDateTime(tripDetails.data.joining_deadline),
+                  getMonthDateTime(tripDetails.data.joining_deadline),
                 )}
               </View>
 

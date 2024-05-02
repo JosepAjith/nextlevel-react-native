@@ -31,8 +31,17 @@ export const getUserDate = (currentDate: moment.MomentInput) => {
   return moment(currentDate).format('DD-MM-YYYY');
 };
 
+//User Date Format - 27-May-2023
+export const getMonthDate = (currentDate: moment.MomentInput) => {
+  return moment(currentDate).format('DD-MMM-YYYY');
+};
+
 export const getDateTime = (currentDate: moment.MomentInput) => {
   return moment(currentDate).format('DD-MM-YYYY h:mm A');
+};
+
+export const getMonthDateTime = (currentDate: moment.MomentInput) => {
+  return moment(currentDate).format('DD-MMM-YYYY h:mm A');
 };
 
 export const getUserTime = (currentDate: moment.MomentInput) => {

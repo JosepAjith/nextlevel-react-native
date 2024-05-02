@@ -4,7 +4,7 @@ import {styles} from './styles';
 import AppImages from '../../constants/AppImages';
 import {FlatList, TouchableOpacity} from 'react-native';
 import {RouteNames} from '../../navigation';
-import {getUserDate, showToast} from '../../constants/commonUtils';
+import {getMonthDate, getUserDate, showToast} from '../../constants/commonUtils';
 import {AnyAction, ThunkDispatch} from '@reduxjs/toolkit';
 import {RootState} from '../../../store';
 import {useDispatch, useSelector} from 'react-redux';
@@ -22,7 +22,7 @@ const MyCars = ({navigation, data}: Props) => {
     (state: RootState) => state.CarDelete,
   );
   const {userId} = useSelector((state: RootState) => state.GlobalVariables);
-  console.log(data);
+
   const deletingCar = (id: any) => {
     dispatch(deleteCar({requestBody: {id: id}}))
       .then(() => {
@@ -85,7 +85,7 @@ const MyCars = ({navigation, data}: Props) => {
                 </Text>
                 <Text style={[styles.carText, {marginVertical: 5}]}>
                   Purchase Year:{' '}
-                  <Text white>{getUserDate(item.purchased_year)}</Text>
+                  <Text white>{getMonthDate(item.purchased_year)}</Text>
                 </Text>
                 <Text style={[styles.carText]}>
                   Trim: <Text white>{item.trim}</Text>

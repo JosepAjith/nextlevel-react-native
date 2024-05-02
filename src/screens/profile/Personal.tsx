@@ -1,14 +1,13 @@
 import React from 'react';
 import {Button, Image, Text, View} from 'react-native-ui-lib';
 import {styles} from './styles';
-import { getUserDate } from '../../constants/commonUtils';
+import { getMonthDate, getUserDate } from '../../constants/commonUtils';
 
 interface Props {
   data: any
 }
 
 const Personal = ({data}: Props) => {
-console.log(data)
   return (
     <View style={styles.view}>
       <View row style={styles.divider}>
@@ -28,7 +27,7 @@ console.log(data)
       <View row style={styles.divider}>
         <Text style={styles.text}>Date of birth</Text>
         <View flex right>
-          <Text style={[styles.text,{opacity:0.8}]}>{data.dob}</Text>
+          <Text style={[styles.text,{opacity:0.8}]}>{getMonthDate(data.dob)}</Text>
         </View>
       </View>
 
@@ -63,7 +62,7 @@ console.log(data)
       <View row padding-20>
         <Text style={styles.text}>Joining Date</Text>
         <View flex right>
-          <Text style={[styles.text,{opacity:0.8}]}>{getUserDate(data.created_at)}</Text>
+          <Text style={[styles.text,{opacity:0.8}]}>{getMonthDate(data.created_at)}</Text>
         </View>
       </View>
     </View>

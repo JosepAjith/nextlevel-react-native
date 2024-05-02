@@ -15,6 +15,7 @@ import {
 import {
   formattedTime,
   getDateTime,
+  getMonthDate,
   getUserDate,
 } from '../constants/commonUtils';
 import {RouteNames} from '../navigation';
@@ -110,7 +111,7 @@ const ListItem = ({item, index, navigation}: Props) => {
           <View row margin-20>
             <Text style={styles.viewText}>{item.title}</Text>
             <View flex right>
-              <Text style={styles.date}>{getUserDate(item.date)}</Text>
+              <Text style={styles.date}>{getMonthDate(item.date)}</Text>
               <Text style={styles.date}>{formattedTime(item.start_time)}</Text>
             </View>
           </View>
