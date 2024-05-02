@@ -22,6 +22,7 @@ import {
   ImageBackground,
   LayoutAnimation,
   Platform,
+  ScrollView,
   TouchableOpacity,
   UIManager,
 } from 'react-native';
@@ -63,7 +64,7 @@ const MyTripScreen: React.FC<Props> = ({isReplace}: Props) => {
   const {type, IsNetConnected} = useSelector(
     (state: RootState) => state.GlobalVariables,
   );
-  const {filterValue, chip} = useSelector(
+  const {filterValue, chip, openFilter} = useSelector(
     (state: RootState) => state.TripReducer,
   );
   const [scrollY] = useState(new Animated.Value(0));
@@ -103,7 +104,6 @@ const MyTripScreen: React.FC<Props> = ({isReplace}: Props) => {
 
   const fetchList = (page: number) => {
     if (IsNetConnected) {
-      console.log(chip, '++++++++++');
       let request = JSON.stringify({
         //title
         name: search,
@@ -117,6 +117,8 @@ const MyTripScreen: React.FC<Props> = ({isReplace}: Props) => {
             ? 'Created'
             : chip === 3
             ? 'Closed'
+            : chip === 4
+            ? 'cancelled'
             : 'My Trips',
         // perpage: 10,
         page: page,
@@ -194,7 +196,7 @@ const MyTripScreen: React.FC<Props> = ({isReplace}: Props) => {
 
             <View style={{flex: 0.3}} right>
               <TouchableOpacity
-                onPress={() => dispatch({type: 'IS_FILTER', payload: true})}>
+                onPress={() => dispatch({type: 'IS_FILTER', payload: !openFilter})}>
                 <Image source={AppImages.FILTER} width={50} height={50} />
               </TouchableOpacity>
             </View>
@@ -202,7 +204,8 @@ const MyTripScreen: React.FC<Props> = ({isReplace}: Props) => {
         </View>
       )}
 
-      <View row marginB-20>
+      <View row marginB-20 style={{height:30}}>
+        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
         <Chip
           label={'My Trips'}
           onPress={() => setChip(1)}
@@ -234,6 +237,17 @@ const MyTripScreen: React.FC<Props> = ({isReplace}: Props) => {
             chip == 3 && {backgroundColor: 'white'},
           ]}
         />
+
+        <Chip
+          label={'Cancelled Trips'}
+          onPress={() => setChip(4)}
+          labelStyle={[styles.chipLabel, chip == 4 && {color: 'black'}]}
+          containerStyle={[
+            styles.chip,
+            chip == 4 && {backgroundColor: 'white'},
+          ]}
+        />
+        </ScrollView>
       </View>
 
       {!IsNetConnected && (
@@ -243,7 +257,7 @@ const MyTripScreen: React.FC<Props> = ({isReplace}: Props) => {
           </Text>
         </View>
       )}
-
+<View flex>
       <Animated.FlatList
         data={tripList}
         showsVerticalScrollIndicator={false}
@@ -252,7 +266,7 @@ const MyTripScreen: React.FC<Props> = ({isReplace}: Props) => {
         }}
         onEndReached={loadMoreTrips}
         onScroll={handleScroll}
-      />
+      /></View>
     </View>
   );
 };

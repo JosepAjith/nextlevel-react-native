@@ -30,7 +30,7 @@ export const styles = StyleSheet.create({
         paddingHorizontal:10,
         paddingVertical:5,
         marginLeft:10,
-        borderRadius:15
+        borderRadius:15,
       },
       text1: {
         fontSize: 12,

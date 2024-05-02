@@ -30,6 +30,7 @@ import BackgroundLoader from '../../components/BackgroundLoader';
 import ButtonView from '../../components/ButtonView';
 import {deleteReset, deleteTrip} from '../../api/trip/TripDeleteSlice';
 import LevelView from '../../components/LevelView';
+import { fetchMemberList } from '../../api/member/MemberListSlice';
 
 const {TextField} = Incubator;
 
@@ -56,10 +57,14 @@ const TripDetails: React.FC<Props> = ({route}: any) => {
   const {cancelData, loadingCancel, cancelError} = useSelector(
     (state: RootState) => state.TripCancel,
   );
+  const {members} = useSelector(
+    (state: RootState) => state.MemberList,
+  );
 
   useFocusEffect(
     React.useCallback(() => {
       fetchDetails();
+      // fetchMembers();
       if (isDeepLink) {
         // Add back handler for deep link
         const backHandler = BackHandler.addEventListener(
@@ -85,6 +90,14 @@ const TripDetails: React.FC<Props> = ({route}: any) => {
     dispatch(fetchTripDetails({requestBody: request}));
   };
 
+  const fetchMembers= () => {
+    let request = JSON.stringify({
+      trip_id: id,
+      application_status: '',
+    });
+    dispatch(fetchMemberList({requestBody: request}));
+  }
+
   const cancelingTrip = async (book_id: number) => {
     let request = {
       trip_booking_id: book_id,
@@ -109,6 +122,28 @@ const TripDetails: React.FC<Props> = ({route}: any) => {
       }
     }
   }, [cancelData]);
+
+  // const isIdPresentInJoinedOrSupport = () => {
+  //   // Check "Joined" section
+  //   const joinedSection = members.find(section => section.title === "Joined");
+  //   if (joinedSection) {
+  //     const joinedMembers = joinedSection.data;
+  //     const isIdInJoined = joinedMembers.some(member => member.id === loginUserId);
+  //     if (isIdInJoined) {
+  //       return true;
+  //     }
+  //   }
+  
+  //   // Check "Support" section
+  //   const supportSection = members.find(section => section.title === "Support");
+  //   if (supportSection) {
+  //     const supportMembers = supportSection.data;
+  //     const isIdInSupport = supportMembers.some(member => member.id === loginUserId);
+  //     if (isIdInSupport) {
+  //       return true;
+  //     }
+  //   }
+  // };
 
   const renderDetails = (label: string, value: string) => (
     <View row marginB-10>
@@ -175,7 +210,8 @@ const TripDetails: React.FC<Props> = ({route}: any) => {
               </View>
 
               <View row centerV marginV-10>
-                <View flex row centerV>
+                <View flex>
+                <View row centerV>
                   <Text style={styles.text1}>Capacity</Text>
                   <View style={styles.capView}>
                     <Text style={styles.capty}>
@@ -183,6 +219,16 @@ const TripDetails: React.FC<Props> = ({route}: any) => {
                       {tripDetails.data.capacity}
                     </Text>
                   </View>
+                </View>
+
+                <View marginT-10 row centerV>
+                  <Text style={styles.text1}>Support</Text>
+                  <View style={styles.capView}>
+                    <Text style={styles.capty}>
+                      {tripDetails.data.trip_book_support_count.toString()}
+                    </Text>
+                  </View>
+                </View>
                 </View>
 
                 <View row centerV>
@@ -210,10 +256,7 @@ const TripDetails: React.FC<Props> = ({route}: any) => {
                   'Finish Time',
                   formattedTime(tripDetails.data.finish_time),
                 )}
-                {renderDetails(
-                  'Total Support Count',
-                  tripDetails.data.trip_book_support_count.toString(),
-                )}
+                {/* {isIdPresentInJoinedOrSupport() && ( */}
                 <View row marginB-10>
                   <Text style={styles.rightText}>Meeting Point</Text>
                   <TouchableOpacity
@@ -228,6 +271,7 @@ const TripDetails: React.FC<Props> = ({route}: any) => {
                     </Text>
                   </TouchableOpacity>
                 </View>
+                {/* )} */}
                 {renderDetails('City', tripDetails.data.city)}
                 {renderDetails('Area', tripDetails.data.area_details)}
                 {renderDetails(

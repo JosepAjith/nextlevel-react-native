@@ -108,7 +108,7 @@ export const styles = StyleSheet.create({
   chip: {
     borderColor: 'white',
     borderWidth: 1,
-    marginRight:20
+    marginRight:10,
   },
   chipLabel:{
     fontSize:12,

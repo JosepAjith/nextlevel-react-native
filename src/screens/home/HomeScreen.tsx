@@ -136,9 +136,9 @@ const HomeScreen: React.FC<Props> = () => {
         <View center style={styles.notifView}>
           <TouchableOpacity
             onPress={() => navigation.navigate(RouteNames.NotificationScreen)}>
-            <Image source={AppImages.NOTIF} width={18} height={21} />
-            {/* <View style={{position:'absolute', right:13, top:12 }}>
-          <Image source={AppImages.DOT} width={8} height={8}/>
+            <Image source={AppImages.LOGO} width={35} height={28} />
+            {/* <View absT absR style={{bottom:12, right:20}}>
+          <Image source={AppImages.DOT} width={10} height={10}/>
           </View> */}
           </TouchableOpacity>
         </View>
