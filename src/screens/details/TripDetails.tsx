@@ -258,7 +258,7 @@ const TripDetails: React.FC<Props> = ({route}: any) => {
                 )}
                 {/* {isIdPresentInJoinedOrSupport() && ( */}
                 <View row marginB-10>
-                  <Text style={styles.rightText}>Meeting Point</Text>
+                  <Text style={styles.rightText}>Meeting Point Location</Text>
                   <TouchableOpacity
                     style={{flex: 1}}
                     onPress={() =>
