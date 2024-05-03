@@ -46,10 +46,13 @@ interface Props {
 const ProfileScreen: React.FC<Props> = ({isReplace}: Props) => {
   const navigation = useNavigation<ProfileScreenNavigationProps>();
   const [tab, setTab] = useState('personal');
+  const [openTab, setOpenTab] = useState(false);
   const dispatch: ThunkDispatch<RootState, any, AnyAction> = useDispatch();
   const {profileDetails, loadingProfileDetails, profileDetailsError} =
     useSelector((state: RootState) => state.ProfileDetails);
-  const {userId} = useSelector((state: RootState) => state.GlobalVariables);
+  const {userId, type} = useSelector(
+    (state: RootState) => state.GlobalVariables,
+  );
 
   useFocusEffect(
     React.useCallback(() => {
@@ -61,7 +64,6 @@ const ProfileScreen: React.FC<Props> = ({isReplace}: Props) => {
       };
     }, []),
   );
-
 
   return (
     <ScrollView style={{backgroundColor: AppColors.Black}}>
@@ -99,11 +101,12 @@ const ProfileScreen: React.FC<Props> = ({isReplace}: Props) => {
                   length:
                     profileDetails?.user.level == 'Marshal' ||
                     profileDetails?.user.level == 'Super Marshal'
-                      ? 3 :
-                      profileDetails?.user.level == 'Explorer'
-                      ? 2 :
-                      profileDetails?.user.level == 'Advanced'
-                      ? 1 : 0,
+                      ? 3
+                      : profileDetails?.user.level == 'Explorer'
+                      ? 2
+                      : profileDetails?.user.level == 'Advanced'
+                      ? 1
+                      : 0,
                 }).map((_, index) => (
                   <Image
                     key={index}
@@ -128,41 +131,97 @@ const ProfileScreen: React.FC<Props> = ({isReplace}: Props) => {
         </View>
 
         <View style={styles.middle}>
-          <TouchableOpacity onPress={() => setTab('personal')}>
-            <View
-              backgroundColor={tab == 'personal' ? AppColors.Orange : 'white'}
-              style={styles.inner}>
-              <Text
-                color={tab == 'personal' ? 'white' : AppColors.Black}
-                style={styles.tabText}>
-                Personal Info
-              </Text>
-            </View>
-          </TouchableOpacity>
+          <View style={styles.middle1}>
+            <TouchableOpacity onPress={() => setTab('personal')}>
+              <View
+                backgroundColor={tab == 'personal' ? AppColors.Orange : 'white'}
+                style={styles.inner}>
+                <Text
+                  color={tab == 'personal' ? 'white' : AppColors.Black}
+                  style={styles.tabText}>
+                  Personal Info
+                </Text>
+              </View>
+            </TouchableOpacity>
 
-          <TouchableOpacity onPress={() => setTab('cars')}>
-            <View
-              backgroundColor={tab == 'cars' ? AppColors.Orange : 'white'}
-              style={styles.inner}>
-              <Text
-                color={tab == 'cars' ? 'white' : AppColors.Black}
-                style={styles.tabText}>
-                My Cars
-              </Text>
-            </View>
-          </TouchableOpacity>
+            <TouchableOpacity onPress={() => setTab('cars')}>
+              <View
+                backgroundColor={tab == 'cars' ? AppColors.Orange : 'white'}
+                style={styles.inner}>
+                <Text
+                  color={tab == 'cars' ? 'white' : AppColors.Black}
+                  style={styles.tabText}>
+                  My Cars
+                </Text>
+              </View>
+            </TouchableOpacity>
 
-          <TouchableOpacity onPress={() => setTab('activity')}>
-            <View
-              backgroundColor={tab == 'activity' ? AppColors.Orange : 'white'}
-              style={styles.inner}>
-              <Text
-                color={tab == 'activity' ? 'white' : AppColors.Black}
-                style={styles.tabText}>
-                Activities
-              </Text>
-            </View>
-          </TouchableOpacity>
+            <TouchableOpacity onPress={() => setTab('activity')}>
+              <View
+                backgroundColor={tab == 'activity' ? AppColors.Orange : 'white'}
+                style={styles.inner}>
+                <Text
+                  color={tab == 'activity' ? 'white' : AppColors.Black}
+                  style={styles.tabText}>
+                  Activities
+                </Text>
+              </View>
+            </TouchableOpacity>
+
+            {userId == 0 && (
+            <TouchableOpacity onPress={() => setOpenTab(!openTab)}>
+              <View
+                backgroundColor={'black'}
+                style={[styles.inner, {paddingHorizontal: 5}]}>
+                <Image
+                  source={openTab ? AppImages.UP : AppImages.DOWN}
+                  tintColor={AppColors.Orange}
+                />
+              </View>
+            </TouchableOpacity>
+            )}
+          </View>
+
+          {openTab && (
+            <>
+              <View
+                style={{
+                  borderTopColor: 'rgba(255,255,255,0.2)',
+                  borderTopWidth: 1,
+                }}
+                marginV-10
+              />
+
+              <View row>
+                {(type == 'Marshal' || type == 'Super Marshal') &&
+                  userId == 0 && (
+                    <TouchableOpacity
+                      onPress={() =>
+                        navigation.navigate(RouteNames.MarshalList)
+                      }>
+                      <View backgroundColor={'white'} style={styles.inner} marginR-20>
+                        <Text color={AppColors.Black} style={styles.tabText}>
+                          View marshal list
+                        </Text>
+                      </View>
+                    </TouchableOpacity>
+                  )}
+
+                {userId == 0 && (
+                  <TouchableOpacity
+                    onPress={() => navigation.navigate(RouteNames.UserList)}>
+                    <View
+                      backgroundColor={'white'}
+                      style={styles.inner}>
+                      <Text color={AppColors.Black} style={styles.tabText}>
+                        View user list
+                      </Text>
+                    </View>
+                  </TouchableOpacity>
+                )} 
+              </View>
+            </>
+          )}
         </View>
 
         {tab == 'personal' && profileDetails?.status && (

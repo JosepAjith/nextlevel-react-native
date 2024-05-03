@@ -25,9 +25,11 @@ export const styles = StyleSheet.create({
         backgroundColor:AppColors.Grey,
         borderRadius:20,
         padding:20,
+        marginBottom:20
+    },
+    middle1:{
         flexDirection:'row',
         justifyContent:'space-between',
-        marginBottom:20
     },
     inner:{
         paddingVertical:5,

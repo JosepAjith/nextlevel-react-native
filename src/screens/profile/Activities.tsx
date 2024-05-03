@@ -96,40 +96,7 @@ const Activities = ({navigation, data, isReplace}: Props) => {
       <View style={styles.view} marginV-20>
         {renderData()}
       </View>
-      {(type == 'Marshal' || type == 'Super Marshal') && userId == 0 && (
-        <>
-          <Text style={[styles.name, {fontSize: 16}]}>User List</Text>
-
-          <View style={styles.view} marginV-20>
-            <TouchableOpacity
-              onPress={() => navigation.navigate(RouteNames.UserList)}>
-              <View row padding-20>
-                <Text style={styles.text}>View User List</Text>
-                <View flex right>
-                  <Image source={AppImages.RIGHT} width={7} height={12} />
-                </View>
-              </View>
-            </TouchableOpacity>
-          </View>
-        </>
-      )}
-      {userId == 0 && (
-        <>
-          <Text style={[styles.name, {fontSize: 16}]}>Marshals List</Text>
-
-          <View style={styles.view} marginV-20>
-            <TouchableOpacity
-              onPress={() => navigation.navigate(RouteNames.MarshalList)}>
-              <View row padding-20>
-                <Text style={styles.text}>View Our Marshals</Text>
-                <View flex right>
-                  <Image source={AppImages.RIGHT} width={7} height={12} />
-                </View>
-              </View>
-            </TouchableOpacity>
-          </View>
-        </>
-      )}
+    
     </View>
   );
 };
