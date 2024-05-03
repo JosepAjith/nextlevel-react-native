@@ -49,6 +49,8 @@ PLACEHOLDER: require('../images/placeholder.png'),
 NOIMAGE: require('../images/nullImage.jpg'),
 PRIVACY: require('../images/privacy.png'),
 LOGO: require('../images/logo.png'),
+HAND: require('../images/HAND.png'),
+CLOGO: require('../images/clogo.png'),
 }
 
 export default AppImages;

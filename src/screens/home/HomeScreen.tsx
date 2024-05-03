@@ -61,12 +61,12 @@ const HomeScreen: React.FC<Props> = () => {
   const [headerVisible, setHeaderVisible] = useState(true);
 
   const handleScroll = Animated.event(
-    [{ nativeEvent: { contentOffset: { y: scrollY } } }],
-    { useNativeDriver: true },
+    [{nativeEvent: {contentOffset: {y: scrollY}}}],
+    {useNativeDriver: true},
   );
 
   useEffect(() => {
-    scrollY.addListener(({ value }) => {
+    scrollY.addListener(({value}) => {
       if (value > 0) {
         LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
         setHeaderVisible(false);
@@ -86,35 +86,36 @@ const HomeScreen: React.FC<Props> = () => {
       fetchList(1);
 
       return () => {
-        setTripList([])
+        setTripList([]);
       };
     }, [search]),
   );
 
   const fetchList = (page: number) => {
-    if(IsNetConnected){
-    let request = JSON.stringify({
-      //upcoming, ongoing, completed
-      status: ['upcoming', 'ongoing'],
-      title:search,
-      // perpage: 10,
-      page: page,
-    });
-    dispatch(fetchTripList({requestBody: request, uri: 'trip/list'}))
-      .then((response: any) => {
-        if (page === 1) {
-          setTripList(response.payload.trip.data);
-        } else {
-          // Concatenate the new trips with the existing list
-          setTripList(prevList => prevList.concat(response.payload.trip.data));
-        }
-      })
-      .catch((error: any) => {
-        // Handle error
+    if (IsNetConnected) {
+      let request = JSON.stringify({
+        //upcoming, ongoing, completed
+        status: ['upcoming', 'ongoing'],
+        title: search,
+        // perpage: 10,
+        page: page,
       });
+      dispatch(fetchTripList({requestBody: request, uri: 'trip/list'}))
+        .then((response: any) => {
+          if (page === 1) {
+            setTripList(response.payload.trip.data);
+          } else {
+            // Concatenate the new trips with the existing list
+            setTripList(prevList =>
+              prevList.concat(response.payload.trip.data),
+            );
+          }
+        })
+        .catch((error: any) => {
+          // Handle error
+        });
     }
   };
-
 
   const loadMoreTrips = () => {
     if (trip?.total_page && trip?.current_page < trip?.total_page) {
@@ -126,25 +127,30 @@ const HomeScreen: React.FC<Props> = () => {
   return (
     <View flex backgroundColor={AppColors.Black} padding-20 paddingB-0>
       {loadingTrip && <BackgroundLoader />}
-      
-      {headerVisible &&
-      <View row>
-        <View flex>
-          <Text style={styles.title}>Buckle up and get ready</Text>
-        </View>
 
-        <View center style={styles.notifView}>
-        <View absT absR>
-          <Image source={AppImages.DOT} width={10} height={10}/>
+      {headerVisible && (
+        <View row>
+              <View style={{flex:0.2}} centerV>
+            <Image source={AppImages.CLOGO} width={50} height={50}/>
           </View>
-          <TouchableOpacity
-            onPress={() => navigation.navigate(RouteNames.NotificationScreen)}>
-            <Image source={AppImages.LOGO} width={35} height={28} />
-          
-          </TouchableOpacity>
+          <View flex marginH-5 centerV>
+            <Text style={styles.title}>NXT LEVEL 4x4</Text>
+            <Text style={styles.sub}>Desert wanderlust, never ending</Text>
+          </View>
+
+          <View  center style={styles.notifView}>
+            {/* <View absT absR>
+          <Image source={AppImages.DOT} width={10} height={10}/>
+          </View> */}
+            <TouchableOpacity
+              onPress={() =>
+                navigation.navigate(RouteNames.NotificationScreen)
+              }>
+              <Image source={AppImages.NOTIF} width={18} height={21} />
+            </TouchableOpacity>
+          </View>
         </View>
-      </View>
-}
+      )}
 
       <TextField
         fieldStyle={styles.field}
@@ -161,21 +167,33 @@ const HomeScreen: React.FC<Props> = () => {
         }
       />
 
-      {!IsNetConnected && 
-      <View flex center>
-        <Text white text40>No Network Connection</Text>
-        </View>}
-
-      <Animated.FlatList
-        data={tripList}
-        showsVerticalScrollIndicator={false}
-        renderItem={({item, index}) => {
-          return <ListItem item={item} index={index} navigation={navigation} />;
-        }}
-        keyExtractor={(item, index) => `${item.id}-${index}`}
-        onEndReached={loadMoreTrips}
-        onScroll={handleScroll}
-      />
+      {!IsNetConnected && (
+        <View flex center>
+          <Text white text40>
+            No Network Connection
+          </Text>
+        </View>
+      )}
+      {tripList.length != 0 ? (
+        <Animated.FlatList
+          data={tripList}
+          showsVerticalScrollIndicator={false}
+          renderItem={({item, index}) => {
+            return (
+              <ListItem item={item} index={index} navigation={navigation} />
+            );
+          }}
+          keyExtractor={(item, index) => `${item.id}-${index}`}
+          onEndReached={loadMoreTrips}
+          onScroll={handleScroll}
+        />
+      ) : (
+        <View flex center>
+          <Text white text40>
+            No trips found.
+          </Text>
+        </View>
+      )}
     </View>
   );
 };

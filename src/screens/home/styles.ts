@@ -4,10 +4,14 @@ import AppFonts from '../../constants/AppFonts';
 
 export const styles = StyleSheet.create({
   title: {
-    fontSize: 22,
+    fontSize: 20,
     fontFamily: AppFonts.BOLD,
     color: 'white',
-    width: '70%',
+  },
+  sub: {
+    fontSize: 12,
+    fontFamily: AppFonts.REGULAR,
+    color: 'white',
   },
   notifView: {
     width: 48,

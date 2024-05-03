@@ -99,8 +99,11 @@ const ProfileScreen: React.FC<Props> = ({isReplace}: Props) => {
                   length:
                     profileDetails?.user.level == 'Marshal' ||
                     profileDetails?.user.level == 'Super Marshal'
-                      ? 3
-                      : 1,
+                      ? 3 :
+                      profileDetails?.user.level == 'Explorer'
+                      ? 2 :
+                      profileDetails?.user.level == 'Advanced'
+                      ? 1 : 0,
                 }).map((_, index) => (
                   <Image
                     key={index}

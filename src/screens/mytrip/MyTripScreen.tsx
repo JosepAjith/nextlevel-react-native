@@ -196,7 +196,9 @@ const MyTripScreen: React.FC<Props> = ({isReplace}: Props) => {
 
             <View style={{flex: 0.3}} right>
               <TouchableOpacity
-                onPress={() => dispatch({type: 'IS_FILTER', payload: !openFilter})}>
+                onPress={() =>
+                  dispatch({type: 'IS_FILTER', payload: !openFilter})
+                }>
                 <Image source={AppImages.FILTER} width={50} height={50} />
               </TouchableOpacity>
             </View>
@@ -204,49 +206,49 @@ const MyTripScreen: React.FC<Props> = ({isReplace}: Props) => {
         </View>
       )}
 
-      <View row marginB-20 style={{height:30}}>
+      <View row marginB-20 style={{height: 30}}>
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-        <Chip
-          label={'My Trips'}
-          onPress={() => setChip(1)}
-          labelStyle={[styles.chipLabel, chip == 1 && {color: 'black'}]}
-          containerStyle={[
-            styles.chip,
-            chip == 1 && {backgroundColor: 'white'},
-          ]}
-        />
-        {(type == 'Explorer' ||
-          type == 'Marshal' ||
-          type == 'Super Marshal') && (
           <Chip
-            label={'Created Trips'}
-            onPress={() => setChip(2)}
-            labelStyle={[styles.chipLabel, chip == 2 && {color: 'black'}]}
+            label={'My Trips'}
+            onPress={() => setChip(1)}
+            labelStyle={[styles.chipLabel, chip == 1 && {color: 'black'}]}
             containerStyle={[
               styles.chip,
-              chip == 2 && {backgroundColor: 'white'},
+              chip == 1 && {backgroundColor: 'white'},
             ]}
           />
-        )}
-        <Chip
-          label={'Closed Trips'}
-          onPress={() => setChip(3)}
-          labelStyle={[styles.chipLabel, chip == 3 && {color: 'black'}]}
-          containerStyle={[
-            styles.chip,
-            chip == 3 && {backgroundColor: 'white'},
-          ]}
-        />
+          {(type == 'Explorer' ||
+            type == 'Marshal' ||
+            type == 'Super Marshal') && (
+            <Chip
+              label={'Created Trips'}
+              onPress={() => setChip(2)}
+              labelStyle={[styles.chipLabel, chip == 2 && {color: 'black'}]}
+              containerStyle={[
+                styles.chip,
+                chip == 2 && {backgroundColor: 'white'},
+              ]}
+            />
+          )}
+          <Chip
+            label={'Closed Trips'}
+            onPress={() => setChip(3)}
+            labelStyle={[styles.chipLabel, chip == 3 && {color: 'black'}]}
+            containerStyle={[
+              styles.chip,
+              chip == 3 && {backgroundColor: 'white'},
+            ]}
+          />
 
-        <Chip
-          label={'Cancelled Trips'}
-          onPress={() => setChip(4)}
-          labelStyle={[styles.chipLabel, chip == 4 && {color: 'black'}]}
-          containerStyle={[
-            styles.chip,
-            chip == 4 && {backgroundColor: 'white'},
-          ]}
-        />
+          <Chip
+            label={'Cancelled Trips'}
+            onPress={() => setChip(4)}
+            labelStyle={[styles.chipLabel, chip == 4 && {color: 'black'}]}
+            containerStyle={[
+              styles.chip,
+              chip == 4 && {backgroundColor: 'white'},
+            ]}
+          />
         </ScrollView>
       </View>
 
@@ -257,16 +259,27 @@ const MyTripScreen: React.FC<Props> = ({isReplace}: Props) => {
           </Text>
         </View>
       )}
-<View flex>
-      <Animated.FlatList
-        data={tripList}
-        showsVerticalScrollIndicator={false}
-        renderItem={({item, index}) => {
-          return <ListItem item={item} index={index} navigation={navigation} />;
-        }}
-        onEndReached={loadMoreTrips}
-        onScroll={handleScroll}
-      /></View>
+      <View flex>
+        {tripList.length != 0 ? (
+          <Animated.FlatList
+            data={tripList}
+            showsVerticalScrollIndicator={false}
+            renderItem={({item, index}) => {
+              return (
+                <ListItem item={item} index={index} navigation={navigation} />
+              );
+            }}
+            onEndReached={loadMoreTrips}
+            onScroll={handleScroll}
+          />
+        ) : (
+          <View flex center>
+            <Text white text40>
+              No trips found.
+            </Text>
+          </View>
+        )}
+      </View>
     </View>
   );
 };

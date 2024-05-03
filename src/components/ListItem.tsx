@@ -107,7 +107,12 @@ const ListItem = ({item, index, navigation}: Props) => {
             borderTopLeftRadius: 10,
             borderTopRightRadius: 10,
           }}>
-            <View style={{ ...StyleSheet.absoluteFillObject, backgroundColor: 'rgba(0, 0, 0, 0.5)' }} />
+          <View
+            style={{
+              ...StyleSheet.absoluteFillObject,
+              backgroundColor: 'rgba(0, 0, 0, 0.5)',
+            }}
+          />
           <View row margin-20>
             <Text style={styles.viewText}>{item.title}</Text>
             <View flex right>
@@ -140,9 +145,14 @@ const ListItem = ({item, index, navigation}: Props) => {
             />
           </TouchableOpacity>
         </ImageBackground>
-        <View row padding-15 style={{justifyContent:'space-between'}}>
+        <View row padding-15 style={{justifyContent: 'space-between'}}>
           <View centerH>
-            <Text style={styles.text1}>{item.level}</Text>
+            {item.level == 'Get To Gether' ? (
+              <Image source={AppImages.HAND} />
+            ) : (
+              <Text style={styles.text1}>{item.level}</Text>
+            )}
+
             <LevelView level={item.level} />
           </View>
 
@@ -150,23 +160,22 @@ const ListItem = ({item, index, navigation}: Props) => {
             <Text style={styles.text1}>Capacity</Text>
             <View style={styles.capView} center>
               <Text style={styles.capty}>
-                {item.trip_book_joined_count}{' '}/{' '}{item.capacity}
+                {item.trip_book_joined_count} / {item.capacity}
               </Text>
             </View>
           </View>
 
           <View centerH>
             <Text style={styles.text1}>Support</Text>
-            <View style={[styles.capView,{width:30}]} center>
-              <Text style={styles.capty}>
-                {item.trip_book_support_count}
-              </Text>
+            <View style={[styles.capView, {width: 30}]} center>
+              <Text style={styles.capty}>{item.trip_book_support_count}</Text>
             </View>
           </View>
 
           <View centerH>
             <Text style={styles.text1}>Status</Text>
-            <View center
+            <View
+              center
               style={styles.statusView}
               backgroundColor={
                 item.trip_status == 'completed'
@@ -179,7 +188,9 @@ const ListItem = ({item, index, navigation}: Props) => {
                   ? 'red'
                   : '#BBFD79'
               }>
-              <Text style={styles.statusText}>{item.trip_status == 'completed' ? 'closed' : item.trip_status}</Text>
+              <Text style={styles.statusText}>
+                {item.trip_status == 'completed' ? 'closed' : item.trip_status}
+              </Text>
             </View>
           </View>
         </View>
