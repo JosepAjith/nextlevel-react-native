@@ -6,6 +6,7 @@ import {
   Easing,
   FlatList,
   PanResponder,
+  Platform,
   ScrollView,
   TouchableOpacity,
 } from 'react-native';
@@ -73,19 +74,41 @@ const ImageSelector = (props: {close: any,isItem: any, multi?: any}) => {
   const handleImagePicker = async () => {
     try {
       let pickerResult;
-      if(multi == true) {
-        pickerResult = await DocumentPicker.pick({
-          presentationStyle: 'fullScreen',
-          allowMultiSelection: true,
-          type: [types.images]
+      if (Platform.OS === 'ios') {
+        // Use ImagePicker for iOS
+        const options = {
+          title: 'Select Image',
+          storageOptions: {
+            skipBackup: true,
+            path: 'images',
+          },
+        };
+        pickerResult = await new Promise((resolve, reject) => {
+          ImagePicker.launchImageLibrary(options, response => {
+            if (response.didCancel) {
+              reject('User cancelled image picker');
+            } else if (response.error) {
+              reject(`ImagePicker Error: ${response.error}`);
+            } else {
+              resolve(response.assets);
+            }
+          });
         });
+      } else {
+        // Use DocumentPicker for Android and other platforms
+        if(multi == true) {
+          pickerResult = await DocumentPicker.pick({
+            presentationStyle: 'fullScreen',
+            allowMultiSelection: true,
+            type: [types.images]
+          });
+        }  else{
+          pickerResult = await DocumentPicker.pickSingle({
+            presentationStyle: 'fullScreen',
+            type: [types.images]
+          });
+        }
       }
-      else{
-      pickerResult = await DocumentPicker.pickSingle({
-        presentationStyle: 'fullScreen',
-        type: [types.images]
-      });
-    }
       isItem(pickerResult)
       closeModal();
     } catch (err) {

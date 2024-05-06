@@ -57,9 +57,6 @@ const TripDetails: React.FC<Props> = ({route}: any) => {
   const {cancelData, loadingCancel, cancelError} = useSelector(
     (state: RootState) => state.TripCancel,
   );
-  const {members} = useSelector(
-    (state: RootState) => state.MemberList,
-  );
 
   useFocusEffect(
     React.useCallback(() => {
@@ -89,14 +86,6 @@ const TripDetails: React.FC<Props> = ({route}: any) => {
     });
     dispatch(fetchTripDetails({requestBody: request}));
   };
-
-  const fetchMembers= () => {
-    let request = JSON.stringify({
-      trip_id: id,
-      application_status: '',
-    });
-    dispatch(fetchMemberList({requestBody: request}));
-  }
 
   const cancelingTrip = async (book_id: number) => {
     let request = {
