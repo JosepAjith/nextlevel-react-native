@@ -138,21 +138,17 @@ const ProfileScreen: React.FC<Props> = ({isReplace}: Props) => {
                 style={styles.inner}>
                 <Text
                   color={tab == 'personal' ? 'white' : AppColors.Black}
-                  style={styles.tabText}>
-                  Personal Info
-                </Text>
+                  style={styles.tabText}>Personal Info</Text>
               </View>
             </TouchableOpacity>
 
             <TouchableOpacity onPress={() => setTab('cars')}>
               <View
                 backgroundColor={tab == 'cars' ? AppColors.Orange : 'white'}
-                style={styles.inner}>
+                style={styles.inner} centerV>
                 <Text
                   color={tab == 'cars' ? 'white' : AppColors.Black}
-                  style={styles.tabText}>
-                  My Cars
-                </Text>
+                  style={styles.tabText}>My Cars</Text>
               </View>
             </TouchableOpacity>
 
@@ -162,8 +158,7 @@ const ProfileScreen: React.FC<Props> = ({isReplace}: Props) => {
                 style={styles.inner}>
                 <Text
                   color={tab == 'activity' ? 'white' : AppColors.Black}
-                  style={styles.tabText}>
-                  Activities
+                  style={styles.tabText}>Activities
                 </Text>
               </View>
             </TouchableOpacity>
@@ -172,7 +167,7 @@ const ProfileScreen: React.FC<Props> = ({isReplace}: Props) => {
             <TouchableOpacity onPress={() => setOpenTab(!openTab)}>
               <View
                 backgroundColor={'black'}
-                style={[styles.inner, {paddingHorizontal: 5}]}>
+                style={[styles.inner, {paddingHorizontal: 5}]} centerV>
                 <Image
                   source={openTab ? AppImages.UP : AppImages.DOWN}
                   tintColor={AppColors.Orange}

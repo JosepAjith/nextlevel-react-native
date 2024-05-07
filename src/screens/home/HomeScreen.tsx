@@ -130,7 +130,7 @@ const HomeScreen: React.FC<Props> = () => {
 
       {headerVisible && (
         <View row>
-              <View style={{flex:0.2}} centerV>
+              <View style={{flex:0.25}} centerV>
             <Image source={AppImages.CLOGO} width={50} height={50}/>
           </View>
           <View flex marginH-5 centerV>

@@ -6,7 +6,6 @@ import NetInfo from '@react-native-community/netinfo';
 import { Linking, Platform } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import AppStrings from '../constants/AppStrings';
-
 const Navigation = () => {
   const dispatch = useDispatch();
   const linking = {
