@@ -124,7 +124,7 @@ const Attendance = ({
       const userData = members
         .map(group => {
        
-          if (group.title === 'Joined') {
+          if (group.title === 'Joined' || group.title === 'Support') {
             return group.data.map(member => ({
               attendance_id: member.attendance_id,
               user_id: member.id,

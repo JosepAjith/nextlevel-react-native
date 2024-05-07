@@ -135,7 +135,7 @@ const ProfileScreen: React.FC<Props> = ({isReplace}: Props) => {
             <TouchableOpacity onPress={() => setTab('personal')}>
               <View
                 backgroundColor={tab == 'personal' ? AppColors.Orange : 'white'}
-                style={styles.inner}>
+                style={styles.inner} centerV>
                 <Text
                   color={tab == 'personal' ? 'white' : AppColors.Black}
                   style={styles.tabText}>Personal Info</Text>
@@ -155,11 +155,10 @@ const ProfileScreen: React.FC<Props> = ({isReplace}: Props) => {
             <TouchableOpacity onPress={() => setTab('activity')}>
               <View
                 backgroundColor={tab == 'activity' ? AppColors.Orange : 'white'}
-                style={styles.inner}>
+                style={styles.inner} centerV>
                 <Text
                   color={tab == 'activity' ? 'white' : AppColors.Black}
-                  style={styles.tabText}>Activities
-                </Text>
+                  style={styles.tabText}>Activities</Text>
               </View>
             </TouchableOpacity>
 

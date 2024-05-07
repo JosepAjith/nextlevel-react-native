@@ -9,7 +9,7 @@ import { Provider } from 'react-redux';
 import Navigation from './src/navigation/Navigation';
 import { RouteNames } from './src/navigation/Routes';
 import { showToast } from './src/constants/commonUtils';
-import SpInAppUpdates, { IAUUpdateKind, StartUpdateOptions } from 'sp-react-native-in-app-updates';
+import SpInAppUpdates, { IAUInstallStatus, IAUUpdateKind, StartUpdateOptions } from 'sp-react-native-in-app-updates';
 import store from './store';
 import PushNotification, { Importance } from 'react-native-push-notification';
 import PushNotificationIOS from '@react-native-community/push-notification-ios';
@@ -17,28 +17,56 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import AppStrings from './src/constants/AppStrings';
 
 const App = () => {
-  const inAppUpdates = new SpInAppUpdates(false);
+
   useEffect(() => {
-    
-    if (!__DEV__) {
-      inAppUpdates.checkNeedsUpdate({}).then(result => {
-        if (result.shouldUpdate) {
-          const updateOptions: StartUpdateOptions = Platform.select({
-            ios: {
-              title: 'Update available',
-              message: "There is a new version of the app available on the App Store, do you want to update it?",
-              buttonUpgradeText: 'Update',
-              buttonCancelText: 'Cancel',
-            },
-            android: {
-              updateType: IAUUpdateKind.IMMEDIATE,
-            },
-          });
-          inAppUpdates.startUpdate(updateOptions);
+    checkForUpdate();
+  }, []);
+
+  const checkForUpdate = async () => {
+    const inAppUpdates = new SpInAppUpdates(
+      false// isDebug
+    );
+    // curVersion is optional if you don't provide it will automatically take from the app using react-native-device-info
+    try {
+      await inAppUpdates.checkNeedsUpdate().then((result) => {
+        try {
+          if (result.shouldUpdate) {
+            let updateOptions: StartUpdateOptions = {};
+            if (Platform.OS === "android") {
+              // android only, on iOS the user will be promped to go to your app store page
+              updateOptions = {
+                updateType: IAUUpdateKind.IMMEDIATE,
+              };
+            }
+            if (Platform.OS === "ios") {
+              updateOptions = {
+                title: "Update available",
+                message:
+                  "There is a new version of the app available on the App Store, do you want to update it?",
+                buttonUpgradeText: "Update",
+                buttonCancelText: "Cancel",
+              };
+            }
+            inAppUpdates.addStatusUpdateListener((downloadStatus) => {
+              console.log("download status", downloadStatus);
+              if (downloadStatus.status === IAUInstallStatus.DOWNLOADED) {
+                console.log("downloaded");
+                inAppUpdates.installUpdate();
+                inAppUpdates.removeStatusUpdateListener((finalStatus) => {
+                  console.log("final status", finalStatus);
+                });
+              }
+            });
+            inAppUpdates.startUpdate(updateOptions);
+          }
+        } catch (error) {
+          console.log(error);
         }
       });
+    } catch (error) {
+      console.log(error);
     }
-  }, []);
+  };
 
   useEffect(() => {
     // Notifications
