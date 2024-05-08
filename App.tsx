@@ -1,72 +1,50 @@
-import React, { useEffect } from 'react';
+import React, {useEffect} from 'react';
 import {
   PermissionsAndroid,
   Platform,
   SafeAreaView,
   StyleSheet,
 } from 'react-native';
-import { Provider } from 'react-redux';
+import {Provider} from 'react-redux';
 import Navigation from './src/navigation/Navigation';
-import { RouteNames } from './src/navigation/Routes';
-import { showToast } from './src/constants/commonUtils';
-import SpInAppUpdates, { IAUInstallStatus, IAUUpdateKind, StartUpdateOptions } from 'sp-react-native-in-app-updates';
+import {RouteNames} from './src/navigation/Routes';
+import {showToast} from './src/constants/commonUtils';
+import SpInAppUpdates, {
+  IAUUpdateKind,
+  StartUpdateOptions,
+} from 'sp-react-native-in-app-updates';
 import store from './store';
-import PushNotification, { Importance } from 'react-native-push-notification';
+import PushNotification, {Importance} from 'react-native-push-notification';
 import PushNotificationIOS from '@react-native-community/push-notification-ios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import AppStrings from './src/constants/AppStrings';
 
 const App = () => {
 
-  useEffect(() => {
-    checkForUpdate();
-  }, []);
+  const inAppUpdates = new SpInAppUpdates(
+    false // isDebug
+  );
 
-  const checkForUpdate = async () => {
-    const inAppUpdates = new SpInAppUpdates(
-      false// isDebug
-    );
-    // curVersion is optional if you don't provide it will automatically take from the app using react-native-device-info
-    try {
-      await inAppUpdates.checkNeedsUpdate().then((result) => {
-        try {
-          if (result.shouldUpdate) {
-            let updateOptions: StartUpdateOptions = {};
-            if (Platform.OS === "android") {
-              // android only, on iOS the user will be promped to go to your app store page
-              updateOptions = {
-                updateType: IAUUpdateKind.IMMEDIATE,
-              };
-            }
-            if (Platform.OS === "ios") {
-              updateOptions = {
-                title: "Update available",
-                message:
-                  "There is a new version of the app available on the App Store, do you want to update it?",
-                buttonUpgradeText: "Update",
-                buttonCancelText: "Cancel",
-              };
-            }
-            inAppUpdates.addStatusUpdateListener((downloadStatus) => {
-              console.log("download status", downloadStatus);
-              if (downloadStatus.status === IAUInstallStatus.DOWNLOADED) {
-                console.log("downloaded");
-                inAppUpdates.installUpdate();
-                inAppUpdates.removeStatusUpdateListener((finalStatus) => {
-                  console.log("final status", finalStatus);
-                });
-              }
-            });
-            inAppUpdates.startUpdate(updateOptions);
-          }
-        } catch (error) {
-          console.log(error);
-        }
+  useEffect(() => {
+    if (!__DEV__) {
+  inAppUpdates.checkNeedsUpdate({}).then(result => {
+    if (result.shouldUpdate) {
+      const updateOptions: StartUpdateOptions = Platform.select({
+        ios: {
+          title: 'Update available',
+          message: "There is a new version of the app available on the App Store, do you want to update it?",
+          buttonUpgradeText: 'Update',
+          buttonCancelText: 'Cancel',
+        },
+        android: {
+          updateType: IAUUpdateKind.IMMEDIATE,
+        },
       });
-    } catch (error) {
-      console.log(error);
+      inAppUpdates.startUpdate(updateOptions);
     }
-  };
+  });
+}
+}, [])
 
   useEffect(() => {
     // Notifications
@@ -87,17 +65,17 @@ const App = () => {
       },
       onNotification: function (notification) {
         if (notification.foreground) {
-        // Check if the app is in the foreground and the notification was clicked
-    if (notification.userInteraction) {
-      // If the notification was clicked, navigate to the desired screen
-    } else {
-      // If the notification is received while the app is in the foreground, display a local notification
-      PushNotification.localNotification({
-        title: notification.title,
-        message: notification.message,
-        channelId: 'nxtlevel_channel_id',
-      });
-    }
+          // Check if the app is in the foreground and the notification was clicked
+          if (notification.userInteraction) {
+            // If the notification was clicked, navigate to the desired screen
+          } else {
+            // If the notification is received while the app is in the foreground, display a local notification
+            PushNotification.localNotification({
+              title: notification.title,
+              message: notification.message,
+              channelId: 'nxtlevel_channel_id',
+            });
+          }
         } else {
           if (notification.userInteraction) {
             console.log('Background Notification:', notification);
@@ -121,7 +99,7 @@ const App = () => {
       popInitialNotification: true,
       requestPermissions: true,
     });
-      // Simulate a dummy notification for testing
+    // Simulate a dummy notification for testing
     // setTimeout(() => {
     //   PushNotification.localNotification({
     //     title: 'Test Notification',
@@ -143,8 +121,7 @@ const App = () => {
         } else {
           showToast('Notification permission denied');
         }
-      } catch (error) {
-      }
+      } catch (error) {}
     }
   };
 

@@ -4,6 +4,7 @@ import Geolocation from 'react-native-geolocation-service';
 import {
   ActivityIndicator,
   Animated,
+  Linking,
   PermissionsAndroid,
   Platform,
   ToastAndroid,
@@ -128,6 +129,17 @@ const MapScreen: React.FC<Props> = ({route}: any) => {
       .catch(error => console.warn(error));
   };
 
+  const openNativeMap = () => {
+    let url;
+    if (Platform.OS === 'android') {
+      url = `https://www.google.com/maps/search/?api=1&query=${location?.latitude},${location?.longitude}`;
+    } else {
+      url = `http://maps.apple.com/?ll=${location?.latitude},${location?.longitude}`;
+    }
+
+    Linking.openURL(url);
+  };
+
   return (
     <View flex>
       <MapView
@@ -146,39 +158,52 @@ const MapScreen: React.FC<Props> = ({route}: any) => {
       </MapView>
 
       <View
+        row
         style={{
           position: 'absolute',
           bottom: 20,
-          right: 20,
+          marginHorizontal: 20,
         }}>
-        <Button
-          backgroundColor={AppColors.Black}
-          label={mapType === 'standard' ? 'Satellite' : 'Default'}
-          onPress={() =>
-            setMapType(mapType === 'standard' ? 'satellite' : 'standard')
-          }
-        />
+        <View flex left>
+          {type === 'details' &&
+          <Button
+            backgroundColor={AppColors.Black}
+            label={'Navigate'}
+            onPress={openNativeMap}
+          />
+}
+        </View>
+        <View flex right>
+          <Button
+            backgroundColor={AppColors.Black}
+            label={mapType === 'standard' ? 'Satellite' : 'Default'}
+            onPress={() =>
+              setMapType(mapType === 'standard' ? 'satellite' : 'standard')
+            }
+          />
+        </View>
       </View>
 
-      <TouchableOpacity onPress={() => navigation.goBack()}
-      style={{
-        position: 'absolute',
-        top: 16,
-        left: 16,
-        right: 16,
-        width: '10%',
-        backgroundColor:'white',
-        padding:10,
-        alignItems:'center'
-      }}>
-          <Image source={AppImages.BACK} tintColor="black" />
+      <TouchableOpacity
+        onPress={() => navigation.goBack()}
+        style={{
+          position: 'absolute',
+          top: 16,
+          left: 16,
+          right: 16,
+          width: '10%',
+          backgroundColor: 'white',
+          padding: 10,
+          alignItems: 'center',
+        }}>
+        <Image source={AppImages.BACK} tintColor="black" />
       </TouchableOpacity>
 
       {isDone && (
         <View
           style={{
             position: 'absolute',
-            bottom: 16,
+            bottom: 80,
             left: 16,
             right: 16,
           }}>
