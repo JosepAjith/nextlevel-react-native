@@ -134,7 +134,8 @@ const MapScreen: React.FC<Props> = ({route}: any) => {
     if (Platform.OS === 'android') {
       url = `https://www.google.com/maps/search/?api=1&query=${location?.latitude},${location?.longitude}`;
     } else {
-      url = `http://maps.apple.com/?ll=${location?.latitude},${location?.longitude}`;
+      // url = `http://maps.apple.com/?ll=${location?.latitude},${location?.longitude}`;
+      url = `https://www.google.com/maps/search/?api=1&query=${location?.latitude},${location?.longitude}`;
     }
 
     Linking.openURL(url);

@@ -9,7 +9,7 @@ import AppStrings from '../constants/AppStrings';
 const Navigation = () => {
   const dispatch = useDispatch();
   const linking = {
-    prefixes: ['next-level.prompttechdemohosting.com'], // Add your desired prefixes here
+    prefixes: ['https://next-level.prompttechdemohosting.com'], // Add your desired prefixes here
   };
 
   useEffect(() => {
