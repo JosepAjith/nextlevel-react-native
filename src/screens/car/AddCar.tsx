@@ -371,7 +371,7 @@ console.log(formData._parts[2])
         <ImageSelector
           close={() => setImageClick(false)}
           isItem={(item: any) => {
-            setCar({ ...carInput, image: item });
+            setCar({ ...carInput, image: item[0]});
             setValidate({ ...carValidate, InvalidImage: false });
           }}
         />
