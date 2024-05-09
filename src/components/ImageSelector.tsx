@@ -90,7 +90,14 @@ const ImageSelector = (props: {close: any,isItem: any, multi?: any}) => {
             } else if (response.error) {
               reject(`ImagePicker Error: ${response.error}`);
             } else {
-              resolve(response.assets);
+              const selectedImages = response.assets.map(image => ({
+                fileCopyUri: null,
+                name: image.fileName,
+                size: image.fileSize,
+                type: image.type,
+                uri: image.uri,
+              }));
+              resolve(selectedImages);
             }
           });
         });

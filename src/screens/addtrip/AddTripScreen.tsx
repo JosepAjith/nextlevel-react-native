@@ -1029,6 +1029,7 @@ const AddTripScreen: React.FC<Props> = ({route, id, initial}: Props) => {
               }));
 
               setValidate({...tripValidate, InvalidImage: false});
+              console.log('Imageeee-----',item)
             }}
             multi={true}
           />

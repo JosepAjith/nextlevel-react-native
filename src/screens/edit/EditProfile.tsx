@@ -521,7 +521,7 @@ const EditProfile: React.FC<Props> = () => {
         <ImageSelector
           close={() => setImageClick(false)}
           isItem={(item: any) => {
-            setProfile({...profileInput, image: item});
+            setProfile({...profileInput, image: item[0]});
             setValidate({...profileValidate, InvalidImage: false});
           }}
         />
