@@ -124,6 +124,7 @@ const App = () => {
       } catch (error) {}
     }
   };
+  
 
   return (
     <SafeAreaView style={styles.container}>
