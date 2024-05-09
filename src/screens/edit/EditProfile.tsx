@@ -14,7 +14,12 @@ import {useNavigation} from '@react-navigation/native';
 import AppColors from '../../constants/AppColors';
 import AppImages from '../../constants/AppImages';
 import ButtonView from '../../components/ButtonView';
-import {KeyboardAvoidingView, Platform, ScrollView, TouchableOpacity} from 'react-native';
+import {
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  TouchableOpacity,
+} from 'react-native';
 import {Header} from '../../components/Header';
 import AppFonts from '../../constants/AppFonts';
 import {styles} from '../addtrip/styles';
@@ -36,7 +41,7 @@ import {editProfile, reset} from '../../api/profile/EditProfileSlice';
 import moment from 'moment';
 import BackgroundLoader from '../../components/BackgroundLoader';
 import CountryPicker, {DARK_THEME} from 'react-native-country-picker-modal';
-import { fetchProfileDetails } from '../../api/profile/ProfileDetailsSlice';
+import {fetchProfileDetails} from '../../api/profile/ProfileDetailsSlice';
 
 const {TextField} = Incubator;
 
@@ -78,7 +83,7 @@ const EditProfile: React.FC<Props> = () => {
   const {profileDetails} = useSelector(
     (state: RootState) => state.ProfileDetails,
   );
-  const { IsNetConnected } = useSelector(
+  const {IsNetConnected} = useSelector(
     (state: RootState) => state.GlobalVariables,
   );
   const [isImageClick, setImageClick] = useState(false);
@@ -121,7 +126,7 @@ const EditProfile: React.FC<Props> = () => {
         InvalidImage: true,
         error: '*Required',
       });
-      showToast("Image Field required")
+      showToast('Image Field required');
       return false;
     }
     if (profileInput.name == '') {
@@ -130,7 +135,7 @@ const EditProfile: React.FC<Props> = () => {
         InvalidName: true,
         error: '*Required',
       });
-      showToast("Name Field required")
+      showToast('Name Field required');
       return false;
     }
     if (profileInput.dob == '') {
@@ -139,7 +144,7 @@ const EditProfile: React.FC<Props> = () => {
         InvalidDob: true,
         error: '*Required',
       });
-      showToast("DOB Field required")
+      showToast('DOB Field required');
       return false;
     }
     if (profileInput.phone == '') {
@@ -148,7 +153,7 @@ const EditProfile: React.FC<Props> = () => {
         InvalidPhone: true,
         error: '*Required',
       });
-      showToast("Phone Field required")
+      showToast('Phone Field required');
       return false;
     }
     if (profileInput.gender == '') {
@@ -157,7 +162,7 @@ const EditProfile: React.FC<Props> = () => {
         InvalidGender: true,
         error: '*Required',
       });
-      showToast("Gender Field required")
+      showToast('Gender Field required');
       return false;
     }
     if (profileInput.location == '') {
@@ -166,7 +171,7 @@ const EditProfile: React.FC<Props> = () => {
         InvalidLocation: true,
         error: '*Required',
       });
-      showToast("Location Field required")
+      showToast('Location Field required');
       return false;
     }
     if (profileInput.emirates == '') {
@@ -175,7 +180,7 @@ const EditProfile: React.FC<Props> = () => {
         InvalidEmirates: true,
         error: '*Required',
       });
-      showToast("Emirates Field required")
+      showToast('Emirates Field required');
       return false;
     }
     if (profileInput.nationality == '') {
@@ -184,7 +189,7 @@ const EditProfile: React.FC<Props> = () => {
         InvalidNation: true,
         error: '*Required',
       });
-      showToast("Nationality Field required")
+      showToast('Nationality Field required');
       return false;
     }
     if (profileInput.occupation == '') {
@@ -193,7 +198,7 @@ const EditProfile: React.FC<Props> = () => {
         InvalidOccup: true,
         error: '*Required',
       });
-      showToast("Occupation Field required")
+      showToast('Occupation Field required');
       return false;
     }
     if (profileInput.interest == '') {
@@ -202,7 +207,7 @@ const EditProfile: React.FC<Props> = () => {
         InvalidInterest: true,
         error: '*Required',
       });
-      showToast("Interest Field required")
+      showToast('Interest Field required');
       return false;
     }
 
@@ -262,11 +267,15 @@ const EditProfile: React.FC<Props> = () => {
   };
 
   const handleConfirm = (date: any) => {
-    setValidate({...profileValidate, isDatePickerVisible: false, InvalidDob: false});
+    setValidate({
+      ...profileValidate,
+      isDatePickerVisible: false,
+      InvalidDob: false,
+    });
     setProfile({...profileInput, dob: getUserDate(date)});
   };
 
-  const onCountrySelect = (country: { name: any; }) => {
+  const onCountrySelect = (country: {name: any}) => {
     setProfile({...profileInput, nationality: country.name});
     setValidate({...profileValidate, InvalidNation: false});
     setNationClick(false);
@@ -274,273 +283,277 @@ const EditProfile: React.FC<Props> = () => {
 
   return (
     <KeyboardAvoidingView
-    style={{ flex: 1 }} // Make sure it takes full height of the screen
-    behavior={Platform.OS === 'ios' ? 'padding' : 'padding'} // Adjust behavior for iOS
-  >
-    <View flex backgroundColor={AppColors.Black}>
-      {loadingEditProfile && <BackgroundLoader />}
-      <ScrollView>
-        <View padding-20>
-          <Header title="Edit Profile" />
+      style={{flex: 1}} // Make sure it takes full height of the screen
+      behavior={Platform.OS === 'ios' ? 'padding' : 'padding'} // Adjust behavior for iOS
+    >
+      <View flex backgroundColor={AppColors.Black}>
+        {loadingEditProfile && <BackgroundLoader />}
+        <ScrollView>
+          <View padding-20>
+            <Header title="Edit Profile" />
 
-          <TouchableOpacity onPress={() => setImageClick(!isImageClick)}>
-            <View center style={styles.imageView}>
-              {profileInput.image.uri ? (
-                <Image
-                  source={{uri: profileInput.image.uri}}
-                  style={{width: '100%', height: '100%', borderRadius: 20}}
-                />
-              ) : (
-                <>
-                  <Image source={AppImages.GALLERY} width={34} height={30} />
-                  <Text style={styles.add}>+ Add Profile Image</Text>
-                  <Text style={styles.click}>
-                    (Click From camera or browse to upload)
-                  </Text>
+            <TouchableOpacity onPress={() => setImageClick(!isImageClick)}>
+              <View center style={styles.imageView}>
+                {profileInput.image.uri ? (
+                  <Image
+                    source={{uri: profileInput.image.uri}}
+                    style={{width: '100%', height: '100%', borderRadius: 20}}
+                  />
+                ) : (
+                  <>
+                    <Image source={AppImages.GALLERY} width={34} height={30} />
+                    <Text style={styles.add}>+ Add Profile Image</Text>
+                    <Text style={styles.click}>
+                      (Click From camera or browse to upload)
+                    </Text>
+                    <Text red10>
+                      {profileValidate.InvalidImage ? '*Required' : ''}
+                    </Text>
+                  </>
+                )}
+              </View>
+            </TouchableOpacity>
+
+            <TextField
+              fieldStyle={styles.field}
+              label={'Full Name'}
+              placeholder={'Enter full name'}
+              placeholderTextColor={'#999999'}
+              labelStyle={styles.label}
+              style={styles.text}
+              paddingH-20
+              marginB-20
+              value={profileInput.name}
+              onChangeText={(text: any) => {
+                setProfile({...profileInput, name: text});
+                setValidate({...profileValidate, InvalidName: false});
+              }}
+              trailingAccessory={
+                <Text red10>
+                  {profileValidate.InvalidName ? '*Required' : ''}
+                </Text>
+              }
+            />
+
+            <TouchableOpacity onPress={showDatePicker}>
+              <TextField
+                fieldStyle={styles.field}
+                label={'Date of Birth'}
+                placeholder={'Enter date of birth'}
+                placeholderTextColor={'#999999'}
+                labelStyle={styles.label}
+                style={styles.text}
+                editable={false}
+                paddingH-20
+                marginB-20
+                value={profileInput.dob}
+                trailingAccessory={
                   <Text red10>
-                    {profileValidate.InvalidImage ? '*Required' : ''}
+                    {profileValidate.InvalidDob ? '*Required' : ''}
                   </Text>
-                </>
-              )}
-            </View>
-          </TouchableOpacity>
+                }
+              />
+              <DateTimePickerModal
+                isVisible={profileValidate.isDatePickerVisible}
+                mode="date"
+                date={
+                  profileInput.dob
+                    ? new Date(
+                        moment(profileInput.dob, 'DD-MM-YYYY', false).format(
+                          'YYYY-MM-DD',
+                        ),
+                      )
+                    : new Date()
+                }
+                onConfirm={handleConfirm}
+                onCancel={hideDatePicker}
+              />
+            </TouchableOpacity>
 
-          <TextField
-            fieldStyle={styles.field}
-            label={'Full Name'}
-            placeholder={'Enter full name'}
-            placeholderTextColor={'#999999'}
-            labelStyle={styles.label}
-            style={styles.text}
-            paddingH-20
-            marginB-20
-            value={profileInput.name}
-            onChangeText={(text: any) => {
-              setProfile({...profileInput, name: text});
-              setValidate({...profileValidate, InvalidName: false});
-            }}
-            trailingAccessory={
-              <Text red10>
-                {profileValidate.InvalidName ? '*Required' : ''}
-              </Text>
-            }
-          />
-
-          <TouchableOpacity onPress={showDatePicker}>
             <TextField
               fieldStyle={styles.field}
-              label={'Date of Birth'}
-              placeholder={'Enter date of birth'}
+              label={'Contact Number'}
+              placeholder={'Enter contact number'}
               placeholderTextColor={'#999999'}
               labelStyle={styles.label}
               style={styles.text}
-              editable={false}
+              keyboardType={'number-pad'}
               paddingH-20
               marginB-20
-              value={profileInput.dob}
+              value={profileInput.phone}
+              onChangeText={(text: any) => {
+                setProfile({...profileInput, phone: text});
+                setValidate({...profileValidate, InvalidPhone: false});
+              }}
               trailingAccessory={
                 <Text red10>
-                  {profileValidate.InvalidDob ? '*Required' : ''}
+                  {profileValidate.InvalidPhone ? '*Required' : ''}
                 </Text>
               }
             />
-            <DateTimePickerModal
-              isVisible={profileValidate.isDatePickerVisible}
-              mode="date"
-              date={
-                profileInput.dob
-                  ? new Date(
-                      moment(profileInput.dob, 'DD-MM-YYYY', false).format(
-                        'YYYY-MM-DD',
-                      ),
-                    )
-                  : new Date()
-              }
-              onConfirm={handleConfirm}
-              onCancel={hideDatePicker}
+
+            <Text style={styles.label}>Gender</Text>
+            <DropdownComponent
+              data={Gender}
+              item={profileInput.gender}
+              label="type"
+              value="id"
+              onChange={(item: any) => {
+                setProfile({...profileInput, gender: item});
+                setValidate({...profileValidate, InvalidGender: false});
+              }}
+              error={profileValidate.InvalidGender}
             />
-          </TouchableOpacity>
 
-          <TextField
-            fieldStyle={styles.field}
-            label={'Contact Number'}
-            placeholder={'Enter contact number'}
-            placeholderTextColor={'#999999'}
-            labelStyle={styles.label}
-            style={styles.text}
-            keyboardType={'number-pad'}
-            paddingH-20
-            marginB-20
-            value={profileInput.phone}
-            onChangeText={(text: any) => {
-              setProfile({...profileInput, phone: text});
-              setValidate({...profileValidate, InvalidPhone: false});
-            }}
-            trailingAccessory={
-              <Text red10>
-                {profileValidate.InvalidPhone ? '*Required' : ''}
-              </Text>
-            }
-          />
-
-          <Text style={styles.label}>Gender</Text>
-          <DropdownComponent
-            data={Gender}
-            item={profileInput.gender}
-            label="type"
-            value="id"
-            onChange={(item: any) => {
-              setProfile({...profileInput, gender: item});
-              setValidate({...profileValidate, InvalidGender: false});
-            }}
-            error={profileValidate.InvalidGender}
-          />
-
-          <TextField
-            fieldStyle={styles.field}
-            label={'Location'}
-            placeholder={'Select location'}
-            placeholderTextColor={'#999999'}
-            labelStyle={styles.label}
-            style={styles.text}
-            paddingH-20
-            marginB-20
-            value={profileInput.location}
-            onChangeText={(text: any) => {
-              setProfile({...profileInput, location: text});
-              setValidate({...profileValidate, InvalidLocation: false});
-            }}
-            trailingAccessory={
-              <Text red10>
-                {profileValidate.InvalidLocation ? '*Required' : ''}
-              </Text>
-            }
-          />
-
-          <Text style={styles.label}>Emirate</Text>
-          <DropdownComponent
-            data={Emirates}
-            item={profileInput.emirates}
-            label="type"
-            value="id"
-            onChange={(item: any) => {
-              setProfile({...profileInput, emirates: item});
-              setValidate({...profileValidate, InvalidEmirates: false});
-            }}
-            error={profileValidate.InvalidEmirates}
-          />
-
-          <TouchableOpacity onPress={() => setNationClick(!isNationClick)}>
             <TextField
               fieldStyle={styles.field}
-              label={'Nationality'}
-              placeholder={'Select nationality'}
+              label={'Location'}
+              placeholder={'Select location'}
               placeholderTextColor={'#999999'}
               labelStyle={styles.label}
               style={styles.text}
               paddingH-20
               marginB-20
-              editable={false}
-              value={profileInput.nationality}
+              value={profileInput.location}
+              onChangeText={(text: any) => {
+                setProfile({...profileInput, location: text});
+                setValidate({...profileValidate, InvalidLocation: false});
+              }}
               trailingAccessory={
                 <Text red10>
-                  {profileValidate.InvalidNation ? '*Required' : ''}
+                  {profileValidate.InvalidLocation ? '*Required' : ''}
                 </Text>
               }
             />
-          </TouchableOpacity>
 
-          <TextField
-            fieldStyle={styles.field}
-            label={'Occupation'}
-            placeholder={'Enter occupation'}
-            placeholderTextColor={'#999999'}
-            labelStyle={styles.label}
-            style={styles.text}
-            paddingH-20
-            marginB-20
-            value={profileInput.occupation}
-            onChangeText={(text: any) => {
-              setProfile({...profileInput, occupation: text});
-              setValidate({...profileValidate, InvalidOccup: false});
-            }}
-            trailingAccessory={
-              <Text red10>
-                {profileValidate.InvalidOccup ? '*Required' : ''}
-              </Text>
-            }
-          />
+            <Text style={styles.label}>Emirate</Text>
+            <DropdownComponent
+              data={Emirates}
+              item={profileInput.emirates}
+              label="type"
+              value="id"
+              onChange={(item: any) => {
+                setProfile({...profileInput, emirates: item});
+                setValidate({...profileValidate, InvalidEmirates: false});
+              }}
+              error={profileValidate.InvalidEmirates}
+            />
 
-          <TextField
-            fieldStyle={styles.field}
-            label={'Interest'}
-            placeholder={'Enter interest'}
-            placeholderTextColor={'#999999'}
-            labelStyle={styles.label}
-            style={styles.text}
-            paddingH-20
-            marginB-20
-            value={profileInput.interest}
-            onChangeText={(text: any) => {
-              setProfile({...profileInput, interest: text});
-              setValidate({...profileValidate, InvalidInterest: false});
-            }}
-            trailingAccessory={
-              <Text red10>
-                {profileValidate.InvalidInterest ? '*Required' : ''}
-              </Text>
-            }
-          />
+            <TouchableOpacity onPress={() => setNationClick(!isNationClick)}>
+              <TextField
+                fieldStyle={styles.field}
+                label={'Nationality'}
+                placeholder={'Select nationality'}
+                placeholderTextColor={'#999999'}
+                labelStyle={styles.label}
+                style={styles.text}
+                paddingH-20
+                marginB-20
+                editable={false}
+                value={profileInput.nationality}
+                trailingAccessory={
+                  <Text red10>
+                    {profileValidate.InvalidNation ? '*Required' : ''}
+                  </Text>
+                }
+              />
+            </TouchableOpacity>
 
-          <TextField
-            fieldStyle={styles.field}
-            label={'Referred By'}
-            placeholder={'Select who referred'}
-            placeholderTextColor={'#999999'}
-            labelStyle={styles.label}
-            style={styles.text}
-            paddingH-20
-            marginB-20
-            value={profileInput.referred_by}
-            onChangeText={(text: any) => {
-              setProfile({...profileInput, referred_by: text});
-            }}
-          />
-
-          <ButtonView
-            title="Update Profile"
-            onPress={() => {
-              if (isValidate()) {
-                updatingProfile();
+            <TextField
+              fieldStyle={styles.field}
+              label={'Occupation'}
+              placeholder={'Enter occupation'}
+              placeholderTextColor={'#999999'}
+              labelStyle={styles.label}
+              style={styles.text}
+              paddingH-20
+              marginB-20
+              value={profileInput.occupation}
+              onChangeText={(text: any) => {
+                setProfile({...profileInput, occupation: text});
+                setValidate({...profileValidate, InvalidOccup: false});
+              }}
+              trailingAccessory={
+                <Text red10>
+                  {profileValidate.InvalidOccup ? '*Required' : ''}
+                </Text>
               }
+            />
+
+            <TextField
+              fieldStyle={styles.field}
+              label={'Interest'}
+              placeholder={'Enter interest'}
+              placeholderTextColor={'#999999'}
+              labelStyle={styles.label}
+              style={styles.text}
+              paddingH-20
+              marginB-20
+              value={profileInput.interest}
+              onChangeText={(text: any) => {
+                setProfile({...profileInput, interest: text});
+                setValidate({...profileValidate, InvalidInterest: false});
+              }}
+              trailingAccessory={
+                <Text red10>
+                  {profileValidate.InvalidInterest ? '*Required' : ''}
+                </Text>
+              }
+            />
+
+            <TextField
+              fieldStyle={styles.field}
+              label={'Referred By'}
+              placeholder={'Select who referred'}
+              placeholderTextColor={'#999999'}
+              labelStyle={styles.label}
+              style={styles.text}
+              paddingH-20
+              marginB-20
+              value={profileInput.referred_by}
+              onChangeText={(text: any) => {
+                setProfile({...profileInput, referred_by: text});
+              }}
+            />
+
+            <ButtonView
+              title="Update Profile"
+              onPress={() => {
+                if (isValidate()) {
+                  updatingProfile();
+                }
+              }}
+            />
+          </View>
+        </ScrollView>
+        {isImageClick && (
+          <ImageSelector
+            close={() => setImageClick(false)}
+            isItem={(item: any) => {
+              if (Platform.OS === 'ios') {
+                setProfile({...profileInput, image: item[0]});
+              } else {
+                setProfile({...profileInput, image: item});
+              }
+              setValidate({...profileValidate, InvalidImage: false});
             }}
           />
-        </View>
-      </ScrollView>
-      {isImageClick && (
-        <ImageSelector
-          close={() => setImageClick(false)}
-          isItem={(item: any) => {
-            setProfile({...profileInput, image: item[0]});
-            setValidate({...profileValidate, InvalidImage: false});
-          }}
-        />
-      )}
+        )}
 
-      {isNationClick && (
-        <CountryPicker
-          withFlag
-          withCallingCode
-          withModal
-          visible={isNationClick}
-          onSelect={onCountrySelect}
-          onClose={() => setNationClick(false)}
-          countryCode={'IN'}
-          withFilter
-          theme={DARK_THEME}
-        />
-      )}
-    </View>
+        {isNationClick && (
+          <CountryPicker
+            withFlag
+            withCallingCode
+            withModal
+            visible={isNationClick}
+            onSelect={onCountrySelect}
+            onClose={() => setNationClick(false)}
+            countryCode={'IN'}
+            withFilter
+            theme={DARK_THEME}
+          />
+        )}
+      </View>
     </KeyboardAvoidingView>
   );
 };
