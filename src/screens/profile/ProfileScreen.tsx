@@ -135,44 +135,54 @@ const ProfileScreen: React.FC<Props> = ({isReplace}: Props) => {
             <TouchableOpacity onPress={() => setTab('personal')}>
               <View
                 backgroundColor={tab == 'personal' ? AppColors.Orange : 'white'}
-                style={styles.inner} centerV>
+                style={styles.inner}
+                centerV>
                 <Text
                   color={tab == 'personal' ? 'white' : AppColors.Black}
-                  style={styles.tabText}>Personal Info</Text>
+                  style={styles.tabText}>
+                  Personal Info
+                </Text>
               </View>
             </TouchableOpacity>
 
             <TouchableOpacity onPress={() => setTab('cars')}>
               <View
                 backgroundColor={tab == 'cars' ? AppColors.Orange : 'white'}
-                style={styles.inner} centerV>
+                style={styles.inner}
+                centerV>
                 <Text
                   color={tab == 'cars' ? 'white' : AppColors.Black}
-                  style={styles.tabText}>My Cars</Text>
+                  style={styles.tabText}>
+                  My Cars
+                </Text>
               </View>
             </TouchableOpacity>
 
             <TouchableOpacity onPress={() => setTab('activity')}>
               <View
                 backgroundColor={tab == 'activity' ? AppColors.Orange : 'white'}
-                style={styles.inner} centerV>
+                style={styles.inner}
+                centerV>
                 <Text
                   color={tab == 'activity' ? 'white' : AppColors.Black}
-                  style={styles.tabText}>Activities</Text>
+                  style={styles.tabText}>
+                  Activities
+                </Text>
               </View>
             </TouchableOpacity>
 
             {userId == 0 && (
-            <TouchableOpacity onPress={() => setOpenTab(!openTab)}>
-              <View
-                backgroundColor={'black'}
-                style={[styles.inner, {paddingHorizontal: 5}]} centerV>
-                <Image
-                  source={openTab ? AppImages.UP : AppImages.DOWN}
-                  tintColor={AppColors.Orange}
-                />
-              </View>
-            </TouchableOpacity>
+              <TouchableOpacity onPress={() => setOpenTab(!openTab)}>
+                <View
+                  backgroundColor={'black'}
+                  style={[styles.inner, {paddingHorizontal: 5}]}
+                  centerV>
+                  <Image
+                    source={openTab ? AppImages.UP : AppImages.DOWN}
+                    tintColor={AppColors.Orange}
+                  />
+                </View>
+              </TouchableOpacity>
             )}
           </View>
 
@@ -187,32 +197,31 @@ const ProfileScreen: React.FC<Props> = ({isReplace}: Props) => {
               />
 
               <View row>
+                {userId == 0 && (
+                  <TouchableOpacity
+                    onPress={() => navigation.navigate(RouteNames.MarshalList)}>
+                    <View
+                      backgroundColor={'white'}
+                      style={styles.inner}
+                      marginR-20>
+                      <Text color={AppColors.Black} style={styles.tabText}>
+                        View marshal list
+                      </Text>
+                    </View>
+                  </TouchableOpacity>
+                )}
+
                 {(type == 'Marshal' || type == 'Super Marshal') &&
                   userId == 0 && (
                     <TouchableOpacity
-                      onPress={() =>
-                        navigation.navigate(RouteNames.MarshalList)
-                      }>
-                      <View backgroundColor={'white'} style={styles.inner} marginR-20>
+                      onPress={() => navigation.navigate(RouteNames.UserList)}>
+                      <View backgroundColor={'white'} style={styles.inner}>
                         <Text color={AppColors.Black} style={styles.tabText}>
-                          View marshal list
+                          View user list
                         </Text>
                       </View>
                     </TouchableOpacity>
                   )}
-
-                {userId == 0 && (
-                  <TouchableOpacity
-                    onPress={() => navigation.navigate(RouteNames.UserList)}>
-                    <View
-                      backgroundColor={'white'}
-                      style={styles.inner}>
-                      <Text color={AppColors.Black} style={styles.tabText}>
-                        View user list
-                      </Text>
-                    </View>
-                  </TouchableOpacity>
-                )} 
               </View>
             </>
           )}

@@ -51,6 +51,7 @@ PRIVACY: require('../images/privacy.png'),
 LOGO: require('../images/logo.png'),
 HAND: require('../images/HAND.png'),
 CLOGO: require('../images/clogo.png'),
+CALL: require('../images/call.png'),
 }
 
 export default AppImages;
