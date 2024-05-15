@@ -53,12 +53,9 @@ const NotificationScreen: React.FC<Props> = () => {
     (state: RootState) => state.DeleteNotification,
   );
 
-  useFocusEffect(
-    React.useCallback(() => {
+  useEffect(()=>{
       NotifList();
-      return () => {};
-    }, []),
-  );
+    }, [])
 
   const NotifList = () => {
     dispatch(

@@ -99,15 +99,9 @@ const UserList: React.FC<Props> = () => {
     }, []),
   );
 
-  useFocusEffect(
-    React.useCallback(() => {
+useEffect(()=>{
       FetchList(1);
-
-      return () => {
-        setUserList([]);
-      };
-    }, [search, filterValue]),
-  );
+    }, [search, filterValue])
 
   const FetchList = (page: number) => {
     if (IsNetConnected) {

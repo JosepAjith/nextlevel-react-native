@@ -8,7 +8,7 @@ import {
   View,
 } from 'react-native-ui-lib';
 import {RootStackParams, RouteNames} from '../../navigation';
-import {RouteProp, useFocusEffect} from '@react-navigation/native';
+import {RouteProp, useFocusEffect, useIsFocused} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {useNavigation} from '@react-navigation/native';
 import AppColors from '../../constants/AppColors';
@@ -16,6 +16,7 @@ import {styles} from './styles';
 import AppImages from '../../constants/AppImages';
 import {
   Animated,
+  BackHandler,
   FlatList,
   LayoutAnimation,
   Platform,
@@ -28,6 +29,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {fetchTripList} from '../../api/trip/TriplListSlice';
 import BackgroundLoader from '../../components/BackgroundLoader';
 import ListItem from '../../components/ListItem';
+import { showToast } from '../../constants/commonUtils';
 
 const {TextField} = Incubator;
 
@@ -47,6 +49,7 @@ if (Platform.OS === 'android') {
 interface Props {}
 
 const HomeScreen: React.FC<Props> = () => {
+  const isFocused = useIsFocused();
   const navigation = useNavigation<HomeScreenNavigationProps>();
   const dispatch: ThunkDispatch<RootState, any, AnyAction> = useDispatch();
   const [tripList, setTripList] = useState([]);
@@ -59,11 +62,36 @@ const HomeScreen: React.FC<Props> = () => {
   );
   const [scrollY] = useState(new Animated.Value(0));
   const [headerVisible, setHeaderVisible] = useState(true);
+  const shouldExitApp = React.useRef(false);
 
   const handleScroll = Animated.event(
     [{nativeEvent: {contentOffset: {y: scrollY}}}],
     {useNativeDriver: true},
   );
+  
+  useEffect(() => {
+    if (isFocused) {
+      const backHandler = BackHandler.addEventListener(
+        'hardwareBackPress',
+        handleBackPress,
+      );
+      return () => backHandler.remove();
+    }
+  }, [isFocused]);
+
+  const handleBackPress = () => {
+    if (shouldExitApp.current) {
+      BackHandler.exitApp();
+      return true;
+    } else {
+      shouldExitApp.current = true;
+      showToast('Press back again to exit');
+      setTimeout(() => {
+        shouldExitApp.current = false;
+      }, 2000); // 2 seconds timeout to reset the shouldExitApp flag
+      return true;
+    }
+  };
 
   useEffect(() => {
     scrollY.addListener(({value}) => {

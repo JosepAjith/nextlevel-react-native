@@ -693,6 +693,7 @@ const AddTripScreen: React.FC<Props> = ({route, id, initial}: Props) => {
               <DateTimePickerModal
                 isVisible={tripValidate.isDatePickerVisible}
                 mode="date"
+                display="inline"
                 date={
                   tripInput.date
                     ? new Date(
@@ -876,6 +877,7 @@ const AddTripScreen: React.FC<Props> = ({route, id, initial}: Props) => {
               <DateTimePickerModal
                 isVisible={tripValidate.isJoinPickerVisible}
                 mode="datetime"
+                display="inline"
                 date={
                   tripInput.joining_start_date
                     ? new Date(
@@ -937,6 +939,7 @@ const AddTripScreen: React.FC<Props> = ({route, id, initial}: Props) => {
               <DateTimePickerModal
                 isVisible={tripValidate.isDeadlinePickerVisible}
                 mode="datetime"
+                display="inline"
                 date={
                   tripInput.joining_deadline
                     ? new Date(

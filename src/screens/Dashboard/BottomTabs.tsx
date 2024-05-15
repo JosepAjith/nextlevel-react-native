@@ -52,22 +52,19 @@ const BottomTabs = () => {
   }, [replace]);
 
   useEffect(() => {
-    const backHandler = () => {
-      if (replace) {
+    const backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
+      if (activeTab !== 'Home' && !replace) {
+        setActiveTab('Home');
+        return true;
+      }
+      else if(replace){
         setActiveTab('Profile');
         return true;
       }
       return false;
-    };
-
-    // Add event listener for hardware back button press
-    BackHandler.addEventListener('hardwareBackPress', backHandler);
-
-    // Cleanup function to remove the event listener when the component unmounts
-    return () => {
-      BackHandler.removeEventListener('hardwareBackPress', backHandler);
-    };
-  }, [replace]);
+    });
+    return () => backHandler.remove();
+  }, [activeTab, replace]);
 
   useFocusEffect(
     useCallback(() => {
