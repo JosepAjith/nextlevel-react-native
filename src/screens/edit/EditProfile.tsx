@@ -234,7 +234,6 @@ const EditProfile: React.FC<Props> = () => {
     formData.append('occupation', profileInput.occupation);
     formData.append('interest', profileInput.interest);
     formData.append('referred_by', profileInput.referred_by);
-
     dispatch(
       editProfile({
         requestBody: formData,

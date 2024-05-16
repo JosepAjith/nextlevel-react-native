@@ -52,6 +52,8 @@ LOGO: require('../images/logo.png'),
 HAND: require('../images/HAND.png'),
 CLOGO: require('../images/clogo.png'),
 CALL: require('../images/call.png'),
+WHATSAPP: require('../images/whatsapp.png'),
+SMS: require('../images/sms.png'),
 }
 
 export default AppImages;
