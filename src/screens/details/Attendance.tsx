@@ -191,7 +191,7 @@ const Attendance = ({
               marginR-10
             />
             <Text style={styles.text2}>
-              "You are kick off from this trip"
+              "You are pushed out from this trip"
             </Text>
           </View>
         </View>

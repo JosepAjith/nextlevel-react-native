@@ -177,7 +177,7 @@ const TripMembers: React.FC<Props> = ({route}: any) => {
                           styles.role,
                           {width: '60%', alignItems: 'center'},
                         ]}>
-                        <Text style={styles.roleText}>Kick off</Text>
+                        <Text style={styles.roleText}>Push out</Text>
                       </View>
                     </TouchableOpacity>
                   )}
@@ -207,7 +207,7 @@ const TripMembers: React.FC<Props> = ({route}: any) => {
                   visible={showAlert}
                   message={
                     selectedMember.action === 'kickout'
-                      ? 'Are you sure you want to kick off this member?'
+                      ? 'Are you sure you want to push out this member?'
                       : 'Are you sure you want to onboard this member?'
                   }
                   onCancel={handleCancel}
@@ -230,7 +230,7 @@ const TripMembers: React.FC<Props> = ({route}: any) => {
                   color: 'white',
                 }}
                 marginB-10>
-                Status: {title == 'Joined' ? 'Main Convey' : title}
+                Status: {title == 'Joined' ? 'Main Convey' : title == 'Kick off' ? 'Push Out' : title}
               </Text>
               {data.length == 0 && (
                 <Text
