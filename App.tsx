@@ -26,7 +26,6 @@ const App = () => {
   );
 
   useEffect(() => {
-    if (!__DEV__) {
   inAppUpdates.checkNeedsUpdate({}).then(result => {
     if (result.shouldUpdate) {
       const updateOptions: StartUpdateOptions = Platform.select({
@@ -43,7 +42,6 @@ const App = () => {
       inAppUpdates.startUpdate(updateOptions);
     }
   });
-}
 }, [])
 
   useEffect(() => {
