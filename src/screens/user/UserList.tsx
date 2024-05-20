@@ -49,25 +49,23 @@ export type UserListRouteProps = RouteProp<RootStackParams, 'UserList'>;
 
 interface Props {}
 const User = [
-  "First Join",
-  "newbie",
-  "newbie+",
-  "Intermediate Exam",
-  "Intermediate",
-  "Intermediate+",
-  "Advanced Exam",
-  "Advanced",
-  "Explorer"
+  'First Join',
+  'newbie',
+  'newbie+',
+  'Intermediate Exam',
+  'Intermediate',
+  'Intermediate+',
+  'Advanced Exam',
+  'Advanced',
+  'Explorer',
 ];
 
 const Level = [
   {type: 'First Join', id: 'First Join'},
   {type: 'newbie', id: 'newbie'},
   {type: 'newbie+', id: 'newbie+'},
-  {type: 'Intermediate Exam', id: 'Intermediate Exam'},
   {type: 'Intermediate', id: 'Intermediate'},
   {type: 'Intermediate+', id: 'Intermediate+'},
-  {type: 'Advanced Exam', id: 'Advanced Exam'},
   {type: 'Advanced', id: 'Advanced'},
 ];
 
@@ -99,9 +97,9 @@ const UserList: React.FC<Props> = () => {
     }, []),
   );
 
-useEffect(()=>{
-      FetchList(1);
-    }, [search, filterValue])
+  useEffect(() => {
+    FetchList(1);
+  }, [search, filterValue]);
 
   const FetchList = (page: number) => {
     if (IsNetConnected) {
@@ -207,7 +205,9 @@ useEffect(()=>{
             </TouchableOpacity>
           </View>
         </View>
-        <Text style={[styles.name,{bottom:10}]}>{'Total Users : ' + userCount}</Text>
+        <Text style={[styles.name, {bottom: 10}]}>
+          {'Total Users : ' + userCount}
+        </Text>
         <FlatList
           data={userList}
           numColumns={2}
@@ -232,44 +232,85 @@ useEffect(()=>{
                         borderRadius: 5,
                       }}
                     />
-                  
-                      <View center paddingT-10>
-                        <Text style={styles.name}>{item.name}</Text>
-                        <Text style={styles.email}>{item.email}</Text>
-                        <Text style={styles.email}>{item.level}</Text>
-                      </View>
-                    
-                      <View center>
-                        <Dropdown
-                          style={styles.role}
-                          placeholderStyle={styles.roleText}
-                          selectedTextStyle={styles.roleText}
-                          inputSearchStyle={styles.roleText}
-                          itemTextStyle={{fontSize: 12, color: 'black'}}
-                          data={Level}
-                          search
-                          maxHeight={300}
-                          labelField={'type'}
-                          valueField={'id'}
-                          placeholder="Update Role"
-                          value={item.level}
-                          searchPlaceholder="Search..."
-                          onChange={items => {
-                            updatingRole(item.id, items.type);
-                          }}
-                          renderRightIcon={() => (
-                            <View row centerV>
-                              <Text red10></Text>
-                              <Image
-                                source={AppImages.DOWN}
-                                tintColor="#3F4E59"
-                                width={11}
-                                height={6}
-                              />
-                            </View>
-                          )}
-                        />
-                      </View>
+
+                    <View center paddingT-10>
+                      <Text style={styles.name}>{item.name}</Text>
+                      <Text style={styles.email}>{item.email}</Text>
+                      <Text style={styles.email}>{item.level}</Text>
+                    </View>
+
+                    <View center>
+                      <Dropdown
+                        style={styles.role}
+                        placeholderStyle={styles.roleText}
+                        selectedTextStyle={styles.roleText}
+                        inputSearchStyle={styles.roleText}
+                        itemTextStyle={{fontSize: 12, color: 'black'}}
+                        data={Level}
+                        search
+                        maxHeight={300}
+                        labelField={'type'}
+                        valueField={'id'}
+                        placeholder="Update Role"
+                        value={item.level}
+                        searchPlaceholder="Search..."
+                        onChange={items => {
+                          updatingRole(item.id, items.type);
+                          // const currentIndex = Level.findIndex(level => level.type === item.level);
+                          // const selectedIndex = Level.findIndex(level => level.type === items.type);
+                          // if (Math.abs(currentIndex - selectedIndex) <= 1) {
+                          //   updatingRole(item.id, items.type);
+                          // }
+                          // else {
+                          //   showToast("Cannot update disabled item.");
+                          // }
+                        }}
+                        renderRightIcon={() => (
+                          <View row centerV>
+                            <Text red10></Text>
+                            <Image
+                              source={AppImages.DOWN}
+                              tintColor="#3F4E59"
+                              width={11}
+                              height={6}
+                            />
+                          </View>
+                        )}
+                        renderItem={dropdownItem => {
+                          const currentIndex = Level.findIndex(
+                            level => level.type === item.level,
+                          );
+                          const itemIndex = Level.findIndex(
+                            level => level.type === dropdownItem.type,
+                          );
+                          // Check if the item is adjacent to the current item
+                          const isAdjacent =
+                            Math.abs(currentIndex - itemIndex) <= 1;
+                          if (isAdjacent) {
+                            return (
+                              <View margin-10>
+                                <Text style={styles.roleText}>
+                                  {dropdownItem.type}
+                                </Text>
+                              </View>
+                            );
+                          } else {
+                            return null; // Render nothing for non-adjacent items
+                          }
+                        }}
+                        //   const currentIndex = Level.findIndex(level => level.type === item.level);
+                        //   const itemIndex = Level.findIndex(level => level.type === dropdownItem.type);
+                        //   const isDisabled = Math.abs(currentIndex - itemIndex) > 1;
+                        //   return (
+                        //     <View margin-10>
+                        //       <Text style={[styles.roleText, {color: isDisabled ? AppColors.Grey : 'black'}]}>
+                        //         {dropdownItem.type}
+                        //       </Text>
+                        //     </View>
+                        //   );
+                        // }}
+                      />
+                    </View>
                   </View>
                 </TouchableOpacity>
               </View>
@@ -278,7 +319,9 @@ useEffect(()=>{
           onEndReached={loadMoreTrips}
         />
       </View>
-      {filter && <TripFilter close={() => setFilter(false)} selected={filterValue}/>}
+      {filter && (
+        <TripFilter close={() => setFilter(false)} selected={filterValue} />
+      )}
     </View>
   );
 };
