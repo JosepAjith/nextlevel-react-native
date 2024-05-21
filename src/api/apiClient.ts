@@ -6,6 +6,7 @@ import {showToast} from '../constants/commonUtils';
 import NetInfo from '@react-native-community/netinfo';
 
 let BASE_URL = 'https://next-level.prompttechdemohosting.com/api/';
+// let BASE_URL = 'https://nxtlevel4x4.com/api/';
 
 export const apiClient = async (
   endPoint: string,
@@ -24,7 +25,7 @@ export const apiClient = async (
           Authorization:
             'Bearer ' + (await AsyncStorage.getItem(AppStrings.ACCESS_TOKEN)),
         },
-        timeout: 30000
+        timeout: 60000
       });
       return response;
     } catch (error) {
@@ -61,7 +62,7 @@ export const SimpleApiClient = async (
         Accept: 'application/json',
         'Content-Type': 'application/json',
       },
-      timeout: 30000
+      timeout: 60000
     });
     return response;
   } catch (error) {
@@ -89,7 +90,6 @@ export const ApiFormData = async (
   requestBody: any,
 ) => {
   const isConnected = await NetInfo.fetch().then(state => state.isConnected);
-  console.log(isConnected,'data')
   if (isConnected) {
   try {
     const response = await axios(BASE_URL + endPoint, {
@@ -101,7 +101,7 @@ export const ApiFormData = async (
         Authorization:
           'Bearer ' + (await AsyncStorage.getItem(AppStrings.ACCESS_TOKEN)),
       },
-       timeout: 30000
+       timeout: 60000
     });
     return response;
   } catch (error) {
@@ -131,7 +131,7 @@ export const getWithAuthCall = async (endPoint: string) => {
       Authorization:
         'Bearer ' + (await AsyncStorage.getItem(AppStrings.ACCESS_TOKEN)),
     },
-    timeout: 30000
+    timeout: 60000
   });
   return response;
 };

@@ -1,5 +1,8 @@
 import React, {useEffect} from 'react';
 import {
+  Alert,
+  BackHandler,
+  Linking,
   PermissionsAndroid,
   Platform,
   SafeAreaView,
@@ -28,21 +31,46 @@ const App = () => {
   useEffect(() => {
   inAppUpdates.checkNeedsUpdate({}).then(result => {
     if (result.shouldUpdate) {
-      const updateOptions: StartUpdateOptions = Platform.select({
-        ios: {
-          title: 'Update available',
-          message: "There is a new version of the app available on the App Store, do you want to update it?",
-          buttonUpgradeText: 'Update',
-          buttonCancelText: 'Cancel',
-        },
-        android: {
-          updateType: IAUUpdateKind.IMMEDIATE,
-        },
-      });
-      inAppUpdates.startUpdate(updateOptions);
+      if (Platform.OS === 'ios') {
+        Alert.alert(
+          'Update available',
+          "There is a new version of the app available on the App Store, do you want to update it?",
+          [
+            {
+              text: 'Cancel',
+              onPress: () => {
+                BackHandler.exitApp();
+              },
+              style: 'cancel'
+            },
+            {
+              text: 'Update',
+              onPress: () => {
+                Linking.openURL('https://apps.apple.com/in/app/nxt-lvl-4x4/id6479346224');
+              }
+            }
+          ],
+          { cancelable: false }
+        );
+      } else {
+        const updateOptions = {
+          updateType: IAUUpdateKind.IMMEDIATE
+        };
+        inAppUpdates.startUpdate(updateOptions)
+          .then(result => {
+            console.log('Update result:', result); // Debugging log
+            if (result === 'UPDATE_CANCELLED' || result === 'UPDATE_FAILED') {
+              BackHandler.exitApp();
+            }
+          })
+          .catch(error => {
+            console.error('Update error:', error); // Debugging log
+            BackHandler.exitApp();
+          });
+      }
     }
   });
-}, [])
+}, []);
 
   useEffect(() => {
     // Notifications

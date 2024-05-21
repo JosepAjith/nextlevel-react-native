@@ -148,7 +148,7 @@ const ResetPasswordScreen: React.FC<Props> = () => {
                     onPress={() =>
                       setValidate({
                         ...passwordValidate,
-                        showConfirmPass: !passwordValidate.showCurrent,
+                        showCurrent: !passwordValidate.showCurrent,
                       })
                     }>
                     {passwordValidate.showCurrent ? (

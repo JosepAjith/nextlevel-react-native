@@ -80,8 +80,8 @@ android {
         applicationId "com.nxtlevel.android"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 16
-        versionName "14.0.13"
+        versionCode 19
+        versionName "14.0.16"
     }
     signingConfigs {
         debug {
