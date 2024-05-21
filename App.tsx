@@ -32,6 +32,7 @@ const App = () => {
   inAppUpdates.checkNeedsUpdate({}).then(result => {
     if (result.shouldUpdate) {
       if (Platform.OS === 'ios') {
+        showToast('ios update')
         Alert.alert(
           'Update available',
           "There is a new version of the app available on the App Store, do you want to update it?",
@@ -53,6 +54,7 @@ const App = () => {
           { cancelable: false }
         );
       } else {
+        showToast('android update')
         const updateOptions = {
           updateType: IAUUpdateKind.IMMEDIATE
         };
@@ -68,6 +70,9 @@ const App = () => {
             BackHandler.exitApp();
           });
       }
+    }
+    else{
+      showToast(result.reason)
     }
   });
 }, []);
