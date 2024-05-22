@@ -34,7 +34,7 @@ package="com.nxtlevel.android">
           <category android:name="android.intent.category.DEFAULT" />
           <category android:name="android.intent.category.BROWSABLE" />
           <data android:scheme="https" />
-          <data android:host="next-level.prompttechdemohosting.com" />
+          <data android:host="nxtlevel4x4.com" />
       </intent-filter>
     
       </activity>

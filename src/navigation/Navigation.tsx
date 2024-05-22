@@ -9,7 +9,7 @@ import AppStrings from '../constants/AppStrings';
 const Navigation = () => {
   const dispatch = useDispatch();
   const linking = {
-    prefixes: ['https://next-level.prompttechdemohosting.com'], // Add your desired prefixes here
+    prefixes: ['https://nxtlevel4x4.com'], // Add your desired prefixes here
   };
 
   useEffect(() => {
@@ -28,26 +28,8 @@ const Navigation = () => {
     const route = url.replace(/.*?:\/\//g, '');
     const id = route.match(/\/([^\/]+)\/?$/)[1];
     
-    // Check if the app is installed
-    // const isAppInstalled = await Linking.canOpenURL(url);
-    // if(isAppInstalled){
     await AsyncStorage.setItem(AppStrings.DEEP_LINK_ID, String(id))
-    // }
-    // else{
-    //   redirectToAppStore();
-    // }
   }
-
-  // Function to redirect to the app store
-  const redirectToAppStore = () => {
-    const appStoreUrl = Platform.OS === 'ios' ?
-      'https://apps.apple.com/app-id/your-app-id' : // Replace 'your-app-id' with your iOS app's ID
-      'market://details?id=com.nxtlevel.android'; // Replace 'com.yourpackage.name' with your Android app's package name
-
-    Linking.openURL(appStoreUrl)
-      .then(() => console.log('Redirected to app store'))
-      .catch(error => console.error('Error redirecting to app store: ', error));
-  };
   
   useEffect(() => {
     const unsubscribe = NetInfo.addEventListener((state) => {
