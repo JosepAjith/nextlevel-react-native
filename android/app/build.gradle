@@ -82,6 +82,8 @@ android {
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 21
         versionName "15.0.0"
+
+        manifestPlaceholders = [autoVerify: "true"]
     }
     signingConfigs {
         debug {

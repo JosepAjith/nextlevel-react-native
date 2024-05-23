@@ -36,6 +36,14 @@ package="com.nxtlevel.android">
           <data android:scheme="https" />
           <data android:host="nxtlevel4x4.com" />
       </intent-filter>
+
+      <intent-filter android:autoVerify="${autoVerify}">
+        <action android:name="android.intent.action.VIEW" />
+        <category android:name="android.intent.category.DEFAULT" />
+        <category android:name="android.intent.category.BROWSABLE" />
+        <data android:scheme="http" />
+        <data android:host="nxtlevel4x4.com" />
+    </intent-filter>
     
       </activity>
 
