@@ -49,7 +49,7 @@ const MapScreen: React.FC<Props> = ({route}: any) => {
 
   const [isDone, setDone] = useState(false);
   const [address, setAddress] = useState('');
-  const [mapType, setMapType] = useState<'standard' | 'satellite'>('standard');
+  const [mapType, setMapType] = useState<'standard' | 'hybrid'>('standard');
   const {tripDetails} = useSelector((state: RootState) => state.TripDetails);
 
   useEffect(() => {
@@ -179,7 +179,7 @@ const MapScreen: React.FC<Props> = ({route}: any) => {
             backgroundColor={AppColors.Black}
             label={mapType === 'standard' ? 'Satellite' : 'Default'}
             onPress={() =>
-              setMapType(mapType === 'standard' ? 'satellite' : 'standard')
+              setMapType(mapType === 'standard' ? 'hybrid' : 'standard')
             }
           />
         </View>
