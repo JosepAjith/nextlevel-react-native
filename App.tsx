@@ -35,13 +35,11 @@ const App = () => {
         const appStoreUrl = 'https://apps.apple.com/in/app/nxt-lvl-4x4/id6479346224'; // App Store URL
   
         if (Platform.OS === 'ios') {
-          const response = await fetch(appStoreUrl);
-          const html = await response.text();
-  
-          // Extract the version number from the App Store page HTML (you may need to adjust this based on the actual HTML structure)
-          const match = html.match(/<span class="whats-new__latest__version">(.*?)<\/span>/);
-          const appStoreVersion = match ? match[1] : null;
-  
+          const response = await fetch('https://itunes.apple.com/lookup?bundleId=${com.bnbcnxtlevel.app}');
+          const data = await response.json();
+          if (data.resultCount > 0) {
+            const appStoreVersion = data.results[0].version
+
           if (appStoreVersion && appStoreVersion > currentVersion) {
             Alert.alert(
               'Update available',
@@ -64,6 +62,7 @@ const App = () => {
               { cancelable: false }
             );
           }
+        }
         } else {
           // For Android, you can continue using inAppUpdates
           const result = await inAppUpdates.checkNeedsUpdate({});
