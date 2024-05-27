@@ -16,6 +16,7 @@ import {
   formattedTime,
   getDateTime,
   getMonthDate,
+  getSplitDate,
   getUserDate,
 } from '../constants/commonUtils';
 import {RouteNames} from '../navigation';
@@ -85,6 +86,7 @@ const ListItem = ({item, index, navigation}: Props) => {
     }
   };
 
+
   return (
     <TouchableOpacity
       onPress={() => {
@@ -116,7 +118,7 @@ const ListItem = ({item, index, navigation}: Props) => {
           <View row margin-20>
             <Text style={styles.viewText}>{item.title}</Text>
             <View flex right>
-              <Text style={styles.date}>{getMonthDate(item.date)}</Text>
+              <Text style={styles.date}>{getSplitDate(item.date)}</Text>
               <Text style={styles.date}>{formattedTime(item.start_time)}</Text>
             </View>
           </View>

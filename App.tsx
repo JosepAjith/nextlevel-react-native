@@ -21,6 +21,7 @@ import PushNotification, {Importance} from 'react-native-push-notification';
 import PushNotificationIOS from '@react-native-community/push-notification-ios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import AppStrings from './src/constants/AppStrings';
+import DeviceInfo from 'react-native-device-info';
 
 const App = () => {
 
@@ -29,47 +30,57 @@ const App = () => {
   );
 
   useEffect(() => {
-  inAppUpdates.checkNeedsUpdate({}).then(result => {
-    if (result.shouldUpdate) {
-      if (Platform.OS === 'ios') {
-        Alert.alert(
-          'Update available',
-          "There is a new version of the app available on the App Store, do you want to update it?",
-          [
-            {
-              text: 'Cancel',
-              onPress: () => {
-                BackHandler.exitApp();
-              },
-              style: 'cancel'
-            },
-            {
-              text: 'Update',
-              onPress: () => {
-                Linking.openURL('https://apps.apple.com/in/app/nxt-lvl-4x4/id6479346224');
-              }
-            }
-          ],
-          { cancelable: false }
-        );
-      } else {
-        const updateOptions = {
-          updateType: IAUUpdateKind.IMMEDIATE
-        };
-        inAppUpdates.startUpdate(updateOptions)
-          .then(result => {
-            if (result === 'UPDATE_CANCELLED' || result === 'UPDATE_FAILED') {
+    const checkForUpdates = async () => {
+        const currentVersion = DeviceInfo.getVersion(); // Get the current version of the app
+        const appStoreUrl = 'https://apps.apple.com/in/app/nxt-lvl-4x4/id6479346224'; // App Store URL
+  
+        if (Platform.OS === 'ios') {
+          const response = await fetch(appStoreUrl);
+          const html = await response.text();
+  
+          // Extract the version number from the App Store page HTML (you may need to adjust this based on the actual HTML structure)
+          const match = html.match(/<span class="whats-new__latest__version">(.*?)<\/span>/);
+          const appStoreVersion = match ? match[1] : null;
+  
+          if (appStoreVersion && appStoreVersion > currentVersion) {
+            Alert.alert(
+              'Update available',
+              'There is a new version of the app available on the App Store, do you want to update it?',
+              [
+                {
+                  text: 'Cancel',
+                  onPress: () => {
+                    BackHandler.exitApp();
+                  },
+                  style: 'cancel'
+                },
+                {
+                  text: 'Update',
+                  onPress: () => {
+                    Linking.openURL(appStoreUrl);
+                  }
+                }
+              ],
+              { cancelable: false }
+            );
+          }
+        } else {
+          // For Android, you can continue using inAppUpdates
+          const result = await inAppUpdates.checkNeedsUpdate({});
+          if (result.shouldUpdate) {
+            const updateOptions = {
+              updateType: IAUUpdateKind.IMMEDIATE
+            };
+            const updateResult = await inAppUpdates.startUpdate(updateOptions);
+            if (updateResult === 'UPDATE_CANCELLED' || updateResult === 'UPDATE_FAILED') {
               BackHandler.exitApp();
             }
-          })
-          .catch(error => {
-            console.error('Update error:', error); // Debugging log
-            BackHandler.exitApp();
-          });
-      }
-    }
-  });
-}, []);
+          }
+        }
+    };
+  
+    checkForUpdates();
+  }, []);
 
   useEffect(() => {
     // Notifications
