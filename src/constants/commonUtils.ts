@@ -36,6 +36,10 @@ export const getMonthDate = (currentDate: moment.MomentInput) => {
   return moment(currentDate).format('DD-MMM-YYYY');
 };
 
+export const getSplitDate = (currentDate: moment.MomentInput) => {
+  return moment(currentDate).format('ddd, MMM DD, YYYY');
+};
+
 export const getDateTime = (currentDate: moment.MomentInput) => {
   return moment(currentDate).format('DD-MM-YYYY h:mm A');
 };

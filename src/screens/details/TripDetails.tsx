@@ -30,7 +30,7 @@ import BackgroundLoader from '../../components/BackgroundLoader';
 import ButtonView from '../../components/ButtonView';
 import {deleteReset, deleteTrip} from '../../api/trip/TripDeleteSlice';
 import LevelView from '../../components/LevelView';
-import { fetchMemberList } from '../../api/member/MemberListSlice';
+import {fetchMemberList} from '../../api/member/MemberListSlice';
 
 const {TextField} = Incubator;
 
@@ -122,7 +122,7 @@ const TripDetails: React.FC<Props> = ({route}: any) => {
   //       return true;
   //     }
   //   }
-  
+
   //   // Check "Support" section
   //   const supportSection = members.find(section => section.title === "Support");
   //   if (supportSection) {
@@ -176,7 +176,9 @@ const TripDetails: React.FC<Props> = ({route}: any) => {
                         : '#BBFD79'
                     }>
                     <Text style={styles.statusText}>
-                      {tripDetails.data.trip_status == 'completed' ? 'closed' : tripDetails.data.trip_status}
+                      {tripDetails.data.trip_status == 'completed'
+                        ? 'closed'
+                        : tripDetails.data.trip_status}
                     </Text>
                   </View>
                 </View>
@@ -200,24 +202,24 @@ const TripDetails: React.FC<Props> = ({route}: any) => {
 
               <View row centerV marginV-10>
                 <View flex>
-                <View row centerV>
-                  <Text style={styles.text1}>Capacity</Text>
-                  <View style={styles.capView}>
-                    <Text style={styles.capty}>
-                      {tripDetails.data.trip_book_joined_count}{' '}/{' '}
-                      {tripDetails.data.capacity}
-                    </Text>
+                  <View row centerV>
+                    <Text style={styles.text1}>Capacity</Text>
+                    <View style={styles.capView}>
+                      <Text style={styles.capty}>
+                        {tripDetails.data.trip_book_joined_count} /{' '}
+                        {tripDetails.data.capacity}
+                      </Text>
+                    </View>
                   </View>
-                </View>
 
-                <View marginT-10 row centerV>
-                  <Text style={styles.text1}>Support</Text>
-                  <View style={styles.capView}>
-                    <Text style={styles.capty}>
-                      {tripDetails.data.trip_book_support_count.toString()}
-                    </Text>
+                  <View marginT-10 row centerV>
+                    <Text style={styles.text1}>Support</Text>
+                    <View style={styles.capView}>
+                      <Text style={styles.capty}>
+                        {tripDetails.data.trip_book_support_count.toString()}
+                      </Text>
+                    </View>
                   </View>
-                </View>
                 </View>
 
                 <View row centerV>
@@ -228,7 +230,10 @@ const TripDetails: React.FC<Props> = ({route}: any) => {
 
               <View marginB-20>
                 {renderDetails('Organized By', tripDetails.data.user.nick_name)}
-                {renderDetails('Trip Date', getMonthDate(tripDetails.data.date))}
+                {renderDetails(
+                  'Trip Date',
+                  getMonthDate(tripDetails.data.date),
+                )}
                 {renderDetails(
                   'Post Date',
                   getMonthDate(tripDetails.data.created_at),
@@ -277,71 +282,99 @@ const TripDetails: React.FC<Props> = ({route}: any) => {
                 )}
               </View>
 
-              {(tripDetails.data.trip_book
-                ? tripDetails.data.trip_book.application_status != 'kick-off' &&
+              {tripDetails.data.trip_book ? (
+                tripDetails.data.trip_status !== 'expired' &&
+                tripDetails.data.trip_status !== 'completed' &&
+                tripDetails.data.trip_status !== 'cancelled' ? (
                   moment(new Date()).isBetween(
                     moment(tripDetails.data.joining_start_date),
                     moment(tripDetails.data.joining_deadline),
-                  )
-                : moment(new Date()).isBetween(
-                    moment(tripDetails.data.joining_start_date),
-                    moment(tripDetails.data.joining_deadline),
-                  )) &&
-                tripDetails.data.trip_status != 'expired' &&
-                tripDetails.data.trip_status != 'completed' &&
-                tripDetails.data.trip_status != 'cancelled' && (
-                  <View row marginB-20>
-                    {tripDetails.data.trip_book &&
-                    (tripDetails.data.trip_book.application_status ===
-                      'support' ||
+                  ) ? (
+                    <View row marginB-20>
+                      {tripDetails.data.trip_book.application_status ===
+                        'support' ||
                       tripDetails.data.trip_book.application_status ===
                         'joined' ||
                       tripDetails.data.trip_book.application_status ===
-                        'waiting list') ? (
-                      <>
-                        <TouchableOpacity
-                          onPress={() =>
-                            navigation.navigate(RouteNames.JoinTrip, {
-                              id: tripDetails.data.trip_book.id,
-                              status:
-                                tripDetails.data.trip_book.application_status,
-                              type: 'edit',
-                            })
-                          }>
-                          <View style={styles.yellowButton}>
-                            <Text style={styles.text2}>Edit Ride</Text>
-                          </View>
-                        </TouchableOpacity>
+                        'waiting list' ? (
+                        <>
+                          <TouchableOpacity
+                            onPress={() =>
+                              navigation.navigate(RouteNames.JoinTrip, {
+                                id: tripDetails.data.trip_book.id,
+                                status:
+                                  tripDetails.data.trip_book.application_status,
+                                type: 'edit',
+                              })
+                            }>
+                            <View style={styles.yellowButton}>
+                              <Text style={styles.text2}>Edit Ride</Text>
+                            </View>
+                          </TouchableOpacity>
 
-                        <TouchableOpacity
-                          onPress={() =>
-                            cancelingTrip(tripDetails.data.trip_book.id)
-                          }>
-                          <View style={styles.whiteButton}>
-                            <Text style={[styles.text2, {color: 'black'}]}>
-                              Sign out
-                            </Text>
-                          </View>
-                        </TouchableOpacity>
-                      </>
-                    ) : tripDetails.data.trip_book &&
-                      tripDetails.data.trip_book.application_status ===
+                          <TouchableOpacity
+                            onPress={() =>
+                              cancelingTrip(tripDetails.data.trip_book.id)
+                            }>
+                            <View style={styles.whiteButton}>
+                              <Text style={[styles.text2, {color: 'black'}]}>
+                                Sign out
+                              </Text>
+                            </View>
+                          </TouchableOpacity>
+                        </>
+                      ) : tripDetails.data.trip_book.application_status ===
                         'may be' ? (
-                      <>
-                        <TouchableOpacity
-                          onPress={() =>
-                            navigation.navigate(RouteNames.JoinTrip, {
-                              id: tripDetails.data.trip_book.id,
-                              status:
-                                tripDetails.data.trip_book.application_status,
-                              type: 'edit',
-                            })
-                          }>
-                          <View style={styles.yellowButton}>
-                            <Text style={styles.text2}>Edit</Text>
-                          </View>
-                        </TouchableOpacity>
+                        <>
+                          <TouchableOpacity
+                            onPress={() =>
+                              navigation.navigate(RouteNames.JoinTrip, {
+                                id: tripDetails.data.trip_book.id,
+                                status:
+                                  tripDetails.data.trip_book.application_status,
+                                type: 'edit',
+                              })
+                            }>
+                            <View style={styles.yellowButton}>
+                              <Text style={styles.text2}>Edit</Text>
+                            </View>
+                          </TouchableOpacity>
 
+                          <TouchableOpacity
+                            onPress={() =>
+                              cancelingTrip(tripDetails.data.trip_book.id)
+                            }>
+                            <View style={styles.whiteButton}>
+                              <Text style={[styles.text2, {color: 'black'}]}>
+                                Not Interested
+                              </Text>
+                            </View>
+                          </TouchableOpacity>
+                        </>
+                      ) : null}
+                    </View>
+                  ) : tripDetails.data.trip_book.application_status ===
+                      'support' ||
+                    tripDetails.data.trip_book.application_status ===
+                      'joined' ||
+                    tripDetails.data.trip_book.application_status ===
+                      'waiting list' ? (
+                    <View marginB-20 center>
+                      <TouchableOpacity
+                        onPress={() =>
+                          cancelingTrip(tripDetails.data.trip_book.id)
+                        }>
+                        <View style={[styles.whiteButton, {marginLeft: 0}]}>
+                          <Text style={[styles.text2, {color: 'black'}]}>
+                            Sign out
+                          </Text>
+                        </View>
+                      </TouchableOpacity>
+                    </View>
+                  ) : (
+                    tripDetails.data.trip_book.application_status ===
+                      'may be' && (
+                      <View marginB-20 center>
                         <TouchableOpacity
                           onPress={() =>
                             cancelingTrip(tripDetails.data.trip_book.id)
@@ -352,58 +385,65 @@ const TripDetails: React.FC<Props> = ({route}: any) => {
                             </Text>
                           </View>
                         </TouchableOpacity>
-                      </>
-                    ) : (
-                      <>
-                        <TouchableOpacity
-                          onPress={() =>
-                            navigation.navigate(RouteNames.JoinTrip, {
-                              id: tripDetails.data.id,
-                              status:
-                                tripDetails.data.level === 'Get To Gether'
-                                  ? ''
-                                  : type.toLowerCase() ===
-                                    tripDetails.data.level.toLowerCase()
-                                  ? ''
-                                  : 'support',
-                              type: 'join',
-                            })
-                          }>
-                          <View style={styles.yellowButton}>
-                            <Text style={styles.text2}>
-                              {tripDetails.data.level === 'Get To Gether'
-                                ? 'Sign in'
-                                : type.toLowerCase() ===
-                                  tripDetails.data.level.toLowerCase()
-                                ? Number(tripDetails.data.capacity) !==
-                                  Number(
-                                    tripDetails.data.trip_book_joined_count,
-                                  )
-                                  ? 'Sign in'
-                                  : 'Sign in waiting'
-                                : 'Support Sign in'}
-                            </Text>
-                          </View>
-                        </TouchableOpacity>
+                      </View>
+                    )
+                  )
+                ) : null
+              ) : (
+                moment(new Date()).isBetween(
+                  moment(tripDetails.data.joining_start_date),
+                  moment(tripDetails.data.joining_deadline),
+                ) &&
+                tripDetails.data.trip_status !== 'expired' &&
+                tripDetails.data.trip_status !== 'completed' &&
+                tripDetails.data.trip_status !== 'cancelled' && (
+                  <View row marginB-20>
+                    <TouchableOpacity
+                      onPress={() =>
+                        navigation.navigate(RouteNames.JoinTrip, {
+                          id: tripDetails.data.id,
+                          status:
+                            tripDetails.data.level === 'Get To Gether'
+                              ? ''
+                              : type.toLowerCase() ===
+                                tripDetails.data.level.toLowerCase()
+                              ? ''
+                              : 'support',
+                          type: 'join',
+                        })
+                      }>
+                      <View style={styles.yellowButton}>
+                        <Text style={styles.text2}>
+                          {tripDetails.data.level === 'Get To Gether'
+                            ? 'Sign in'
+                            : type.toLowerCase() ===
+                              tripDetails.data.level.toLowerCase()
+                            ? Number(tripDetails.data.capacity) !==
+                              Number(tripDetails.data.trip_book_joined_count)
+                              ? 'Sign in'
+                              : 'Sign in waiting'
+                            : 'Support Sign in'}
+                        </Text>
+                      </View>
+                    </TouchableOpacity>
 
-                        <TouchableOpacity
-                          onPress={() =>
-                            navigation.navigate(RouteNames.JoinTrip, {
-                              id: tripDetails.data.id,
-                              status: 'may be',
-                              type: 'join',
-                            })
-                          }>
-                          <View style={styles.whiteButton}>
-                            <Text style={[styles.text2, {color: 'black'}]}>
-                              Maybe
-                            </Text>
-                          </View>
-                        </TouchableOpacity>
-                      </>
-                    )}
+                    <TouchableOpacity
+                      onPress={() =>
+                        navigation.navigate(RouteNames.JoinTrip, {
+                          id: tripDetails.data.id,
+                          status: 'may be',
+                          type: 'join',
+                        })
+                      }>
+                      <View style={styles.whiteButton}>
+                        <Text style={[styles.text2, {color: 'black'}]}>
+                          Maybe
+                        </Text>
+                      </View>
+                    </TouchableOpacity>
                   </View>
-                )}
+                )
+              )}
 
               <Attendance
                 startDate={tripDetails.data.joining_start_date}
