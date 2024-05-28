@@ -11,12 +11,16 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
   [GMSServices provideAPIKey:@"AIzaSyDWcCxgYNwP2NAQ6A5CFehiLKOzCq2Qvds"];
+  // Configure user notifications
   UNUserNotificationCenter *center = [UNUserNotificationCenter currentNotificationCenter];
   center.delegate = self;
   self.moduleName = @"NextLevel";
-  // You can add your custom initial props in the dictionary below.
-  // They will be passed down to the ViewController used by React Native.
+  
+  // Custom initial props, if any
   self.initialProps = @{};
+
+  // Register for remote notifications
+  [application registerForRemoteNotifications];
 
   return [super application:application didFinishLaunchingWithOptions:launchOptions];
 }

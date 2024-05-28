@@ -24,21 +24,23 @@ import AppStrings from './src/constants/AppStrings';
 import DeviceInfo from 'react-native-device-info';
 
 const App = () => {
-
   const inAppUpdates = new SpInAppUpdates(
-    false // isDebug
+    false, // isDebug
   );
 
   useEffect(() => {
     const checkForUpdates = async () => {
-        const currentVersion = DeviceInfo.getVersion(); // Get the current version of the app
-        const appStoreUrl = 'https://apps.apple.com/in/app/nxt-lvl-4x4/id6479346224'; // App Store URL
-  
-        if (Platform.OS === 'ios') {
-          const response = await fetch('https://itunes.apple.com/lookup?bundleId=${com.bnbcnxtlevel.app}');
-          const data = await response.json();
-          if (data.resultCount > 0) {
-            const appStoreVersion = data.results[0].version
+      const currentVersion = DeviceInfo.getVersion(); // Get the current version of the app
+      const appStoreUrl =
+        'https://apps.apple.com/in/app/nxt-lvl-4x4/id6479346224'; // App Store URL
+
+      if (Platform.OS === 'ios') {
+        const response = await fetch(
+          'https://itunes.apple.com/lookup?bundleId=${com.bnbcnxtlevel.app}',
+        );
+        const data = await response.json();
+        if (data.resultCount > 0) {
+          const appStoreVersion = data.results[0].version;
 
           if (appStoreVersion && appStoreVersion > currentVersion) {
             Alert.alert(
@@ -50,49 +52,54 @@ const App = () => {
                   onPress: () => {
                     BackHandler.exitApp();
                   },
-                  style: 'cancel'
+                  style: 'cancel',
                 },
                 {
                   text: 'Update',
                   onPress: () => {
                     Linking.openURL(appStoreUrl);
-                  }
-                }
+                  },
+                },
               ],
-              { cancelable: false }
+              {cancelable: false},
             );
           }
         }
-        } else {
-          // For Android, you can continue using inAppUpdates
-          const result = await inAppUpdates.checkNeedsUpdate({});
-          if (result.shouldUpdate) {
-            const updateOptions = {
-              updateType: IAUUpdateKind.IMMEDIATE
-            };
-            const updateResult = await inAppUpdates.startUpdate(updateOptions);
-            if (updateResult === 'UPDATE_CANCELLED' || updateResult === 'UPDATE_FAILED') {
-              BackHandler.exitApp();
-            }
+      } else {
+        // For Android, you can continue using inAppUpdates
+        const result = await inAppUpdates.checkNeedsUpdate({});
+        if (result.shouldUpdate) {
+          const updateOptions = {
+            updateType: IAUUpdateKind.IMMEDIATE,
+          };
+          const updateResult = await inAppUpdates.startUpdate(updateOptions);
+          if (
+            updateResult === 'UPDATE_CANCELLED' ||
+            updateResult === 'UPDATE_FAILED'
+          ) {
+            BackHandler.exitApp();
           }
         }
+      }
     };
-  
+
     checkForUpdates();
   }, []);
 
   useEffect(() => {
     // Notifications
     checkApplicationPermission();
-    PushNotification.createChannel(
-      {
-        channelId: 'nxtlevel_channel_id',
-        channelName: 'nxtlevel Notifications',
-        importance: Importance.HIGH,
-        vibrate: true,
-      },
-      created => console.log(`Channel created: ${created}`),
-    );
+    if (Platform.OS == 'android') {
+      PushNotification.createChannel(
+        {
+          channelId: 'nxtlevel_channel_id',
+          channelName: 'nxtlevel Notifications',
+          importance: Importance.HIGH,
+          vibrate: true,
+        },
+        created => console.log(`Channel created: ${created}`),
+      );
+    }
     PushNotification.configure({
       invokeApp: true,
       onRegister: async function (token) {
@@ -105,15 +112,26 @@ const App = () => {
             // If the notification was clicked, navigate to the desired screen
           } else {
             // If the notification is received while the app is in the foreground, display a local notification
-            PushNotification.localNotification({
-              title: notification.title,
-              message: notification.message,
-              channelId: 'nxtlevel_channel_id',
-            });
+            if (Platform.OS == 'ios') {
+              PushNotification.localNotification({
+                title: notification.title,
+                message: notification.message,
+              });
+            } else {
+              PushNotification.localNotification({
+                title: notification.title,
+                message: notification.message,
+                channelId: 'nxtlevel_channel_id',
+              });
+            }
           }
         } else {
+       
           if (notification.userInteraction) {
             console.log('Background Notification:', notification);
+            if(notification.data){
+              Linking.openURL("https://nxtlevel4x4.com")
+            }
           }
         }
         notification.finish(PushNotificationIOS.FetchResult.NoData);
@@ -123,7 +141,7 @@ const App = () => {
         console.log('NOTIFICATION:', notification);
       },
       onRegistrationError: function (err) {
-        console.error(err.message, err);
+        showToast(err.message);
       },
       senderID: '1096238675733',
       permissions: {
@@ -159,7 +177,6 @@ const App = () => {
       } catch (error) {}
     }
   };
-  
 
   return (
     <SafeAreaView style={styles.container}>
