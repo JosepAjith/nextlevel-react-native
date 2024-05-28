@@ -57,11 +57,14 @@ const TripDetails: React.FC<Props> = ({route}: any) => {
   const {cancelData, loadingCancel, cancelError} = useSelector(
     (state: RootState) => state.TripCancel,
   );
+  const {members} = useSelector(
+    (state: RootState) => state.MemberList,
+  );
 
   useFocusEffect(
     React.useCallback(() => {
       fetchDetails();
-      // fetchMembers();
+      fetchMembers();
       if (isDeepLink) {
         // Add back handler for deep link
         const backHandler = BackHandler.addEventListener(
@@ -112,27 +115,35 @@ const TripDetails: React.FC<Props> = ({route}: any) => {
     }
   }, [cancelData]);
 
-  // const isIdPresentInJoinedOrSupport = () => {
-  //   // Check "Joined" section
-  //   const joinedSection = members.find(section => section.title === "Joined");
-  //   if (joinedSection) {
-  //     const joinedMembers = joinedSection.data;
-  //     const isIdInJoined = joinedMembers.some(member => member.id === loginUserId);
-  //     if (isIdInJoined) {
-  //       return true;
-  //     }
-  //   }
+  const fetchMembers = () => {
+    let request = JSON.stringify({
+      trip_id: id,
+      application_status: '',
+    });
+    dispatch(fetchMemberList({requestBody: request}));
+  }
 
-  //   // Check "Support" section
-  //   const supportSection = members.find(section => section.title === "Support");
-  //   if (supportSection) {
-  //     const supportMembers = supportSection.data;
-  //     const isIdInSupport = supportMembers.some(member => member.id === loginUserId);
-  //     if (isIdInSupport) {
-  //       return true;
-  //     }
-  //   }
-  // };
+  const isIdPresentInJoinedOrSupport = () => {
+    // Check "Joined" section
+    const joinedSection = members.find(section => section.title === "Joined");
+    if (joinedSection) {
+      const joinedMembers = joinedSection.data;
+      const isIdInJoined = joinedMembers.some(member => member.id === loginUserId);
+      if (isIdInJoined) {
+        return true;
+      }
+    }
+
+    // Check "Support" section
+    const supportSection = members.find(section => section.title === "Support");
+    if (supportSection) {
+      const supportMembers = supportSection.data;
+      const isIdInSupport = supportMembers.some(member => member.id === loginUserId);
+      if (isIdInSupport) {
+        return true;
+      }
+    }
+  };
 
   const renderDetails = (label: string, value: string) => (
     <View row marginB-10>
@@ -250,7 +261,7 @@ const TripDetails: React.FC<Props> = ({route}: any) => {
                   'Finish Time',
                   formattedTime(tripDetails.data.finish_time),
                 )}
-                {/* {isIdPresentInJoinedOrSupport() && ( */}
+                {isIdPresentInJoinedOrSupport() && (
                 <View row marginB-10>
                   <Text style={styles.rightText}>Meeting Point Location</Text>
                   <TouchableOpacity
@@ -265,7 +276,7 @@ const TripDetails: React.FC<Props> = ({route}: any) => {
                     </Text>
                   </TouchableOpacity>
                 </View>
-                {/* )} */}
+                )} 
                 {renderDetails('City', tripDetails.data.city)}
                 {renderDetails('Area', tripDetails.data.area_details)}
                 {renderDetails(

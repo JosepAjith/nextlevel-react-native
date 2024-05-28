@@ -50,6 +50,7 @@ pod 'react-native-google-maps', :path => rn_maps_path
 
 target 'NextLevel' do
   config = use_native_modules!
+  pod 'React-RCTLinking', :path => '../node_modules/react-native/Libraries/LinkingIOS'
 
   use_react_native!(
     :path => config[:reactNativePath],

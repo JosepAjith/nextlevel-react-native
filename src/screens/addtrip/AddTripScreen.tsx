@@ -970,6 +970,8 @@ const AddTripScreen: React.FC<Props> = ({route, id, initial}: Props) => {
             <TextField
               fieldStyle={[styles.field, {height: 100}]}
               label={'Description'}
+              spellCheck={true}
+              autoCorrect={true}
               placeholder={'Enter description'}
               placeholderTextColor={'#999999'}
               labelStyle={styles.label}
