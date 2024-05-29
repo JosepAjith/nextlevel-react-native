@@ -26,7 +26,7 @@ const CarouselView = ({images}: Prop) => {
         data={images}
         onSnapToItem={(index) => setCurrentIndex(index)}
         renderItem={({ item }) => (
-       <ImageBackground source={{uri: item.image}} style={{width:'100%', height:170,alignSelf:'center'}} imageStyle={{borderRadius:5}}>
+       <ImageBackground source={{uri: item.image}} style={{width:'100%', height:170,alignSelf:'center'}} imageStyle={{borderRadius:5, resizeMode:'cover'}}>
           <View flex row centerH bottom marginB-20>
                 {images.map((item, index) => (
                     <View key={index} style={[styles.dot, { backgroundColor: index === currentIndex ? 'white' : 'transparent' }]} />

@@ -63,7 +63,6 @@ const ListItem = ({item, index, navigation}: Props) => {
   };
 
   const shareUrl = async (url: any) => {
-    //  const deepLink = 'com.bnbcnxtlevel.app://next-level.prompttechdemohosting.com';
     const shareOptions = {
       title: 'Share file',
       message: 'Join here ==>',
@@ -108,6 +107,7 @@ const ListItem = ({item, index, navigation}: Props) => {
           imageStyle={{
             borderTopLeftRadius: 10,
             borderTopRightRadius: 10,
+            resizeMode:'cover'
           }}>
           <View
             style={{

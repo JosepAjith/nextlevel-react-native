@@ -261,7 +261,7 @@ const TripDetails: React.FC<Props> = ({route}: any) => {
                   'Finish Time',
                   formattedTime(tripDetails.data.finish_time),
                 )}
-                {isIdPresentInJoinedOrSupport() && (
+                {(isIdPresentInJoinedOrSupport() || loginUserId == tripDetails.data.user_id) && (
                 <View row marginB-10>
                   <Text style={styles.rightText}>Meeting Point Location</Text>
                   <TouchableOpacity
