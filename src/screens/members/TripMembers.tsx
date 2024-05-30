@@ -151,6 +151,8 @@ const TripMembers: React.FC<Props> = ({route}: any) => {
                 <Text style={styles.name}>{item.nick_name}</Text>
                 <Text style={styles.email}>{item.email}</Text>
                 <Text style={styles.email}>{item.level}</Text>
+                {item.trip_book &&
+                <>
                 <Text style={[styles.name, {fontSize: 10}]} marginV-5>
                   {item.trip_book.vehicle}
                 </Text>
@@ -160,6 +162,8 @@ const TripMembers: React.FC<Props> = ({route}: any) => {
                 <Text style={styles.email}>
                   Contact Info : {item.trip_book.phone}
                 </Text>
+                </>
+        }
 
                 {userId === loginUserId &&
                   (section.title === 'Joined' || section.title === 'Support') &&

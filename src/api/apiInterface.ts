@@ -11,6 +11,7 @@ import { TripCancelResponse } from './joinTrip/TripCancelSlice';
 import { TripJoinResponse } from './joinTrip/TripJoinSlice';
 import { UpdateRoleResponse } from './levelUpdate/UpdateRoleSlice';
 import { LoginResponse } from './login/LoginCreateSlice';
+import { LogoutResponse } from './login/LogoutSlice';
 import { MarkAttendanceResponse } from './markAttendance/MarkAttendanceSlice';
 import { MemberListData } from './member/MemberListResponse';
 import { MemberStatusResponse } from './member/MemberStatusSlice';
@@ -58,6 +59,25 @@ export const createLogin = async (
   requestBody: any,
 ): Promise<NetworkResponse<LoginResponse>> => {
   const response = await SimpleApiClient('login', 'POST', requestBody);
+
+  if (response && response.status) {
+    const json = await response.data;
+    return {
+      kind: 'success',
+      body: json,
+    };
+  } else {
+    return {
+      kind: 'failure',
+    };
+  }
+};
+
+//API FOR LOGOUT
+export const createLogout = async (
+  requestBody: any,
+): Promise<NetworkResponse<LogoutResponse>> => {
+  const response = await apiClient('logout', 'POST', requestBody);
 
   if (response && response.status) {
     const json = await response.data;

@@ -27,6 +27,7 @@ import GetNotificationSlice from './src/api/notification/GetNotificationSlice';
 import DeleteNotificationSlice from './src/api/notification/DeleteNotificationSlice';
 import MemberStatusSlice from './src/api/member/MemberStatusSlice';
 import ShareUrlSlice from './src/api/share/ShareUrlSlice';
+import LogoutSlice from './src/api/login/LogoutSlice';
 
 
 const rootReducer = combineReducers({
@@ -34,6 +35,7 @@ const rootReducer = combineReducers({
   registerCreate: RegisterCreateSlice,
   GlobalVariables: GlobalVariables,
   loginCreate: LoginCreateSlice,
+  logout: LogoutSlice,
   SendOtp: SendOtpSlice,
   VerifyOtp: VerifyOtpSlice,
   ChangePassword: ChangePasswordSlice,

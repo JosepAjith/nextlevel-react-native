@@ -25,10 +25,13 @@ const Personal = ({data}: Props) => {
         if (supported) {
           return Linking.openURL(status == 'whatsapp' ? whatsappURL : status == 'sms' ? smsURL : phoneUrl);
         } else {
-          showToast('Not supported');
+          showToast(`Cannot open ${status}. Make sure the app is installed.`);
         }
       })
-      .catch(err => console.error('An error occurred', err));
+      .catch(err => {
+        console.error('An error occurred', err)
+        showToast('An error occurred. Please try again.');
+  });
   };
   return (
     <View>

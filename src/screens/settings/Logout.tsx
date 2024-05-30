@@ -18,20 +18,51 @@ import {showToast} from '../../constants/commonUtils';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import AppStrings from '../../constants/AppStrings';
 import {RouteNames} from '../../navigation';
+import {createLogout, reset} from '../../api/login/LogoutSlice';
 const deviceHeight = Dimensions.get('window').height;
 
 const Logout = (props: {close: any; navigation: any}) => {
   const close = props.close;
   const navigation = props.navigation;
+  const dispatch: ThunkDispatch<RootState, any, AnyAction> = useDispatch();
+  const {OutData, loadingOut, OutError} = useSelector(
+    (state: RootState) => state.logout,
+  );
 
   useEffect(() => {
     openModal();
   }, []);
 
   const LoggingOut = async () => {
+    try{
+    let token = await AsyncStorage.getItem(AppStrings.ACCESS_TOKEN);
+    dispatch(createLogout({requestBody: {fcm_token: token}}))
+      .then(() => {
+        dispatch(reset());
+      })
+      .catch((err: any) => console.log(err));
+    }catch (err) {
+      console.log(err);
+    }
+  };
+
+  useEffect(() => {
+    if (OutData != null) {
+      if (!loadingOut && !OutError && OutData.status) {
+        showToast(OutData.message);
+        remove();
+      } else {
+        showToast(OutData.message);
+        remove();
+      }
+    }
+  }, [OutData]);
+
+  const remove = async () => {
     await AsyncStorage.removeItem(AppStrings.ACCESS_TOKEN);
     await AsyncStorage.removeItem(AppStrings.IS_LOGIN);
     await AsyncStorage.removeItem(AppStrings.TYPE);
+    await AsyncStorage.removeItem(AppStrings.LOGIN_USER_ID);
     navigation.reset({
       index: 0,
       routes: [{name: RouteNames.LoginScreen}],
