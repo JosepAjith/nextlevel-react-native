@@ -8,6 +8,7 @@ import {
   BackHandler,
   ImageSourcePropType,
   LayoutAnimation,
+  Linking,
   Platform,
   StyleSheet,
   TouchableOpacity,
@@ -97,6 +98,7 @@ const BottomTabs = () => {
   const FilterClose = () => {
     dispatch({type: 'IS_FILTER', payload: false});
   };
+
 
   const renderTab = (tabName: string, iconName: any) => (
     <TouchableOpacity

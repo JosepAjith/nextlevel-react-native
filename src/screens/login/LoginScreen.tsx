@@ -15,7 +15,12 @@ import AppColors from '../../constants/AppColors';
 import {styles} from './styles';
 import AppImages from '../../constants/AppImages';
 import ButtonView from '../../components/ButtonView';
-import {KeyboardAvoidingView, Platform, ScrollView, TouchableOpacity} from 'react-native';
+import {
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  TouchableOpacity,
+} from 'react-native';
 import {AnyAction, ThunkDispatch} from '@reduxjs/toolkit';
 import {RootState} from '../../../store';
 import {useDispatch, useSelector} from 'react-redux';
@@ -116,7 +121,7 @@ const LoginScreen: React.FC<Props> = () => {
           AppStrings.LOGIN_USER_ID,
           String(LoginData.user.id),
         );
-        navigation.replace(RouteNames.BottomTabs);
+        NavigationFunction();
       } else {
         if (LoginData.verified == 0) {
           navigation.navigate(RouteNames.VerificationScreen, {
@@ -129,70 +134,84 @@ const LoginScreen: React.FC<Props> = () => {
     }
   }, [LoginData]);
 
+  const NavigationFunction = async () => {
+    let DeepLinkId = await AsyncStorage.getItem(AppStrings.DEEP_LINK_ID);
+    if (DeepLinkId == null) {
+      navigation.replace(RouteNames.BottomTabs);
+    } else {
+      navigation.replace(RouteNames.JoinTrip, {
+        id: Number(DeepLinkId),
+        status:'',
+        type: 'join',
+        isDeepLink: true
+      })
+    }
+  };
+
   return (
     <KeyboardAvoidingView
-    style={{ flex: 1 }} // Make sure it takes full height of the screen
-    behavior={Platform.OS === 'ios' ? 'padding' : 'padding'} // Adjust behavior for iOS
-  >
-    <ScrollView style={{backgroundColor:AppColors.Black}}>
-    <View flex backgroundColor={AppColors.Black} padding-20>
-      <View center marginT-20 marginB-40>
-        <Text style={styles.title}>Sign in</Text>
-      </View>
-
-      {loadingLogin && <BackgroundLoader />}
-
-      <TextField
-        fieldStyle={styles.field}
-        label={'E-mail'}
-        labelStyle={styles.label}
-        style={styles.text}
-        paddingH-20
-        onChangeText={(text: any) => {
-          setLogin({...loginInput, email: text});
-          setValidate({...loginValidate, InvalidEmail: false});
-        }}
-        trailingAccessory={
-          <Text red10>{loginValidate.InvalidEmail ? '*Required' : ''}</Text>
-        }
-      />
-
-      <TextField
-        fieldStyle={styles.field}
-        label={'Password'}
-        labelStyle={styles.label}
-        style={styles.text}
-        paddingH-20
-        marginT-25
-        secureTextEntry={!loginValidate.showPassword}
-        trailingAccessory={
-          <View row center>
-            <Text marginR-10 red10>
-              {loginValidate.InvalidPassword ? '*Required' : ''}
-            </Text>
-            <TouchableOpacity
-              onPress={() =>
-                setValidate({
-                  ...loginValidate,
-                  showPassword: !loginValidate.showPassword,
-                })
-              }>
-              {loginValidate.showPassword ? (
-                <Image source={AppImages.EYECLOSE} width={23} height={15} />
-              ) : (
-                <Image source={AppImages.EYE} />
-              )}
-            </TouchableOpacity>
+      style={{flex: 1}} // Make sure it takes full height of the screen
+      behavior={Platform.OS === 'ios' ? 'padding' : 'padding'} // Adjust behavior for iOS
+    >
+      <ScrollView style={{backgroundColor: AppColors.Black}}>
+        <View flex backgroundColor={AppColors.Black} padding-20>
+          <View center marginT-20 marginB-40>
+            <Text style={styles.title}>Sign in</Text>
           </View>
-        }
-        onChangeText={(text: any) => {
-          setLogin({...loginInput, password: text});
-          setValidate({...loginValidate, InvalidPassword: false});
-        }}
-      />
-      
-      <View row centerV marginV-30>
-        {/* <Checkbox
+
+          {loadingLogin && <BackgroundLoader />}
+
+          <TextField
+            fieldStyle={styles.field}
+            label={'E-mail'}
+            labelStyle={styles.label}
+            style={styles.text}
+            paddingH-20
+            onChangeText={(text: any) => {
+              setLogin({...loginInput, email: text});
+              setValidate({...loginValidate, InvalidEmail: false});
+            }}
+            trailingAccessory={
+              <Text red10>{loginValidate.InvalidEmail ? '*Required' : ''}</Text>
+            }
+          />
+
+          <TextField
+            fieldStyle={styles.field}
+            label={'Password'}
+            labelStyle={styles.label}
+            style={styles.text}
+            paddingH-20
+            marginT-25
+            secureTextEntry={!loginValidate.showPassword}
+            trailingAccessory={
+              <View row center>
+                <Text marginR-10 red10>
+                  {loginValidate.InvalidPassword ? '*Required' : ''}
+                </Text>
+                <TouchableOpacity
+                  onPress={() =>
+                    setValidate({
+                      ...loginValidate,
+                      showPassword: !loginValidate.showPassword,
+                    })
+                  }>
+                  {loginValidate.showPassword ? (
+                    <Image source={AppImages.EYECLOSE} width={23} height={15} />
+                  ) : (
+                    <Image source={AppImages.EYE} />
+                  )}
+                </TouchableOpacity>
+              </View>
+            }
+            onChangeText={(text: any) => {
+              setLogin({...loginInput, password: text});
+              setValidate({...loginValidate, InvalidPassword: false});
+            }}
+          />
+
+          <View row centerV marginV-30>
+            {/* <Checkbox
           value={remember}
           label="Remember me"
           color={AppColors.Orange}
@@ -200,36 +219,36 @@ const LoginScreen: React.FC<Props> = () => {
           style={{borderColor: 'white'}}
           onValueChange={value => setRemember(value)}
         /> */}
-        <View flex right>
-          <TouchableOpacity
-            onPress={() =>
-              navigation.navigate(RouteNames.ForgotPasswordScreen)
-            }>
-            <Text style={styles.forgot}>Forgot Password?</Text>
-          </TouchableOpacity>
+            <View flex right>
+              <TouchableOpacity
+                onPress={() =>
+                  navigation.navigate(RouteNames.ForgotPasswordScreen)
+                }>
+                <Text style={styles.forgot}>Forgot Password?</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+
+          <ButtonView
+            title="Sign in"
+            onPress={() => {
+              if (isValidate()) {
+                Login();
+              }
+            }}
+          />
+
+          <View marginT-20 center>
+            <TouchableOpacity
+              onPress={() => navigation.navigate(RouteNames.RegisterScreen)}>
+              <Text style={styles.title}>
+                Don't have an account ?{' '}
+                <Text color={AppColors.Orange}>Create Account</Text>
+              </Text>
+            </TouchableOpacity>
+          </View>
         </View>
-      </View>
-
-      <ButtonView
-        title="Sign in"
-        onPress={() => {
-          if (isValidate()) {
-            Login();
-          }
-        }}
-      />
-
-      <View marginT-20 center>
-        <TouchableOpacity
-          onPress={() => navigation.navigate(RouteNames.RegisterScreen)}>
-          <Text style={styles.title}>
-            Don't have an account ?{' '}
-            <Text color={AppColors.Orange}>Create Account</Text>
-          </Text>
-        </TouchableOpacity>
-      </View>
-    </View>
-    </ScrollView>
+      </ScrollView>
     </KeyboardAvoidingView>
   );
 };

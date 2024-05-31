@@ -8,13 +8,13 @@ import {
   View,
 } from 'react-native-ui-lib';
 import {RootStackParams, RouteNames} from '../../navigation';
-import {RouteProp} from '@react-navigation/native';
+import {RouteProp, useFocusEffect} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {useNavigation} from '@react-navigation/native';
 import AppColors from '../../constants/AppColors';
 import AppImages from '../../constants/AppImages';
 import ButtonView from '../../components/ButtonView';
-import {KeyboardAvoidingView, Platform, ScrollView, TouchableOpacity} from 'react-native';
+import {BackHandler, KeyboardAvoidingView, Platform, ScrollView, TouchableOpacity} from 'react-native';
 import {Header} from '../../components/Header';
 import {styles} from '../addtrip/styles';
 import {getUserDate, showToast} from '../../constants/commonUtils';
@@ -26,6 +26,7 @@ import {JoinRequest} from '../../api/joinTrip/JoinRequest';
 import {JoinValidation} from '../../api/joinTrip/JoinValidation';
 import {joinTrip, reset} from '../../api/joinTrip/TripJoinSlice';
 import BackgroundLoader from '../../components/BackgroundLoader';
+import { fetchProfileDetails } from '../../api/profile/ProfileDetailsSlice';
 
 const {TextField} = Incubator;
 
@@ -49,6 +50,7 @@ const JoinTrip: React.FC<Props> = ({route}: any) => {
   const id = route.params.id;
   const status = route.params.status;
   const type = route.params.type;
+  const isDeepLink = route.params.isDeepLink;
   const [agree, setAgree] = useState(false);
   const dispatch: ThunkDispatch<RootState, any, AnyAction> = useDispatch();
   const {joinData, loadingJoin, joinError} = useSelector(
@@ -63,6 +65,31 @@ const JoinTrip: React.FC<Props> = ({route}: any) => {
     (state: RootState) => state.ProfileDetails,
   );
 
+  useFocusEffect(
+    React.useCallback(() => {
+      if (isDeepLink) {
+        // Add back handler for deep link
+        const backHandler = BackHandler.addEventListener(
+          'hardwareBackPress',
+          () => {
+            navigation.replace(RouteNames.BottomTabs); // Navigate to bottom tabs
+            return true; // Prevent default behavior
+          },
+        );
+
+        // Clean-up function
+        return () => backHandler.remove();
+      }
+      // Clean-up function
+      return () => {};
+    }, []),
+  );
+
+  useEffect(()=>{
+    if(isDeepLink == true){
+      dispatch(fetchProfileDetails({requestBody: ''}));
+    }
+  },[isDeepLink])
 
   useEffect(() => {
     if (type == 'edit') {
@@ -81,6 +108,7 @@ const JoinTrip: React.FC<Props> = ({route}: any) => {
       }
     }
     else if (type == 'join') {
+
       if (profileDetails && typeof profileDetails.user === 'object') {
         const item = profileDetails?.user;
 
@@ -95,7 +123,7 @@ const JoinTrip: React.FC<Props> = ({route}: any) => {
         });
       }
     }
-  }, [type]);
+  }, [type, profileDetails, tripDetails]);
 
   function isValidate(): boolean {
     if (joinInput.name == '') {
@@ -157,6 +185,7 @@ const JoinTrip: React.FC<Props> = ({route}: any) => {
       };
     } else {
       request = {
+        // is_link: isDeepLink ? 1 : 0,
         trip_id: id,
         ...joinInput,
       };
@@ -195,7 +224,7 @@ const JoinTrip: React.FC<Props> = ({route}: any) => {
     <View flex backgroundColor={AppColors.Black}>
       <ScrollView>
         <View padding-20>
-          <Header title={type == 'edit' ? 'Edit Ride' : 'Join Ride'} />
+          <Header title={type == 'edit' ? 'Edit Ride' : 'Join Ride'} isDeepLink={isDeepLink}/>
           {loadingJoin && <BackgroundLoader />}
           <TextField
             fieldStyle={styles.field}

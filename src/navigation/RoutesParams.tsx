@@ -14,7 +14,7 @@ export type RootStackParams = {
   MyTripScreen: undefined;
   AddTripScreen: {id: any};
   ProfileScreen: undefined;
-  TripDetails: {id:any, isDeepLink: any};
+  TripDetails: {id:any};
   SettingsScreen: undefined;
   AboutScreen: undefined;
   EditProfile: undefined;
@@ -22,7 +22,7 @@ export type RootStackParams = {
   MarshalList: undefined;
   UserList: undefined;
   TripMembers: {id: any,userId: any, status: any};
-JoinTrip: {id: any, status:any, type:any};
+JoinTrip: {id: any, status:any, type:any, isDeepLink: any};
 NotificationScreen: undefined;
 BroadcastScreen: {id: any,userId: any};
 MapScreen: {setPlaceLocation?: any, type: any, lat: any, long: any};

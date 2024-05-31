@@ -159,7 +159,6 @@ const TripDetails: React.FC<Props> = ({route}: any) => {
           title="Trip Details"
           rightIcon={AppImages.REFRESH}
           rightOnpress={fetchDetails}
-          isDeepLink={isDeepLink}
         />
       </View>
 
@@ -316,6 +315,7 @@ const TripDetails: React.FC<Props> = ({route}: any) => {
                                 status:
                                   tripDetails.data.trip_book.application_status,
                                 type: 'edit',
+                                isDeepLink: false
                               })
                             }>
                             <View style={styles.yellowButton}>
@@ -344,6 +344,7 @@ const TripDetails: React.FC<Props> = ({route}: any) => {
                                 status:
                                   tripDetails.data.trip_book.application_status,
                                 type: 'edit',
+                                isDeepLink: false
                               })
                             }>
                             <View style={styles.yellowButton}>
@@ -421,6 +422,7 @@ const TripDetails: React.FC<Props> = ({route}: any) => {
                               ? ''
                               : 'support',
                           type: 'join',
+                          isDeepLink: false
                         })
                       }>
                       <View style={styles.yellowButton}>
@@ -444,6 +446,7 @@ const TripDetails: React.FC<Props> = ({route}: any) => {
                           id: tripDetails.data.id,
                           status: 'may be',
                           type: 'join',
+                          isDeepLink: false
                         })
                       }>
                       <View style={styles.whiteButton}>

@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Image, Text, View} from 'react-native-ui-lib';
 import {RootStackParams} from '../../navigation';
 import {RouteProp} from '@react-navigation/native';
@@ -23,26 +23,34 @@ const SplashScreen: React.FC<Props> = () => {
   const [count, setCount] = useState(0);
   const navigation = useNavigation<SplashScreenNavigationProps>();
 
-  setTimeout(async () => {
-    if ((await AsyncStorage.getItem(AppStrings.DEEP_LINK_ID)) == null) {
-      if ((await AsyncStorage.getItem(AppStrings.IS_ONBOARD)) == null) {
+  useEffect(() => {
+    const initialize = async () => {
+      const deepLinkId = await AsyncStorage.getItem(AppStrings.DEEP_LINK_ID);
+      const isOnboarded = await AsyncStorage.getItem(AppStrings.IS_ONBOARD);
+      const isLoggedIn = await AsyncStorage.getItem(AppStrings.IS_LOGIN);
+
+      if (!isOnboarded) {
         navigation.replace(RouteNames.OnboardScreen);
-      } else if ((await AsyncStorage.getItem(AppStrings.IS_LOGIN)) == null) {
+      } else if (!isLoggedIn) {
         navigation.replace(RouteNames.LoginScreen);
       } else {
-        navigation.replace(RouteNames.BottomTabs);
+        if (deepLinkId) {
+          navigation.replace(RouteNames.JoinTrip, {
+            id: Number(deepLinkId),
+            status:'',
+            type: 'join',
+            isDeepLink: true
+          })
+          await AsyncStorage.removeItem(AppStrings.DEEP_LINK_ID);
+        } else {
+          navigation.replace(RouteNames.BottomTabs);
+        }
       }
-    } else {
-      if ((await AsyncStorage.getItem(AppStrings.IS_LOGIN)) == null) {
-        navigation.replace(RouteNames.LoginScreen);
-      } else {
-        navigation.replace(RouteNames.TripDetails, {
-          id: Number(await AsyncStorage.getItem(AppStrings.DEEP_LINK_ID)),isDeepLink: true
-        });
-        await AsyncStorage.removeItem(AppStrings.DEEP_LINK_ID)
-      }
-    }
-  }, 2000);
+    };
+
+    const timer = setTimeout(initialize, 2000);
+    return () => clearTimeout(timer);
+  }, [navigation]);
 
   return (
     <View flex center backgroundColor={AppColors.Black}>

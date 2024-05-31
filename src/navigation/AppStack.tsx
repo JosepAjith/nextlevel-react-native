@@ -29,14 +29,43 @@ import DeleteAccount from '../screens/settings/DeleteAccount';
 import { useNavigation } from '@react-navigation/native';
 import UserPicker from '../screens/addtrip/UserPicker';
 import UserTrips from '../screens/user/UserTrips';
+import { AppState, Linking } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import AppStrings from '../constants/AppStrings';
 
 const Stack = createNativeStackNavigator();
 
 const AppStack = () => {
 
   const navigation = useNavigation();
+  const [appState, setAppState] = useState(AppState.currentState);
 
- 
+  useEffect(() => {
+    // Add deep linking handling here
+    Linking.addEventListener('url', handleDeepLink);
+    Linking.getInitialURL().then((url) => {
+      if (url) {
+        handleDeepLink({ url });
+      }
+      else{
+        removeDeepLink();
+      }
+    });
+  }, []);
+
+  const handleDeepLink = async ({ url }) => {
+    // Parse the URL and extract information if needed
+    console.log('Received deep link:', url);
+    const route = url.replace(/.*?:\/\//g, '');
+    const id = route.match(/\/([^\/]+)\/?$/)[1];
+    
+    await AsyncStorage.setItem(AppStrings.DEEP_LINK_ID, String(id))
+  }
+
+  const removeDeepLink = async() => {
+    console.log('remove')
+    await AsyncStorage.removeItem(AppStrings.DEEP_LINK_ID);
+  }
 
   return (
     <Stack.Navigator

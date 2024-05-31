@@ -91,8 +91,7 @@ const ListItem = ({item, index, navigation}: Props) => {
       onPress={() => {
         dispatch({type: 'SET_CHIP', payload: 1});
         navigation.navigate(RouteNames.TripDetails, {
-          id: item.id,
-          isDeepLink: false,
+          id: item.id
         });
       }}>
       <View style={styles.view}>
