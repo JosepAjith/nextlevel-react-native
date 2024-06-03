@@ -22,7 +22,7 @@ import {
 import {RouteNames} from '../navigation';
 import {styles} from '../screens/home/styles';
 import AppImages from '../constants/AppImages';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import Share from 'react-native-share';
 import {reset, urlShare} from '../api/share/ShareUrlSlice';
 import {RootState} from '../../store';
@@ -45,6 +45,7 @@ const ListItem = ({item, index, navigation}: Props) => {
   const [expandedItems, setExpandedItems] = useState([]);
   const dispatch: ThunkDispatch<RootState, any, AnyAction> = useDispatch();
   const [arrowRotation, setArrowRotation] = useState(new Animated.Value(0));
+  const {type} = useSelector((state: RootState) => state.GlobalVariables);
 
   const toggleExpand = (index: number) => {
     LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
@@ -85,13 +86,12 @@ const ListItem = ({item, index, navigation}: Props) => {
     }
   };
 
-
   return (
     <TouchableOpacity
       onPress={() => {
         dispatch({type: 'SET_CHIP', payload: 1});
         navigation.navigate(RouteNames.TripDetails, {
-          id: item.id
+          id: item.id,
         });
       }}>
       <View style={styles.view}>
@@ -106,7 +106,7 @@ const ListItem = ({item, index, navigation}: Props) => {
           imageStyle={{
             borderTopLeftRadius: 10,
             borderTopRightRadius: 10,
-            resizeMode:'cover'
+            resizeMode: 'cover',
           }}>
           <View
             style={{
@@ -122,11 +122,15 @@ const ListItem = ({item, index, navigation}: Props) => {
             </View>
           </View>
 
-          <View flex right centerV margin-20>
-            <TouchableOpacity onPress={() => shareUrl(item.share_url)}>
-              <Image source={AppImages.SHARE} width={30} height={30} />
-            </TouchableOpacity>
-          </View>
+          {(type == 'Super Marshal' || type == 'Marshal') &&
+            (item.trip_status == 'ongoing' ||
+              item.trip_status == 'upcoming') && (
+              <View flex right centerV margin-20>
+                <TouchableOpacity onPress={() => shareUrl(item.share_url)}>
+                  <Image source={AppImages.SHARE} width={30} height={30} />
+                </TouchableOpacity>
+              </View>
+            )}
 
           <TouchableOpacity
             style={styles.arrow}

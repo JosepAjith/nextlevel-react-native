@@ -185,7 +185,7 @@ const JoinTrip: React.FC<Props> = ({route}: any) => {
       };
     } else {
       request = {
-        // is_link: isDeepLink ? 1 : 0,
+        is_link: isDeepLink ? 1 : 0,
         trip_id: id,
         ...joinInput,
       };

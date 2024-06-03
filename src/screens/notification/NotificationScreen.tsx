@@ -22,7 +22,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {RootState} from '../../../store';
 import {AnyAction, ThunkDispatch} from '@reduxjs/toolkit';
 import {fetchNotifications} from '../../api/notification/GetNotificationSlice';
-import {showToast} from '../../constants/commonUtils';
+import {getDateTime, showToast} from '../../constants/commonUtils';
 import {
   deleteNotif,
   reset,
@@ -132,10 +132,9 @@ const NotificationScreen: React.FC<Props> = () => {
                       <Image source={AppImages.REMOVE} />
                     </TouchableOpacity>
                   )}>
-                    <TouchableOpacity onPress={()=>{if(item.is_broad_cast){
+                    <TouchableOpacity onPress={()=>{if(item.trip_id){
                       navigation.navigate(RouteNames.TripDetails, {
-                        id: item.trip_id,
-                        isDeepLink: false,
+                        id: item.trip_id
                       });
                     }}}>
                   <View row style={styles.notiFView}>
@@ -147,7 +146,9 @@ const NotificationScreen: React.FC<Props> = () => {
                     />
                     <View marginL-10 width={'90%'}>
                       <Text style={styles.notifText}>{item.message}</Text>
-                      {/* <Text style={styles.notifText1}>{item.text}</Text> */}
+                      <View right>
+                      <Text style={styles.notifText1}>{getDateTime(item.date)}</Text>
+                      </View>
                     </View>
                   </View>
                   </TouchableOpacity>

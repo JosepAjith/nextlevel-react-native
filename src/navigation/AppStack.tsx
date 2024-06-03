@@ -63,7 +63,6 @@ const AppStack = () => {
   }
 
   const removeDeepLink = async() => {
-    console.log('remove')
     await AsyncStorage.removeItem(AppStrings.DEEP_LINK_ID);
   }
 

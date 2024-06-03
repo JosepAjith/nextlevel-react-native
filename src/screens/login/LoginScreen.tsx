@@ -32,6 +32,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import AppStrings from '../../constants/AppStrings';
 import Loader from '../../components/Loader';
 import BackgroundLoader from '../../components/BackgroundLoader';
+import crashlytics from '@react-native-firebase/crashlytics';
 
 const {TextField} = Incubator;
 
@@ -69,10 +70,54 @@ const LoginScreen: React.FC<Props> = () => {
           fcmToken: token,
         });
       }
+
+      const email = await getRememberedUser();
+      const password = await getRememberedUserPassword();
+      setLogin((prev) => ({ ...prev, email: email || '', password: password || '' }));
+      setRemember(email && password ? true : false);
     };
 
     setFCMToken();
+
+    // crashlytics().log('App mounted.');
   }, []);
+
+  console.log(loginInput)
+
+  const toggleRememberMe = async (value: boolean | ((prevState: boolean) => boolean)) => {
+    setRemember(value);
+    if (value === true) {
+      // user wants to be remembered.
+      await rememberUser();
+    }
+  };
+
+  const rememberUser = async () => {
+    try {
+      await AsyncStorage.setItem(AppStrings.REMEMBEREMAIL, loginInput.email);
+      await AsyncStorage.setItem(AppStrings.REMEMBERPASSWORD, loginInput.password);
+    } catch (error) { }
+  };
+
+  const getRememberedUser = async () => {
+    try {
+      const email = await AsyncStorage.getItem(AppStrings.REMEMBEREMAIL);
+      if (email !== null) {
+        return email;
+      }
+    } catch (error) { }
+    return '';
+  };
+
+  const getRememberedUserPassword = async () => {
+    try {
+      const password = await AsyncStorage.getItem(AppStrings.REMEMBERPASSWORD);
+      if (password !== null) {
+        return password;
+      }
+    } catch (error) { }
+    return '';
+  };
 
   function isValidate(): boolean {
     if (!IsNetConnected) {
@@ -100,6 +145,7 @@ const LoginScreen: React.FC<Props> = () => {
   }
 
   const Login = async () => {
+    // crashlytics().crash();
     dispatch(createLogin({requestBody: loginInput}))
       .then(() => {
         dispatch(reset());
@@ -141,10 +187,10 @@ const LoginScreen: React.FC<Props> = () => {
     } else {
       navigation.replace(RouteNames.JoinTrip, {
         id: Number(DeepLinkId),
-        status:'',
+        status: '',
         type: 'join',
-        isDeepLink: true
-      })
+        isDeepLink: true,
+      });
     }
   };
 
@@ -164,6 +210,7 @@ const LoginScreen: React.FC<Props> = () => {
           <TextField
             fieldStyle={styles.field}
             label={'E-mail'}
+            value={loginInput.email}
             labelStyle={styles.label}
             style={styles.text}
             paddingH-20
@@ -181,6 +228,7 @@ const LoginScreen: React.FC<Props> = () => {
             label={'Password'}
             labelStyle={styles.label}
             style={styles.text}
+            value={loginInput.password}
             paddingH-20
             marginT-25
             secureTextEntry={!loginValidate.showPassword}
@@ -211,14 +259,14 @@ const LoginScreen: React.FC<Props> = () => {
           />
 
           <View row centerV marginV-30>
-            {/* <Checkbox
-          value={remember}
-          label="Remember me"
-          color={AppColors.Orange}
-          labelStyle={[styles.forgot, {color: 'white'}]}
-          style={{borderColor: 'white'}}
-          onValueChange={value => setRemember(value)}
-        /> */}
+            <Checkbox
+              value={remember}
+              label="Remember me"
+              color={AppColors.Orange}
+              labelStyle={[styles.forgot, {color: 'white'}]}
+              style={{borderColor: 'white'}}
+              onValueChange={(value: any) => toggleRememberMe(value)}
+            />
             <View flex right>
               <TouchableOpacity
                 onPress={() =>

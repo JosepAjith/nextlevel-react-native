@@ -24,8 +24,7 @@ export const apiClient = async (
           'Content-Type': 'application/json',
           Authorization:
             'Bearer ' + (await AsyncStorage.getItem(AppStrings.ACCESS_TOKEN)),
-        },
-        timeout: 60000
+        }
       });
       return response;
     } catch (error) {
@@ -61,8 +60,7 @@ export const SimpleApiClient = async (
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
-      },
-      timeout: 60000
+      }
     });
     return response;
   } catch (error) {
@@ -100,8 +98,7 @@ export const ApiFormData = async (
         'Content-Type': 'multipart/form-data',
         Authorization:
           'Bearer ' + (await AsyncStorage.getItem(AppStrings.ACCESS_TOKEN)),
-      },
-       timeout: 60000
+      }
     });
     return response;
   } catch (error) {
@@ -130,8 +127,7 @@ export const getWithAuthCall = async (endPoint: string) => {
       'Content-Type': 'application/json',
       Authorization:
         'Bearer ' + (await AsyncStorage.getItem(AppStrings.ACCESS_TOKEN)),
-    },
-    timeout: 60000
+    }
   });
   return response;
 };

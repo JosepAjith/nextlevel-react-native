@@ -22,9 +22,9 @@ export const styles = StyleSheet.create({
     },
     notifText1:{
         fontFamily:AppFonts.INTER_REGULAR,
-        fontSize:14,
+        fontSize:12,
         color:AppColors.Black,
-        opacity:0.6
+        opacity:0.6,
     },
     notiFView:{
         backgroundColor:'white',
