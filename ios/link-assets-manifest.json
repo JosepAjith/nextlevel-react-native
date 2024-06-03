@@ -26,10 +26,6 @@
       "sha1": "e923c72eda5e50a87e18ff5c71e9ef4b3b6455a3"
     },
     {
-      "path": "assets/fonts/lato-semibold.ttf",
-      "sha1": "96569e2cfcc3a298bb1aea21103d0d1e3c7e2ed4"
-    },
-    {
       "path": "assets/fonts/Satoshi-Bold.ttf",
       "sha1": "b825a4a89b7257537a202316b08997a2d2f00a49"
     },
@@ -44,6 +40,10 @@
     {
       "path": "assets/fonts/Satoshi-Regular.ttf",
       "sha1": "bc605aa08468cfb9a40275a6386ada56c92a5bed"
+    },
+    {
+      "path": "assets/fonts/lato-semibold.ttf",
+      "sha1": "96569e2cfcc3a298bb1aea21103d0d1e3c7e2ed4"
     }
   ]
 }

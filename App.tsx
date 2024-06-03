@@ -104,8 +104,10 @@ const App = () => {
       invokeApp: true,
       onRegister: async function (token) {
         await AsyncStorage.setItem(AppStrings.FCM_TOKEN, token.token);
+        console.log(token)
       },
       onNotification: function (notification) {
+        console.log(notification)
         if (notification.foreground) {
           // Check if the app is in the foreground and the notification was clicked
           if (notification.userInteraction) {
@@ -153,13 +155,13 @@ const App = () => {
       requestPermissions: true,
     });
     // Simulate a dummy notification for testing
-    // setTimeout(() => {
-    //   PushNotification.localNotification({
-    //     title: 'Test Notification',
-    //     message: 'This is a test notification!',
-    //     channelId: 'nxtlevel_channel_id',
-    //   });
-    // }, 5000); // Send the notification after 5 seconds
+    setTimeout(() => {
+      PushNotification.localNotification({
+        title: 'Test Notification',
+        message: 'This is a test notification!',
+        // channelId: 'nxtlevel_channel_id',
+      });
+    }, 5000); // Send the notification after 5 seconds
   }, []);
 
   const checkApplicationPermission = async () => {
