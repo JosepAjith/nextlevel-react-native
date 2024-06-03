@@ -190,8 +190,6 @@ const JoinTrip: React.FC<Props> = ({route}: any) => {
         ...joinInput,
       };
     }
-
-    console.log(request)
    
     dispatch(
       joinTrip({

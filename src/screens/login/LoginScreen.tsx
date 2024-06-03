@@ -32,7 +32,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import AppStrings from '../../constants/AppStrings';
 import Loader from '../../components/Loader';
 import BackgroundLoader from '../../components/BackgroundLoader';
-import crashlytics from '@react-native-firebase/crashlytics';
 
 const {TextField} = Incubator;
 
@@ -79,7 +78,6 @@ const LoginScreen: React.FC<Props> = () => {
 
     setFCMToken();
 
-    // crashlytics().log('App mounted.');
   }, []);
 
   console.log(loginInput)
@@ -145,7 +143,6 @@ const LoginScreen: React.FC<Props> = () => {
   }
 
   const Login = async () => {
-    // crashlytics().crash();
     dispatch(createLogin({requestBody: loginInput}))
       .then(() => {
         dispatch(reset());
