@@ -147,7 +147,7 @@ const NotificationScreen: React.FC<Props> = () => {
                     <View marginL-10 width={'90%'}>
                       <Text style={styles.notifText}>{item.message}</Text>
                       <View right>
-                      <Text style={styles.notifText1}>{getDateTime(item.date)}</Text>
+                      <Text style={styles.notifText1}>{getDateTime(item.created_at)}</Text>
                       </View>
                     </View>
                   </View>

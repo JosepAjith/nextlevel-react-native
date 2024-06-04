@@ -14,7 +14,13 @@ import {useNavigation} from '@react-navigation/native';
 import AppColors from '../../constants/AppColors';
 import AppImages from '../../constants/AppImages';
 import ButtonView from '../../components/ButtonView';
-import {BackHandler, KeyboardAvoidingView, Platform, ScrollView, TouchableOpacity} from 'react-native';
+import {
+  BackHandler,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  TouchableOpacity,
+} from 'react-native';
 import {Header} from '../../components/Header';
 import {styles} from '../addtrip/styles';
 import {getUserDate, showToast} from '../../constants/commonUtils';
@@ -26,7 +32,9 @@ import {JoinRequest} from '../../api/joinTrip/JoinRequest';
 import {JoinValidation} from '../../api/joinTrip/JoinValidation';
 import {joinTrip, reset} from '../../api/joinTrip/TripJoinSlice';
 import BackgroundLoader from '../../components/BackgroundLoader';
-import { fetchProfileDetails } from '../../api/profile/ProfileDetailsSlice';
+import {fetchProfileDetails} from '../../api/profile/ProfileDetailsSlice';
+import {fetchTripDetails} from '../../api/trip/TripDetailsSlice';
+import LevelView from '../../components/LevelView';
 
 const {TextField} = Incubator;
 
@@ -60,8 +68,10 @@ const JoinTrip: React.FC<Props> = ({route}: any) => {
   const [joinValidate, setValidate] = useState<JoinValidation>(
     new JoinValidation(),
   );
-  const {tripDetails} = useSelector((state: RootState) => state.TripDetails);
-  const { profileDetails } = useSelector(
+  const {tripDetails, loadingTripDetails} = useSelector(
+    (state: RootState) => state.TripDetails,
+  );
+  const {profileDetails} = useSelector(
     (state: RootState) => state.ProfileDetails,
   );
 
@@ -85,11 +95,19 @@ const JoinTrip: React.FC<Props> = ({route}: any) => {
     }, []),
   );
 
-  useEffect(()=>{
-    if(isDeepLink == true){
+  useEffect(() => {
+    if (isDeepLink == true) {
+      fetchDetails();
       dispatch(fetchProfileDetails({requestBody: ''}));
     }
-  },[isDeepLink])
+  }, [isDeepLink]);
+
+  const fetchDetails = () => {
+    let request = JSON.stringify({
+      id: id,
+    });
+    dispatch(fetchTripDetails({requestBody: request}));
+  };
 
   useEffect(() => {
     if (type == 'edit') {
@@ -103,12 +121,10 @@ const JoinTrip: React.FC<Props> = ({route}: any) => {
           gender: item.gender,
           vehicle: item.vehicle,
           passenger: item.passenger.toString(),
-          application_status: status
+          application_status: status,
         });
       }
-    }
-    else if (type == 'join') {
-
+    } else if (type == 'join') {
       if (profileDetails && typeof profileDetails.user === 'object') {
         const item = profileDetails?.user;
 
@@ -116,10 +132,10 @@ const JoinTrip: React.FC<Props> = ({route}: any) => {
           ...joinInput,
           name: item.name,
           phone: item.phone ? item.phone : '',
-          gender: item.gender? item.gender : '',
+          gender: item.gender ? item.gender : '',
           vehicle: '',
           passenger: '',
-          application_status: status
+          application_status: status,
         });
       }
     }
@@ -190,11 +206,12 @@ const JoinTrip: React.FC<Props> = ({route}: any) => {
         ...joinInput,
       };
     }
-   
+
     dispatch(
       joinTrip({
         requestBody: request,
-        uri: type == 'edit' ? 'booking/trip-book-update' : 'booking/trip-booking'
+        uri:
+          type == 'edit' ? 'booking/trip-book-update' : 'booking/trip-booking',
       }),
     )
       .then(() => {
@@ -207,7 +224,11 @@ const JoinTrip: React.FC<Props> = ({route}: any) => {
     if (joinData != null) {
       if (!loadingJoin && !joinError && joinData.status) {
         showToast(joinData.message);
-        navigation.goBack();
+        if (isDeepLink) {
+          navigation.replace(RouteNames.BottomTabs);
+        } else {
+          navigation.goBack();
+        }
       } else {
         showToast(joinData.message);
       }
@@ -216,137 +237,198 @@ const JoinTrip: React.FC<Props> = ({route}: any) => {
 
   return (
     <KeyboardAvoidingView
-    style={{ flex: 1 }} // Make sure it takes full height of the screen
-    behavior={Platform.OS === 'ios' ? 'padding' : 'padding'} // Adjust behavior for iOS
-  >
-    <View flex backgroundColor={AppColors.Black}>
-      <ScrollView>
-        <View padding-20>
-          <Header title={type == 'edit' ? 'Edit Ride' : 'Join Ride'} isDeepLink={isDeepLink}/>
-          {loadingJoin && <BackgroundLoader />}
-          <TextField
-            fieldStyle={styles.field}
-            label={'Name'}
-            placeholder={'Enter name'}
-            placeholderTextColor={'#999999'}
-            labelStyle={styles.label}
-            style={styles.text}
-            paddingH-20
-            marginV-20
-            value={joinInput.name}
-            onChangeText={(text: any) => {
-              setJoin({...joinInput, name: text});
-              setValidate({...joinValidate, InvalidName: false});
-            }}
-            trailingAccessory={
-              <Text red10>{joinValidate.InvalidName ? '*Required' : ''}</Text>
-            }
-          />
+      style={{flex: 1}} // Make sure it takes full height of the screen
+      behavior={Platform.OS === 'ios' ? 'padding' : 'padding'} // Adjust behavior for iOS
+    >
+      <View flex backgroundColor={AppColors.Black}>
+        {isDeepLink && loadingTripDetails && <BackgroundLoader />}
+        <ScrollView>
+          <View padding-20>
+            <Header
+              title={type == 'edit' ? 'Edit Ride' : 'Join Ride'}
+              isDeepLink={isDeepLink}
+            />
 
-          <Text style={styles.label}>Gender</Text>
-          <DropdownComponent
-            data={Gender}
-            item={joinInput.gender}
-            label="type"
-            value="id"
-            onChange={(item: any) => {
-              setJoin({...joinInput, gender: item});
-              setValidate({...joinValidate, InvalidGender: false});
-            }}
-            error={joinValidate.InvalidGender}
-          />
+            {isDeepLink && (
+              <View style={styles.detailView}>
+                <View row centerV>
+                  <View flex>
+                    <Text style={styles.title}>{tripDetails?.data.title}</Text>
+                  </View>
 
-          <TextField
-            fieldStyle={styles.field}
-            label={'Phone Number'}
-            placeholder={'Enter phone number'}
-            placeholderTextColor={'#999999'}
-            labelStyle={styles.label}
-            style={styles.text}
-            keyboardType={'number-pad'}
-            paddingH-20
-            marginB-20
-            value={joinInput.phone}
-            onChangeText={(text: any) => {
-              setJoin({...joinInput, phone: text});
-              setValidate({...joinValidate, InvalidPhone: false});
-            }}
-            trailingAccessory={
-              <Text red10>{joinValidate.InvalidPhone ? '*Required' : ''}</Text>
-            }
-          />
+                  <View
+                    style={styles.statusView}
+                    backgroundColor={
+                      tripDetails?.data.trip_status == 'completed'
+                        ? '#BBFD79'
+                        : tripDetails?.data.trip_status == 'ongoing'
+                        ? 'orange'
+                        : tripDetails?.data.trip_status == 'upcoming'
+                        ? 'yellow'
+                        : tripDetails?.data.trip_status == 'cancelled'
+                        ? 'red'
+                        : '#BBFD79'
+                    }>
+                    <Text style={styles.statusText}>
+                      {tripDetails?.data.trip_status == 'completed'
+                        ? 'closed'
+                        : tripDetails?.data.trip_status}
+                    </Text>
+                  </View>
+                </View>
 
-          <TextField
-            fieldStyle={styles.field}
-            label={'Vehicle'}
-            placeholder={'Enter vehicle name'}
-            placeholderTextColor={'#999999'}
-            labelStyle={styles.label}
-            style={styles.text}
-            paddingH-20
-            marginB-20
-            value={joinInput.vehicle}
-            onChangeText={(text: any) => {
-              setJoin({...joinInput, vehicle: text});
-              setValidate({...joinValidate, InvalidVehicle: false});
-            }}
-            trailingAccessory={
-              <Text red10>
-                {joinValidate.InvalidVehicle ? '*Required' : ''}
-              </Text>
-            }
-          />
+                <View row centerV marginV-10>
+                  <View flex row centerV>
+                    <Text style={styles.text1}>Capacity</Text>
+                    <View style={styles.capView}>
+                      <Text style={styles.capty}>
+                        {tripDetails?.data.trip_book_joined_count} /{' '}
+                        {tripDetails?.data.capacity}
+                      </Text>
+                    </View>
+                  </View>
 
-          <TextField
-            fieldStyle={styles.field}
-            label={'Passengers'}
-            placeholder={'Enter passengers count'}
-            placeholderTextColor={'#999999'}
-            labelStyle={styles.label}
-            style={styles.text}
-            keyboardType={'number-pad'}
-            paddingH-20
-            marginB-20
-            value={joinInput.passenger}
-            onChangeText={(text: any) => {
-              setJoin({...joinInput, passenger: text});
-              setValidate({...joinValidate, InvalidPassenger: false});
-            }}
-            trailingAccessory={
-              <Text red10>
-                {joinValidate.InvalidPassenger ? '*Required' : ''}
-              </Text>
-            }
-          />
+                  <View flex row centerV right>
+                    <Text style={styles.text1}>{tripDetails?.data.level}</Text>
+                    <LevelView level={tripDetails?.data.level} />
+                  </View>
+                </View>
 
-          <View row centerV marginB-20>
-            <Checkbox
-              value={agree}
-              label={
-                <Text style={[styles.forgot, {color: 'white', lineHeight: 20}]}>
-                  I have read and agree to the club indemnity{'\n'}
-                  <Text style={styles.lineText}>
-                    You must accept club indemnity to continue.
+                <View>
+                  <Text style={[styles.text, {textAlign: 'auto'}]}>
+                    "{tripDetails?.data.description}"
                   </Text>
+                </View>
+              </View>
+            )}
+
+            {loadingJoin && <BackgroundLoader />}
+            <TextField
+              fieldStyle={styles.field}
+              label={'Name'}
+              placeholder={'Enter name'}
+              placeholderTextColor={'#999999'}
+              labelStyle={styles.label}
+              style={styles.text}
+              paddingH-20
+              marginV-20
+              value={joinInput.name}
+              onChangeText={(text: any) => {
+                setJoin({...joinInput, name: text});
+                setValidate({...joinValidate, InvalidName: false});
+              }}
+              trailingAccessory={
+                <Text red10>{joinValidate.InvalidName ? '*Required' : ''}</Text>
+              }
+            />
+
+            <Text style={styles.label}>Gender</Text>
+            <DropdownComponent
+              data={Gender}
+              item={joinInput.gender}
+              label="type"
+              value="id"
+              onChange={(item: any) => {
+                setJoin({...joinInput, gender: item});
+                setValidate({...joinValidate, InvalidGender: false});
+              }}
+              error={joinValidate.InvalidGender}
+            />
+
+            <TextField
+              fieldStyle={styles.field}
+              label={'Phone Number'}
+              placeholder={'Enter phone number'}
+              placeholderTextColor={'#999999'}
+              labelStyle={styles.label}
+              style={styles.text}
+              keyboardType={'number-pad'}
+              paddingH-20
+              marginB-20
+              value={joinInput.phone}
+              onChangeText={(text: any) => {
+                setJoin({...joinInput, phone: text});
+                setValidate({...joinValidate, InvalidPhone: false});
+              }}
+              trailingAccessory={
+                <Text red10>
+                  {joinValidate.InvalidPhone ? '*Required' : ''}
                 </Text>
               }
-              color={AppColors.Orange}
-              style={{borderColor: 'white'}}
-              onValueChange={value => setAgree(value)}
+            />
+
+            <TextField
+              fieldStyle={styles.field}
+              label={'Vehicle'}
+              placeholder={'Enter vehicle name'}
+              placeholderTextColor={'#999999'}
+              labelStyle={styles.label}
+              style={styles.text}
+              paddingH-20
+              marginB-20
+              value={joinInput.vehicle}
+              onChangeText={(text: any) => {
+                setJoin({...joinInput, vehicle: text});
+                setValidate({...joinValidate, InvalidVehicle: false});
+              }}
+              trailingAccessory={
+                <Text red10>
+                  {joinValidate.InvalidVehicle ? '*Required' : ''}
+                </Text>
+              }
+            />
+
+            <TextField
+              fieldStyle={styles.field}
+              label={'Passengers'}
+              placeholder={'Enter passengers count'}
+              placeholderTextColor={'#999999'}
+              labelStyle={styles.label}
+              style={styles.text}
+              keyboardType={'number-pad'}
+              paddingH-20
+              marginB-20
+              value={joinInput.passenger}
+              onChangeText={(text: any) => {
+                setJoin({...joinInput, passenger: text});
+                setValidate({...joinValidate, InvalidPassenger: false});
+              }}
+              trailingAccessory={
+                <Text red10>
+                  {joinValidate.InvalidPassenger ? '*Required' : ''}
+                </Text>
+              }
+            />
+
+            <View row centerV marginB-20>
+              <Checkbox
+                value={agree}
+                label={
+                  <Text
+                    style={[styles.forgot, {color: 'white', lineHeight: 20}]}>
+                    I have read and agree to the club indemnity{'\n'}
+                    <Text style={styles.lineText}>
+                      You must accept club indemnity to continue.
+                    </Text>
+                  </Text>
+                }
+                color={AppColors.Orange}
+                style={{borderColor: 'white'}}
+                onValueChange={value => setAgree(value)}
+              />
+            </View>
+
+            <ButtonView
+              title={type == 'edit' ? 'Update' : 'Join'}
+              onPress={() => {
+                if (isValidate()) {
+                  joiningTrip();
+                }
+              }}
             />
           </View>
-
-          <ButtonView
-            title={type == 'edit' ? 'Update' : 'Join'}
-            onPress={() => {
-              if (isValidate()) {
-                joiningTrip();
-              }
-            }}
-          />
-        </View>
-      </ScrollView>
-    </View>
+        </ScrollView>
+      </View>
     </KeyboardAvoidingView>
   );
 };

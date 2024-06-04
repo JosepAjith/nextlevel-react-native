@@ -155,13 +155,13 @@ const App = () => {
       requestPermissions: true,
     });
     // Simulate a dummy notification for testing
-    setTimeout(() => {
-      PushNotification.localNotification({
-        title: 'Test Notification',
-        message: 'This is a test notification!',
-        // channelId: 'nxtlevel_channel_id',
-      });
-    }, 5000); // Send the notification after 5 seconds
+    // setTimeout(() => {
+    //   PushNotification.localNotification({
+    //     title: 'Test Notification',
+    //     message: 'This is a test notification!',
+    //     // channelId: 'nxtlevel_channel_id',
+    //   });
+    // }, 5000); // Send the notification after 5 seconds
   }, []);
 
   const checkApplicationPermission = async () => {

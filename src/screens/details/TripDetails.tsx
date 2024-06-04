@@ -46,7 +46,6 @@ interface Props {}
 const TripDetails: React.FC<Props> = ({route}: any) => {
   const navigation = useNavigation<TripDetailsNavigationProps>();
   const id = route.params.id;
-  const isDeepLink = route.params.isDeepLink;
   const {type, loginUserId} = useSelector(
     (state: RootState) => state.GlobalVariables,
   );
@@ -65,19 +64,6 @@ const TripDetails: React.FC<Props> = ({route}: any) => {
     React.useCallback(() => {
       fetchDetails();
       fetchMembers();
-      if (isDeepLink) {
-        // Add back handler for deep link
-        const backHandler = BackHandler.addEventListener(
-          'hardwareBackPress',
-          () => {
-            navigation.replace(RouteNames.BottomTabs); // Navigate to bottom tabs
-            return true; // Prevent default behavior
-          },
-        );
-
-        // Clean-up function
-        return () => backHandler.remove();
-      }
       // Clean-up function
       return () => {};
     }, [cancelData]),
