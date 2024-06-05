@@ -21,7 +21,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import AppStrings from './src/constants/AppStrings';
 import DeviceInfo from 'react-native-device-info';
 import messaging, { FirebaseMessagingTypes } from '@react-native-firebase/messaging';
-import notifee, { AuthorizationStatus } from '@notifee/react-native';
+import notifee, { AndroidImportance, AuthorizationStatus } from '@notifee/react-native';
 
 
 const App = () => {
@@ -154,11 +154,14 @@ const App = () => {
     return unsubscribe;
   }, []);
 
-  const onDisplayNotification = async remoteMessage => {
+  const onDisplayNotification = async (remoteMessage: any) => {
     await notifee.requestPermission();
     const channelId = await notifee.createChannel({
-      id: 'default',
-      name: 'Default Channel',
+      id: 'nxtlevel_channel_id',
+      name: 'nxtlevel',
+      importance: AndroidImportance.HIGH,
+      sound: 'hollow',
+      vibration:true
     });
 
     await notifee.displayNotification({
@@ -168,7 +171,7 @@ const App = () => {
         channelId,
         smallIcon: 'ic_launcher',
         pressAction: {
-          id: 'default',
+          id: 'nxtlevel_channel_id',
         },
       },
     });
