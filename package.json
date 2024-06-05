@@ -10,10 +10,12 @@
     "test": "jest"
   },
   "dependencies": {
+    "@notifee/react-native": "^7.8.2",
     "@react-native-async-storage/async-storage": "^1.22.2",
     "@react-native-community/datetimepicker": "^7.6.2",
     "@react-native-community/netinfo": "^11.3.1",
-    "@react-native-community/push-notification-ios": "^1.11.0",
+    "@react-native-firebase/app": "^20.1.0",
+    "@react-native-firebase/messaging": "^20.1.0",
     "@react-navigation/native": "^6.1.10",
     "@react-navigation/native-stack": "^6.9.18",
     "@reduxjs/toolkit": "^2.2.1",
@@ -35,7 +37,6 @@
     "react-native-otp-textinput": "^1.1.5",
     "react-native-pager-view": "^6.2.3",
     "react-native-permissions": "^4.1.4",
-    "react-native-push-notification": "^8.1.1",
     "react-native-reanimated": "^3.7.1",
     "react-native-reanimated-carousel": "^3.5.1",
     "react-native-safe-area-context": "^4.9.0",

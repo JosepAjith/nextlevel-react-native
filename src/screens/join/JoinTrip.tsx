@@ -207,6 +207,8 @@ const JoinTrip: React.FC<Props> = ({route}: any) => {
       };
     }
 
+    console.log(request)
+
     dispatch(
       joinTrip({
         requestBody: request,
