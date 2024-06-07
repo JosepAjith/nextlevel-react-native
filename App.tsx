@@ -186,8 +186,8 @@ const App = () => {
   const onDisplayNotification = async (remoteMessage: any) => {
     await notifee.requestPermission();
     const channelId = await notifee.createChannel({
-      id: 'default',
-      name: 'Default Channel',
+      id: 'nxtlevel_channel_id',
+      name: 'NxtLevel',
       importance: AndroidImportance.HIGH,
       sound: 'hollow',
       vibration:true
@@ -200,7 +200,7 @@ const App = () => {
         channelId,
         smallIcon: 'ic_launcher',
         pressAction: {
-          id: 'default',
+          id: 'nxtlevel_channel_id',
         },
       },
     });
