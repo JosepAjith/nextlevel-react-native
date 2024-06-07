@@ -59,6 +59,8 @@
 	<string>Your location is required to show your current position on the map</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>To allow users to upload and edit photos within the app.</string>
+	<key>NSUserNotificationUsageDescription</key>
+	<string>We need your permission to send notifications.</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>Satoshi-Bold.ttf</string>

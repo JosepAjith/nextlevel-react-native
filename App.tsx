@@ -21,7 +21,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import AppStrings from './src/constants/AppStrings';
 import DeviceInfo from 'react-native-device-info';
 import messaging, { FirebaseMessagingTypes } from '@react-native-firebase/messaging';
-import notifee, { AndroidImportance, AuthorizationStatus } from '@notifee/react-native';
+import notifee, { AndroidImportance, AuthorizationStatus, EventType } from '@notifee/react-native';
 
 
 const App = () => {
@@ -88,24 +88,52 @@ const App = () => {
   }, []);
    
   useEffect(() => {
-    const checkNotificationPermission = async () => {
-      const settings = await notifee.getNotificationSettings();
-      console.log(settings,'=====')
-      if (
-        settings.authorizationStatus === AuthorizationStatus.NOT_DETERMINED
-      ) {
-        const requestPermission = async () => {
-          const settings = await notifee.requestPermission({
-            criticalAlert: true,
-          });
-          return settings.authorizationStatus === AuthorizationStatus.AUTHORIZED;
-        };
-        return await requestPermission();
-      }
-      return (
-        settings.authorizationStatus === AuthorizationStatus.AUTHORIZED ||
-        settings.authorizationStatus === AuthorizationStatus.PROVISIONAL
-      );
+    const checkNotificationPermission = () => {
+      return new Promise(async (resolve, reject) => {
+        const settings = await notifee.getNotificationSettings();
+        switch (settings.authorizationStatus) {
+          case AuthorizationStatus.AUTHORIZED:
+            resolve(true);
+            break;
+          case AuthorizationStatus.NOT_DETERMINED:
+            RequestNotificationPermission()
+              .then(val => {
+                resolve(val);
+              })
+              .catch(er => {
+                reject(er);
+              });
+            break;
+          case AuthorizationStatus.PROVISIONAL:
+            resolve(true);
+            break;
+          case AuthorizationStatus.DENIED:
+            reject(false);
+            break;
+          default:
+            reject(false);
+        }
+      });
+    };
+   const RequestNotificationPermission = () => {
+      return new Promise(async (resolve, reject) => {
+        const settings = await notifee.requestPermission({
+          criticalAlert: true,
+        });
+        switch (settings.authorizationStatus) {
+          case AuthorizationStatus.AUTHORIZED:
+            resolve(true);
+            break;
+          case AuthorizationStatus.DENIED:
+            reject(false);
+            break;
+          case AuthorizationStatus.PROVISIONAL:
+            resolve(true);
+            break;
+          default:
+            reject(false);
+        }
+      });
     };
 
     const checkToken = async () => {
@@ -166,8 +194,8 @@ const App = () => {
     });
 
     await notifee.displayNotification({
-      title: remoteMessage.data.title,
-      body: remoteMessage.data.body,
+      title: remoteMessage.notification?.title,
+      body: remoteMessage.notification?.body,
       android: {
         channelId,
         smallIcon: 'ic_launcher',
@@ -176,7 +204,17 @@ const App = () => {
         },
       },
     });
+  
   };
+
+  // Register background event handler 
+  notifee.onBackgroundEvent(async ({ type, detail }) => 
+    { console.log('Background event received:', type, detail); 
+      if (type === EventType.DISMISSED) { 
+        console.log('User dismissed notification', detail.notification); } 
+        else if (type === EventType.PRESS) {
+           console.log('User pressed notification', detail.notification); // Handle the press event 
+           } });
 
   return (
     <SafeAreaView style={styles.container}>
