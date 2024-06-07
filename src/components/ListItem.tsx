@@ -64,10 +64,11 @@ const ListItem = ({item, index, navigation}: Props) => {
   };
 
   const shareUrl = async (url: any) => {
+    const modifiedUrl = Platform.OS === 'ios' ? url.replace('https://nxtlevel4x4.com', 'nxtlevel4x4.com:/') : url;
     const shareOptions = {
       title: 'Share file',
       message: 'Join here ==>',
-      url: url,
+      url: modifiedUrl,
     };
 
     try {

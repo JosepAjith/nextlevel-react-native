@@ -32,7 +32,6 @@
 				<string>nxtlevel4x4.com</string>
 			</array>
 		</dict>
-		<dict/>
 	</array>
 	<key>CFBundleVersion</key>
 	<string>$(CURRENT_PROJECT_VERSION)</string>
@@ -57,6 +56,15 @@
 	<string>Your location is required to show your current position on the map</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Your location is required to show your current position on the map</string>
+	<key>NSNotifications</key>
+	<dict>
+		<key>alert</key>
+		<true/>
+		<key>badge</key>
+		<true/>
+		<key>sound</key>
+		<true/>
+	</dict>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>To allow users to upload and edit photos within the app.</string>
 	<key>NSUserNotificationUsageDescription</key>
@@ -80,15 +88,6 @@
 		<string>fetch</string>
 		<string>remote-notification</string>
 	</array>
-	<key>NSNotifications</key>
-<dict>
-    <key>alert</key>
-    <true/>
-    <key>badge</key>
-    <true/>
-    <key>sound</key>
-    <true/>
-</dict>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen.storyboard</string>
 	<key>UIRequiredDeviceCapabilities</key>
@@ -107,5 +106,9 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<key>com.apple.developer.associated-domains</key>
+	<array>
+		<string>applinks:nxtlevel4x4.com</string>
+	</array>
 </dict>
 </plist>
