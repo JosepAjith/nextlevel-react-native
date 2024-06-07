@@ -90,6 +90,7 @@ const App = () => {
   useEffect(() => {
     const checkNotificationPermission = async () => {
       const settings = await notifee.getNotificationSettings();
+      console.log(settings,'=====')
       if (
         settings.authorizationStatus === AuthorizationStatus.NOT_DETERMINED
       ) {
@@ -110,7 +111,7 @@ const App = () => {
     const checkToken = async () => {
       const token = await messaging().getToken();
       console.log('FCM Token:', token);
-      await AsyncStorage.setItem('fcmToken', token);
+      await AsyncStorage.setItem(AppStrings.FCM_TOKEN, token);
     };
 
     const notificationAndroid = async () => {
@@ -157,8 +158,8 @@ const App = () => {
   const onDisplayNotification = async (remoteMessage: any) => {
     await notifee.requestPermission();
     const channelId = await notifee.createChannel({
-      id: 'nxtlevel_channel_id',
-      name: 'nxtlevel',
+      id: 'default',
+      name: 'Default Channel',
       importance: AndroidImportance.HIGH,
       sound: 'hollow',
       vibration:true
@@ -171,7 +172,7 @@ const App = () => {
         channelId,
         smallIcon: 'ic_launcher',
         pressAction: {
-          id: 'nxtlevel_channel_id',
+          id: 'default',
         },
       },
     });
