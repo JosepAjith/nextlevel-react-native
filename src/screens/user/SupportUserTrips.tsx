@@ -5,7 +5,7 @@ import {RouteProp, useFocusEffect} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {useNavigation} from '@react-navigation/native';
 import AppColors from '../../constants/AppColors';
-import {FlatList} from 'react-native';
+import {FlatList, SectionList} from 'react-native';
 import {AnyAction, ThunkDispatch} from '@reduxjs/toolkit';
 import {RootState} from '../../../store';
 import {useDispatch, useSelector} from 'react-redux';
@@ -14,22 +14,27 @@ import BackgroundLoader from '../../components/BackgroundLoader';
 import ListItem from '../../components/ListItem';
 import {Header} from '../../components/Header';
 import AppImages from '../../constants/AppImages';
+import {fetchSupportTripList} from '../../api/trip/SupportTripListSlice';
+import AppFonts from '../../constants/AppFonts';
 
-export type UserTripsNavigationProps = NativeStackNavigationProp<
+export type SupportUserTripsNavigationProps = NativeStackNavigationProp<
   RootStackParams,
-  'UserTrips'
+  'SupportUserTrips'
 >;
 
-export type UserTripsRouteProps = RouteProp<RootStackParams, 'UserTrips'>;
+export type SupportUserTripsRouteProps = RouteProp<
+  RootStackParams,
+  'SupportUserTrips'
+>;
 interface Props {}
 
-const UserTrips: React.FC<Props> = ({route}: any) => {
-  const navigation = useNavigation<UserTripsNavigationProps>();
+const SupportUserTrips: React.FC<Props> = ({route}: any) => {
+  const navigation = useNavigation<SupportUserTripsNavigationProps>();
   const status = route.params.status;
   const userId = route.params.userId;
   const dispatch: ThunkDispatch<RootState, any, AnyAction> = useDispatch();
-  const {trip, loadingTrip, tripError} = useSelector(
-    (state: RootState) => state.TripList,
+  const {supportTrip, loadingSupportTrip} = useSelector(
+    (state: RootState) => state.SupportTripList,
   );
   const {IsNetConnected} = useSelector(
     (state: RootState) => state.GlobalVariables,
@@ -56,8 +61,12 @@ const UserTrips: React.FC<Props> = ({route}: any) => {
           status: status,
         });
       }
+
       dispatch(
-        fetchTripList({requestBody: request, uri: 'user-trip/status-wise'}),
+        fetchSupportTripList({
+          requestBody: request,
+          uri: 'user-trip/status-wise',
+        }),
       );
     }
   };
@@ -71,7 +80,7 @@ const UserTrips: React.FC<Props> = ({route}: any) => {
           fetchList();
         }}
       />
-      {loadingTrip && <BackgroundLoader />}
+      {loadingSupportTrip && <BackgroundLoader />}
 
       {!IsNetConnected && (
         <View flex center>
@@ -82,16 +91,34 @@ const UserTrips: React.FC<Props> = ({route}: any) => {
       )}
 
       <View marginV-10 />
-
-      <FlatList
-        data={trip?.data}
-        showsVerticalScrollIndicator={false}
-        renderItem={({item, index}) => {
-          return <ListItem item={item} index={index} navigation={navigation} />;
-        }}
-        keyExtractor={(item, index) => `${item.id}-${index}`}
-      />
+      {supportTrip && (
+        <SectionList
+          sections={supportTrip?.data.map(section => ({
+            title: section.level,
+            data: section.trips,
+          }))}
+          renderItem={({item, index}) => (
+            <ListItem item={item} index={index} navigation={navigation} />
+          )}
+          renderSectionHeader={({section}) => {
+            const {title, data} = section;
+            return (
+              <View row style={{justifyContent: 'space-between'}} marginV-10>
+                <Text white style={{fontSize: 16, fontFamily: AppFonts.BOLD}}>
+                  Trip Level
+                </Text>
+                <Text
+                  white
+                  style={{fontSize: 16, fontFamily: AppFonts.REGULAR}}>
+                  {title} ( {data.length} )
+                </Text>
+              </View>
+            );
+          }}
+          keyExtractor={(item, index) => `${item.id}-${index}`}
+        />
+      )}
     </View>
   );
 };
-export default UserTrips;
+export default SupportUserTrips;

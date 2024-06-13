@@ -6,6 +6,19 @@ export type TripDetailsResponse ={
     current_page: number;
 }
 
+export type SupportTripDetailsResponse = {
+    status: number;
+    data:   Datum[];
+    total_count: number;
+    total_page: number;
+    current_page: number;
+}
+
+export type Datum = {
+    level: string;
+    trips: TripListResponse[];
+}
+
 export type TripListResponse = {
     id:                 number;
     title:              string;

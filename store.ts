@@ -28,6 +28,7 @@ import DeleteNotificationSlice from './src/api/notification/DeleteNotificationSl
 import MemberStatusSlice from './src/api/member/MemberStatusSlice';
 import ShareUrlSlice from './src/api/share/ShareUrlSlice';
 import LogoutSlice from './src/api/login/LogoutSlice';
+import SupportTripListSlice from './src/api/trip/SupportTripListSlice';
 
 
 const rootReducer = combineReducers({
@@ -40,6 +41,7 @@ const rootReducer = combineReducers({
   VerifyOtp: VerifyOtpSlice,
   ChangePassword: ChangePasswordSlice,
   TripList: TriplListSlice,
+  SupportTripList: SupportTripListSlice,
   TripDetails: TripDetailsSlice,
   ProfileDetails: ProfileDetailsSlice,
   CarCreate: CarCreateSlice,

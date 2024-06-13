@@ -32,6 +32,7 @@ import UserTrips from '../screens/user/UserTrips';
 import { AppState, Linking } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import AppStrings from '../constants/AppStrings';
+import SupportUserTrips from '../screens/user/SupportUserTrips';
 
 const Stack = createNativeStackNavigator();
 
@@ -123,6 +124,7 @@ const AppStack = () => {
       <Stack.Screen name={RouteNames.DeleteAccount} component={DeleteAccount} />
       <Stack.Screen name={RouteNames.UserPicker} component={UserPicker} />
       <Stack.Screen name={RouteNames.UserTrips} component={UserTrips} />
+      <Stack.Screen name={RouteNames.SupportUserTrips} component={SupportUserTrips} />
     </Stack.Navigator>
   );
 };

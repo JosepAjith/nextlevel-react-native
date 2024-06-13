@@ -27,7 +27,12 @@ const Activities = ({navigation, data, isReplace}: Props) => {
       <TouchableOpacity
         onPress={() => {
           if (value > 0) {
+            if(title == 'support'){
+              navigation.navigate(RouteNames.SupportUserTrips, {status: title, userId: userId});
+            }
+            else{
             navigation.navigate(RouteNames.UserTrips, {status: title, userId: userId});
+            }
           }
         }}>
         <View

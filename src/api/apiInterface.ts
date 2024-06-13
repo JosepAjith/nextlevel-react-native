@@ -24,7 +24,7 @@ import { ProfileDetails } from './profile/ProfileDetailsSlice';
 import { RegisterResponse } from './register/RegisterCreateSlice';
 import { AddTripResponse } from './trip/TripCreateSlice';
 import { TripDeleteResponse } from './trip/TripDeleteSlice';
-import { TripDetailsResponse, TripListResponse } from './trip/TripListResponse';
+import { SupportTripDetailsResponse, TripDetailsResponse, TripListResponse } from './trip/TripListResponse';
 import { TripStatusChangeResponse } from './trip/TripStatusChangeSlice';
 import { UserListData, UserListResponse } from './user/UserListResponse';
 
@@ -173,6 +173,25 @@ export const fetchTripList = async (
 ): Promise<NetworkResponse<TripDetailsResponse>> => {
   const response = await apiClient(uri, 'POST', requestBody);
 
+  if (response && response.status) {
+    const json = await response.data;
+    return {
+      kind: 'success',
+      body: json,
+    };
+  } else {
+    return {
+      kind: 'failure',
+    };
+  }
+};
+
+//API FOR TRIP LIST
+export const fetchSupportTripList = async (
+  requestBody: any,uri: any
+): Promise<NetworkResponse<SupportTripDetailsResponse>> => {
+  const response = await apiClient(uri, 'POST', requestBody);
+console.log(response, 'interface')
   if (response && response.status) {
     const json = await response.data;
     return {

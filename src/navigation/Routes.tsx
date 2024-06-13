@@ -27,5 +27,6 @@ export const RouteNames = {
   MapScreen: 'MapScreen',
   DeleteAccount: 'DeleteAccount',
   UserPicker:'UserPicker',
-  UserTrips: 'UserTrips'
+  UserTrips: 'UserTrips',
+  SupportUserTrips: 'SupportUserTrips'
 } as const;

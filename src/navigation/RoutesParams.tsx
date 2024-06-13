@@ -29,4 +29,5 @@ MapScreen: {setPlaceLocation?: any, type: any, lat: any, long: any};
 DeleteAccount: undefined;
 UserPicker:{level: any,onSelectUsers: any, selectUsers: any};
 UserTrips: {status: any,userId: any};
+SupportUserTrips: {status: any,userId: any};
 };
