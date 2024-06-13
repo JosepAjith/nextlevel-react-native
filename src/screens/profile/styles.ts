@@ -94,6 +94,21 @@ export const styles = StyleSheet.create({
         fontFamily:AppFonts.INTER_REGULAR,
         color:'black',
         marginRight:20
-    }
+    },
+    role:{
+        backgroundColor:'white',
+        borderRadius:5,
+        paddingVertical:5,
+        paddingHorizontal:10,
+        marginVertical:10,
+        height:35,
+        width:'40%',
+        top:30
+      },
+      roleText:{
+        fontSize:12,
+        fontFamily:AppFonts.INTER_MEDIUM,
+        color:'black',
+      },
 });
 

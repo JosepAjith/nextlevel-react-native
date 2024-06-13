@@ -26,6 +26,9 @@ import {useDispatch, useSelector} from 'react-redux';
 import {fetchProfileDetails} from '../../api/profile/ProfileDetailsSlice';
 import MyCars from './MyCars';
 import BackgroundLoader from '../../components/BackgroundLoader';
+import {Dropdown} from 'react-native-element-dropdown';
+import {reset, updateRole} from '../../api/levelUpdate/UpdateRoleSlice';
+import {showToast} from '../../constants/commonUtils';
 
 const {TextField} = Incubator;
 
@@ -38,6 +41,15 @@ export type ProfileScreenRouteProps = RouteProp<
   RootStackParams,
   'ProfileScreen'
 >;
+
+const Level = [
+  {type: 'First Join', id: 'First Join'},
+  {type: 'newbie', id: 'newbie'},
+  {type: 'newbie+', id: 'newbie+'},
+  {type: 'Intermediate', id: 'Intermediate'},
+  {type: 'Intermediate+', id: 'Intermediate+'},
+  {type: 'Advanced', id: 'Advanced'},
+];
 
 interface Props {
   isReplace?: any;
@@ -53,6 +65,9 @@ const ProfileScreen: React.FC<Props> = ({isReplace}: Props) => {
   const {userId, type} = useSelector(
     (state: RootState) => state.GlobalVariables,
   );
+  const {updateRoleData, loadingRoleUpdate, roleUpdateError} = useSelector(
+    (state: RootState) => state.UpdateRole,
+  );
 
   useFocusEffect(
     React.useCallback(() => {
@@ -62,8 +77,34 @@ const ProfileScreen: React.FC<Props> = ({isReplace}: Props) => {
       return () => {
         setTab('personal');
       };
-    }, []),
+    }, [updateRoleData]),
   );
+
+  const updatingRole = async (id: any, level: string) => {
+    let request = {
+      id: id,
+      level: level,
+    };
+    dispatch(
+      updateRole({
+        requestBody: request,
+      }),
+    )
+      .then(() => {
+        dispatch(reset());
+      })
+      .catch((err: any) => console.log(err));
+  };
+
+  useEffect(() => {
+    if (updateRoleData != null) {
+      if (!loadingRoleUpdate && !roleUpdateError && updateRoleData.status) {
+        showToast(updateRoleData.message);
+      } else {
+        showToast(updateRoleData.message);
+      }
+    }
+  }, [updateRoleData]);
 
   return (
     <ScrollView style={{backgroundColor: AppColors.Black}}>
@@ -120,13 +161,66 @@ const ProfileScreen: React.FC<Props> = ({isReplace}: Props) => {
             </View>
           </View>
 
-          {userId == 0 && (
+          {userId == 0 ? (
             <View flex right>
               <TouchableOpacity
                 onPress={() => navigation.navigate(RouteNames.SettingsScreen)}>
                 <Image source={AppImages.SETTINGS} width={30} height={30} />
               </TouchableOpacity>
             </View>
+          ) : (
+            (profileDetails?.user.level == 'Marshal' || profileDetails?.user.level == 'Super Marshal') ?
+            <View/>
+            : (
+              <Dropdown
+                style={styles.role}
+                placeholderStyle={styles.roleText}
+                selectedTextStyle={styles.roleText}
+                inputSearchStyle={styles.roleText}
+                itemTextStyle={{fontSize: 12, color: 'black'}}
+                data={Level}
+                search
+                maxHeight={300}
+                labelField={'type'}
+                valueField={'id'}
+                placeholder="Update Role"
+                value={profileDetails?.user.level}
+                searchPlaceholder="Search..."
+                onChange={items => {
+                  updatingRole(profileDetails?.user.id, items.type);
+                }}
+                renderRightIcon={() => (
+                  <View row centerV>
+                    <Text red10></Text>
+                    <Image
+                      source={AppImages.DOWN}
+                      tintColor="#3F4E59"
+                      width={11}
+                      height={6}
+                    />
+                  </View>
+                )}
+                renderItem={dropdownItem => {
+                  const currentIndex = Level.findIndex(
+                    level => level.type === profileDetails?.user.level,
+                  );
+                  const itemIndex = Level.findIndex(
+                    level => level.type === dropdownItem.type,
+                  );
+                  // Check if the item is adjacent to the current item
+                  const isAdjacent = Math.abs(currentIndex - itemIndex) <= 1;
+                  if (isAdjacent) {
+                    return (
+                      <View margin-10>
+                        <Text style={styles.roleText}>{dropdownItem.type}</Text>
+                      </View>
+                    );
+                  } else {
+                    return null; // Render nothing for non-adjacent items
+                  }
+                }}
+              />
+            )
           )}
         </View>
 

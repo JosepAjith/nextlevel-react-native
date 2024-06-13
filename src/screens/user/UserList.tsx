@@ -80,9 +80,6 @@ const UserList: React.FC<Props> = () => {
   const {users, loadingUsers, usersError} = useSelector(
     (state: RootState) => state.UserList,
   );
-  const {updateRoleData, loadingRoleUpdate, roleUpdateError} = useSelector(
-    (state: RootState) => state.UpdateRole,
-  );
   const [search, setSearch] = useState('');
   const {filterValue} = useSelector((state: RootState) => state.TripReducer);
   const {IsNetConnected} = useSelector(
@@ -125,33 +122,6 @@ const UserList: React.FC<Props> = () => {
         });
     }
   };
-
-  const updatingRole = async (id: number, level: string) => {
-    let request = {
-      id: id,
-      level: level,
-    };
-    dispatch(
-      updateRole({
-        requestBody: request,
-      }),
-    )
-      .then(() => {
-        dispatch(reset());
-      })
-      .catch((err: any) => console.log(err));
-  };
-
-  useEffect(() => {
-    if (updateRoleData != null) {
-      if (!loadingRoleUpdate && !roleUpdateError && updateRoleData.status) {
-        showToast(updateRoleData.message);
-        FetchList(1);
-      } else {
-        showToast(updateRoleData.message);
-      }
-    }
-  }, [updateRoleData]);
 
   const loadMoreTrips = () => {
     if (users?.total_page && users?.page < users?.total_page) {
@@ -236,11 +206,12 @@ const UserList: React.FC<Props> = () => {
                     <View center paddingT-10>
                       <Text style={styles.name}>{item.name}</Text>
                       <Text style={styles.email}>{item.email}</Text>
-                      <Text style={styles.email}>{item.level}</Text>
+                   
                     </View>
 
-                    <View center>
-                      <Dropdown
+                    <View center style={[styles.role, {alignSelf:'center'}]}>
+                    <Text style={styles.roleText}>{item.level}</Text>
+                      {/* <Dropdown
                         style={styles.role}
                         placeholderStyle={styles.roleText}
                         selectedTextStyle={styles.roleText}
@@ -256,14 +227,6 @@ const UserList: React.FC<Props> = () => {
                         searchPlaceholder="Search..."
                         onChange={items => {
                           updatingRole(item.id, items.type);
-                          // const currentIndex = Level.findIndex(level => level.type === item.level);
-                          // const selectedIndex = Level.findIndex(level => level.type === items.type);
-                          // if (Math.abs(currentIndex - selectedIndex) <= 1) {
-                          //   updatingRole(item.id, items.type);
-                          // }
-                          // else {
-                          //   showToast("Cannot update disabled item.");
-                          // }
                         }}
                         renderRightIcon={() => (
                           <View row centerV>
@@ -298,18 +261,7 @@ const UserList: React.FC<Props> = () => {
                             return null; // Render nothing for non-adjacent items
                           }
                         }}
-                        //   const currentIndex = Level.findIndex(level => level.type === item.level);
-                        //   const itemIndex = Level.findIndex(level => level.type === dropdownItem.type);
-                        //   const isDisabled = Math.abs(currentIndex - itemIndex) > 1;
-                        //   return (
-                        //     <View margin-10>
-                        //       <Text style={[styles.roleText, {color: isDisabled ? AppColors.Grey : 'black'}]}>
-                        //         {dropdownItem.type}
-                        //       </Text>
-                        //     </View>
-                        //   );
-                        // }}
-                      />
+                      /> */}
                     </View>
                   </View>
                 </TouchableOpacity>
