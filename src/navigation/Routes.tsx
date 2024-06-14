@@ -28,5 +28,6 @@ export const RouteNames = {
   DeleteAccount: 'DeleteAccount',
   UserPicker:'UserPicker',
   UserTrips: 'UserTrips',
-  SupportUserTrips: 'SupportUserTrips'
+  SupportUserTrips: 'SupportUserTrips',
+  UpgradeLevel: 'UpgradeLevel'
 } as const;

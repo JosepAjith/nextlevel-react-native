@@ -22,6 +22,8 @@ import { ChangePasswordResponse } from './password/ChangePasswordSlice';
 import { EditProfileResponse } from './profile/EditProfileSlice';
 import { ProfileDetails } from './profile/ProfileDetailsSlice';
 import { RegisterResponse } from './register/RegisterCreateSlice';
+import { RoleUpgradeResponse } from './roleUpgrade/RoleUpgradeResponse';
+import { UpdateLevelResponse } from './roleUpgrade/UpdateLevelSlice';
 import { AddTripResponse } from './trip/TripCreateSlice';
 import { TripDeleteResponse } from './trip/TripDeleteSlice';
 import { SupportTripDetailsResponse, TripDetailsResponse, TripListResponse } from './trip/TripListResponse';
@@ -191,7 +193,24 @@ export const fetchSupportTripList = async (
   requestBody: any,uri: any
 ): Promise<NetworkResponse<SupportTripDetailsResponse>> => {
   const response = await apiClient(uri, 'POST', requestBody);
-console.log(response, 'interface')
+  if (response && response.status) {
+    const json = await response.data;
+    return {
+      kind: 'success',
+      body: json,
+    };
+  } else {
+    return {
+      kind: 'failure',
+    };
+  }
+};
+
+//API FOR Role Upgrading list
+export const fetchRoleUpgradeList = async (
+  requestBody: any
+): Promise<NetworkResponse<RoleUpgradeResponse>> => {
+  const response = await apiClient('get-pending-role-update', 'POST', requestBody);
   if (response && response.status) {
     const json = await response.data;
     return {
@@ -400,6 +419,25 @@ export const updateRole = async (
 ): Promise<NetworkResponse<UpdateRoleResponse>> => {
   const response = await apiClient('update-role', 'POST', requestBody);
 
+  if (response && response.status) {
+    const json = await response.data;
+    return {
+      kind: 'success',
+      body: json,
+    };
+  } else {
+    return {
+      kind: 'failure',
+    };
+  }
+};
+
+//API FOR UPDATING LEVEL
+export const updateLevel = async (
+  requestBody: any
+): Promise<NetworkResponse<UpdateLevelResponse>> => {
+  const response = await apiClient('update-pending-approvel', 'POST', requestBody);
+console.log(response?.data,'levelupgrade')
   if (response && response.status) {
     const json = await response.data;
     return {

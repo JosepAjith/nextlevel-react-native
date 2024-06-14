@@ -159,4 +159,11 @@ export const styles = StyleSheet.create({
     fontFamily:AppFonts.INTER_MEDIUM,
     color:'black',
   },
+  button:{
+    backgroundColor:AppColors.Orange,
+    borderRadius:8,
+    justifyContent:'center',
+    alignItems:'center',
+    padding:8
+        },
 });

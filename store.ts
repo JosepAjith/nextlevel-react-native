@@ -29,6 +29,8 @@ import MemberStatusSlice from './src/api/member/MemberStatusSlice';
 import ShareUrlSlice from './src/api/share/ShareUrlSlice';
 import LogoutSlice from './src/api/login/LogoutSlice';
 import SupportTripListSlice from './src/api/trip/SupportTripListSlice';
+import RoleUpgradeSlice from './src/api/roleUpgrade/RoleUpgradeSlice';
+import UpdateLevelSlice from './src/api/roleUpgrade/UpdateLevelSlice';
 
 
 const rootReducer = combineReducers({
@@ -61,7 +63,9 @@ const rootReducer = combineReducers({
   GetNotification: GetNotificationSlice,
   DeleteNotification: DeleteNotificationSlice,
   MemberStatus: MemberStatusSlice,
-  ShareUrl: ShareUrlSlice
+  ShareUrl: ShareUrlSlice,
+  RoleUpgrade: RoleUpgradeSlice,
+  UpdateLevel: UpdateLevelSlice
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

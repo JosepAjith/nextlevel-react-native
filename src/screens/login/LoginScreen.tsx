@@ -80,8 +80,6 @@ const LoginScreen: React.FC<Props> = () => {
 
   }, []);
 
-  console.log(loginInput)
-
   const toggleRememberMe = async (value: boolean | ((prevState: boolean) => boolean)) => {
     setRemember(value);
     if (value === true) {
