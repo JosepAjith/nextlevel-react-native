@@ -29,6 +29,7 @@ import BackgroundLoader from '../../components/BackgroundLoader';
 import {Dropdown} from 'react-native-element-dropdown';
 import {reset, updateRole} from '../../api/levelUpdate/UpdateRoleSlice';
 import {showToast} from '../../constants/commonUtils';
+import CustomAlert from '../../components/CustomAlert';
 
 const {TextField} = Incubator;
 
@@ -69,16 +70,27 @@ const ProfileScreen: React.FC<Props> = ({isReplace}: Props) => {
     (state: RootState) => state.UpdateRole,
   );
 
+  const [alertVisible, setAlertVisible] = useState(false);
+  const [alertMessage, setAlertMessage] = useState('');
+  const [currentRole, setCurrentRole] = useState<{
+    id: any;
+    level: string;
+  } | null>(null);
+
   useFocusEffect(
     React.useCallback(() => {
-      let request = {id: userId};
-      dispatch(fetchProfileDetails({requestBody: userId == 0 ? '' : request}));
+      FetchProfile();
 
       return () => {
         setTab('personal');
       };
     }, [updateRoleData]),
   );
+
+  const FetchProfile = () => {
+    let request = {id: userId};
+    dispatch(fetchProfileDetails({requestBody: userId == 0 ? '' : request}));
+  };
 
   const updatingRole = async (id: any, level: string) => {
     let request = {
@@ -105,6 +117,26 @@ const ProfileScreen: React.FC<Props> = ({isReplace}: Props) => {
       }
     }
   }, [updateRoleData]);
+
+  const handleConfirm = () => {
+    if (currentRole) {
+      updatingRole(currentRole.id, currentRole.level);
+    }
+    setAlertVisible(false);
+  };
+
+  const handleCancel = () => {
+    setAlertVisible(false);
+    setCurrentRole(null);
+    FetchProfile();
+  };
+
+  const showAlert = (id: any, level: string) => {
+    const message = `Are you sure you want to update the role to ${level}?`;
+    setAlertMessage(message);
+    setCurrentRole({id, level});
+    setAlertVisible(true);
+  };
 
   return (
     <ScrollView style={{backgroundColor: AppColors.Black}}>
@@ -168,59 +200,58 @@ const ProfileScreen: React.FC<Props> = ({isReplace}: Props) => {
                 <Image source={AppImages.SETTINGS} width={30} height={30} />
               </TouchableOpacity>
             </View>
+          ) : profileDetails?.user.level == 'Marshal' ||
+            profileDetails?.user.level == 'Super Marshal' ? (
+            <View />
           ) : (
-            (profileDetails?.user.level == 'Marshal' || profileDetails?.user.level == 'Super Marshal') ?
-            <View/>
-            : (
-              <Dropdown
-                style={styles.role}
-                placeholderStyle={styles.roleText}
-                selectedTextStyle={styles.roleText}
-                inputSearchStyle={styles.roleText}
-                itemTextStyle={{fontSize: 12, color: 'black'}}
-                data={Level}
-                search
-                maxHeight={300}
-                labelField={'type'}
-                valueField={'id'}
-                placeholder="Update Role"
-                value={profileDetails?.user.level}
-                searchPlaceholder="Search..."
-                onChange={items => {
-                  updatingRole(profileDetails?.user.id, items.type);
-                }}
-                renderRightIcon={() => (
-                  <View row centerV>
-                    <Text red10></Text>
-                    <Image
-                      source={AppImages.DOWN}
-                      tintColor="#3F4E59"
-                      width={11}
-                      height={6}
-                    />
-                  </View>
-                )}
-                renderItem={dropdownItem => {
-                  const currentIndex = Level.findIndex(
-                    level => level.type === profileDetails?.user.level,
+            <Dropdown
+              style={styles.role}
+              placeholderStyle={styles.roleText}
+              selectedTextStyle={styles.roleText}
+              inputSearchStyle={styles.roleText}
+              itemTextStyle={{fontSize: 12, color: 'black'}}
+              data={Level}
+              search
+              maxHeight={300}
+              labelField={'type'}
+              valueField={'id'}
+              placeholder="Update Role"
+              value={profileDetails?.user.level}
+              searchPlaceholder="Search..."
+              onChange={items => {
+                showAlert(profileDetails?.user.id, items.type);
+              }}
+              renderRightIcon={() => (
+                <View row centerV>
+                  <Text red10></Text>
+                  <Image
+                    source={AppImages.DOWN}
+                    tintColor="#3F4E59"
+                    width={11}
+                    height={6}
+                  />
+                </View>
+              )}
+              renderItem={dropdownItem => {
+                const currentIndex = Level.findIndex(
+                  level => level.type === profileDetails?.user.level,
+                );
+                const itemIndex = Level.findIndex(
+                  level => level.type === dropdownItem.type,
+                );
+                // Check if the item is adjacent to the current item
+                const isAdjacent = Math.abs(currentIndex - itemIndex) <= 1;
+                if (isAdjacent) {
+                  return (
+                    <View margin-10>
+                      <Text style={styles.roleText}>{dropdownItem.type}</Text>
+                    </View>
                   );
-                  const itemIndex = Level.findIndex(
-                    level => level.type === dropdownItem.type,
-                  );
-                  // Check if the item is adjacent to the current item
-                  const isAdjacent = Math.abs(currentIndex - itemIndex) <= 1;
-                  if (isAdjacent) {
-                    return (
-                      <View margin-10>
-                        <Text style={styles.roleText}>{dropdownItem.type}</Text>
-                      </View>
-                    );
-                  } else {
-                    return null; // Render nothing for non-adjacent items
-                  }
-                }}
-              />
-            )
+                } else {
+                  return null; // Render nothing for non-adjacent items
+                }
+              }}
+            />
           )}
         </View>
 
@@ -332,6 +363,15 @@ const ProfileScreen: React.FC<Props> = ({isReplace}: Props) => {
             navigation={navigation}
             data={profileDetails.trip_status_counts}
             isReplace={isReplace}
+          />
+        )}
+
+        {alertVisible && (
+          <CustomAlert
+            visible={alertVisible}
+            message={alertMessage}
+            onConfirm={handleConfirm}
+            onCancel={handleCancel}
           />
         )}
       </View>

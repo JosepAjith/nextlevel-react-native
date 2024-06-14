@@ -28,6 +28,7 @@ import ButtonView from '../../components/ButtonView';
 import AppStyles from '../../constants/AppStyles';
 import {reset, updateLevel} from '../../api/roleUpgrade/UpdateLevelSlice';
 import {showToast} from '../../constants/commonUtils';
+import CustomAlert from '../../components/CustomAlert';
 
 const {TextField} = Incubator;
 
@@ -54,6 +55,12 @@ const UpgradeLevel: React.FC<Props> = () => {
   const {IsNetConnected} = useSelector(
     (state: RootState) => state.GlobalVariables,
   );
+  const [alertVisible, setAlertVisible] = useState(false);
+  const [alertMessage, setAlertMessage] = useState('');
+  const [currentAction, setCurrentAction] = useState<{
+    id: any;
+    status: any;
+  } | null>(null);
 
   useFocusEffect(
     React.useCallback(() => {
@@ -97,6 +104,28 @@ const UpgradeLevel: React.FC<Props> = () => {
     }
   }, [updateLevelData]);
 
+  const handleConfirm = () => {
+    if (currentAction) {
+      updatingLevel(currentAction.id, currentAction.status);
+    }
+    setAlertVisible(false);
+  };
+
+  const handleCancel = () => {
+    setAlertVisible(false);
+    setCurrentAction(null);
+  };
+
+  const showAlert = (id: any, status: any) => {
+    const message =
+      status === 1
+        ? 'Are you sure you want to upgrade this user?'
+        : 'Are you sure you want to cancel the upgrade?';
+    setAlertMessage(message);
+    setCurrentAction({id, status});
+    setAlertVisible(true);
+  };
+
   return (
     <View flex backgroundColor={AppColors.Black} padding-20>
       <Header
@@ -122,7 +151,9 @@ const UpgradeLevel: React.FC<Props> = () => {
 
       {upgrades?.data.length == 0 ? (
         <View flex center>
-          <Text white text70>No account to upgrade</Text>
+          <Text white text70>
+            No account to upgrade
+          </Text>
         </View>
       ) : (
         <FlatList
@@ -165,9 +196,7 @@ const UpgradeLevel: React.FC<Props> = () => {
                       marginB-10>
                       <TouchableOpacity
                         style={[styles.button]}
-                        onPress={() => {
-                          updatingLevel(item.user_id, 1);
-                        }}>
+                        onPress={() => showAlert(item.user_id, 1)}>
                         <Text
                           style={[
                             styles.text,
@@ -178,9 +207,7 @@ const UpgradeLevel: React.FC<Props> = () => {
                       </TouchableOpacity>
                       <TouchableOpacity
                         style={[styles.button, {backgroundColor: 'white'}]}
-                        onPress={() => {
-                          updatingLevel(item.user_id, 0);
-                        }}>
+                        onPress={() => showAlert(item.user_id, 0)}>
                         <Text
                           style={[
                             styles.text,
@@ -197,6 +224,13 @@ const UpgradeLevel: React.FC<Props> = () => {
           }}
         />
       )}
+
+      <CustomAlert
+        visible={alertVisible}
+        message={alertMessage}
+        onCancel={handleCancel}
+        onConfirm={handleConfirm}
+      />
     </View>
   );
 };
