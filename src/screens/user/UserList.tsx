@@ -58,6 +58,8 @@ const User = [
   'Advanced Exam',
   'Advanced',
   'Explorer',
+  'Marshal',
+  'Super Marshal'
 ];
 
 const Level = [
