@@ -6,8 +6,8 @@ import {showToast} from '../constants/commonUtils';
 import NetInfo from '@react-native-community/netinfo';
 
 // let BASE_URL = 'https://next-level.prompttechdemohosting.com/api/';
-// let BASE_URL = 'https://nxtlevel4x4.com/api/';
-let BASE_URL = 'https://nxt-level-live.prompttechdemohosting.com/api/'
+let BASE_URL = 'https://nxtlevel4x4.com/api/';
+// let BASE_URL = 'https://nxt-level-live.prompttechdemohosting.com/api/';
 
 export const apiClient = async (
   endPoint: string,
