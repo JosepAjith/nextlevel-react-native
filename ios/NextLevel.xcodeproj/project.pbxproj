@@ -18,7 +18,7 @@
 		2AE6345BAE514F2CBD82A9A5 /* Lato-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4EFC8E68C4244B1DB37A5A09 /* Lato-Bold.ttf */; };
 		41A9E420366F4101B21FE8EB /* Satoshi-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D0F118FB67434F2D9424320D /* Satoshi-Bold.ttf */; };
 		574221574D204CB69DAE9C44 /* Lato-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CDFF9318E5154FE5A46D897D /* Lato-Regular.ttf */; };
-		6AC6D9FF2C12245600019647 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6AC6D9FE2C12245600019647 /* GoogleService-Info.plist */; };
+		72D92FF52C1E947F00B982A9 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 72D92FF42C1E947F00B982A9 /* GoogleService-Info.plist */; };
 		7699B88040F8A987B510C191 /* libPods-NextLevel-NextLevelTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 19F6CBCC0A4E27FBF8BF4A61 /* libPods-NextLevel-NextLevelTests.a */; };
 		7A04E36B0B504600938AC62E /* Inter-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 5B94B7188FF94106A6BC97F7 /* Inter-Medium.ttf */; };
 		7FBF104E983246A98D26C064 /* Inter-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A7401C33655A48688D9A5716 /* Inter-Regular.ttf */; };
@@ -57,7 +57,7 @@
 		5B94B7188FF94106A6BC97F7 /* Inter-Medium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Inter-Medium.ttf"; path = "../assets/fonts/Inter-Medium.ttf"; sourceTree = "<group>"; };
 		5DCACB8F33CDC322A6C60F78 /* libPods-NextLevel.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-NextLevel.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5DD97D4972EE459FACC4826D /* Satoshi-Light.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Satoshi-Light.ttf"; path = "../assets/fonts/Satoshi-Light.ttf"; sourceTree = "<group>"; };
-		6AC6D9FE2C12245600019647 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
+		72D92FF42C1E947F00B982A9 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		7C92E7F7FCD8413E8AA0E05C /* lato-semibold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "lato-semibold.ttf"; path = "../assets/fonts/lato-semibold.ttf"; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = NextLevel/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		834C618647C345FDA02ACFC1 /* Inter-Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Inter-Bold.ttf"; path = "../assets/fonts/Inter-Bold.ttf"; sourceTree = "<group>"; };
@@ -112,7 +112,7 @@
 		13B07FAE1A68108700A75B9A /* NextLevel */ = {
 			isa = PBXGroup;
 			children = (
-				6AC6D9FE2C12245600019647 /* GoogleService-Info.plist */,
+				72D92FF42C1E947F00B982A9 /* GoogleService-Info.plist */,
 				8BB681D22BAC232B004B83C0 /* NextLevelRelease.entitlements */,
 				8B0110F22BA4361D005E5FDF /* NextLevelDebug.entitlements */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
@@ -293,6 +293,7 @@
 			files = (
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
+				72D92FF52C1E947F00B982A9 /* GoogleService-Info.plist in Resources */,
 				41A9E420366F4101B21FE8EB /* Satoshi-Bold.ttf in Resources */,
 				0C5888144DC64618A5AAE588 /* Satoshi-Light.ttf in Resources */,
 				220C60EAAF504BC5A7E34043 /* Satoshi-Medium.ttf in Resources */,
@@ -304,7 +305,6 @@
 				2AE6345BAE514F2CBD82A9A5 /* Lato-Bold.ttf in Resources */,
 				574221574D204CB69DAE9C44 /* Lato-Regular.ttf in Resources */,
 				8670C5ECC24E4BBE9D238BF9 /* lato-semibold.ttf in Resources */,
-				6AC6D9FF2C12245600019647 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -554,7 +554,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 15.0.4;
+				MARKETING_VERSION = 16.0.2;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -589,7 +589,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 15.0.4;
+				MARKETING_VERSION = 16.0.2;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -677,7 +677,11 @@
 					"-DFOLLY_USE_LIBCPP=1",
 					"-DFOLLY_CFG_NO_COROUTINES=1",
 				);
-				OTHER_LDFLAGS = "$(inherited)";
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-Wl",
+					"-ld_classic",
+				);
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				USE_HERMES = true;
@@ -747,7 +751,11 @@
 					"-DFOLLY_USE_LIBCPP=1",
 					"-DFOLLY_CFG_NO_COROUTINES=1",
 				);
-				OTHER_LDFLAGS = "$(inherited)";
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-Wl",
+					"-ld_classic",
+				);
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				USE_HERMES = true;
