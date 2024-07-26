@@ -25,6 +25,7 @@ import AppFonts from '../../constants/AppFonts';
 import {MemberStatusChange, reset} from '../../api/member/MemberStatusSlice';
 import {showToast} from '../../constants/commonUtils';
 import CustomAlert from '../../components/CustomAlert';
+import useBackHandler from '../../constants/useBackHandler';
 
 const {TextField} = Incubator;
 
@@ -62,6 +63,11 @@ const TripMembers: React.FC<Props> = ({route}: any) => {
       setShowAlert(false);
     }
   };
+
+  useBackHandler(() => {
+    navigation.goBack(); // Navigate back to the previous screen
+    return true; // Prevent default behavior
+  });
 
   const handleCancel = () => {
     setShowAlert(false);

@@ -28,6 +28,7 @@ import {
   reset,
 } from '../../api/notification/DeleteNotificationSlice';
 import BackgroundLoader from '../../components/BackgroundLoader';
+import useBackHandler from '../../constants/useBackHandler';
 
 const {TextField} = Incubator;
 
@@ -52,6 +53,11 @@ const NotificationScreen: React.FC<Props> = () => {
   const {NotifDeleteData, loadingDeleteNotif, NotifDeleteError} = useSelector(
     (state: RootState) => state.DeleteNotification,
   );
+
+  useBackHandler(() => {
+    navigation.goBack(); // Navigate back to the previous screen
+    return true; // Prevent default behavior
+  });
 
   useEffect(()=>{
       NotifList();

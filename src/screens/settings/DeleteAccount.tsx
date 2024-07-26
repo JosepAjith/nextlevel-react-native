@@ -19,6 +19,7 @@ import {deleteAccount, reset} from '../../api/accountDelete/AccountDeleteSlice';
 import {showToast} from '../../constants/commonUtils';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import AppStrings from '../../constants/AppStrings';
+import useBackHandler from '../../constants/useBackHandler';
 
 const {TextField} = Incubator;
 
@@ -69,6 +70,11 @@ const DeleteAccount: React.FC<Props> = () => {
     (state: RootState) => state.GlobalVariables,
   );
 
+  useBackHandler(() => {
+    navigation.goBack(); // Navigate back to the previous screen
+    return true; // Prevent default behavior
+  });
+  
   function isValidate(): boolean {
     if (!IsNetConnected) {
       showToast('Need internet connection');

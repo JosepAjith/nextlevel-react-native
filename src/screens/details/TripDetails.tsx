@@ -31,6 +31,7 @@ import ButtonView from '../../components/ButtonView';
 import {deleteReset, deleteTrip} from '../../api/trip/TripDeleteSlice';
 import LevelView from '../../components/LevelView';
 import {fetchMemberList} from '../../api/member/MemberListSlice';
+import useBackHandler from '../../constants/useBackHandler';
 
 const {TextField} = Incubator;
 
@@ -59,6 +60,11 @@ const TripDetails: React.FC<Props> = ({route}: any) => {
   const {members} = useSelector(
     (state: RootState) => state.MemberList,
   );
+
+  useBackHandler(() => {
+    navigation.goBack(); // Navigate back to the previous screen
+    return true; // Prevent default behavior
+  });
 
   useFocusEffect(
     React.useCallback(() => {

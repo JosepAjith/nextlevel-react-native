@@ -25,6 +25,7 @@ import {getDayTime, showToast} from '../../constants/commonUtils';
 import {send} from 'process';
 import BackgroundLoader from '../../components/BackgroundLoader';
 import {fetchNotifications} from '../../api/notification/GetNotificationSlice';
+import useBackHandler from '../../constants/useBackHandler';
 
 const {TextField} = Incubator;
 
@@ -56,7 +57,12 @@ const BroadcastScreen: React.FC<Props> = ({route}: any) => {
   const {loginUserId} = useSelector(
     (state: RootState) => state.GlobalVariables,
   );
-console.log(notification)
+
+  useBackHandler(() => {
+    navigation.goBack(); // Navigate back to the previous screen
+    return true; // Prevent default behavior
+  });
+  
   useFocusEffect(
     React.useCallback(() => {
       getMessages(1);

@@ -15,6 +15,7 @@ import AppColors from '../../constants/AppColors';
 import {ScrollView, TouchableOpacity} from 'react-native';
 import {Header} from '../../components/Header';
 import AppFonts from '../../constants/AppFonts';
+import useBackHandler from '../../constants/useBackHandler';
 
 const {TextField} = Incubator;
 
@@ -29,6 +30,10 @@ interface Props {}
 
 const AboutScreen: React.FC<Props> = () => {
   const navigation = useNavigation<AboutScreenNavigationProps>();
+  useBackHandler(() => {
+    navigation.goBack(); // Navigate back to the previous screen
+    return true; // Prevent default behavior
+  });
 
   return (
     <ScrollView style={{backgroundColor: AppColors.Black}}>

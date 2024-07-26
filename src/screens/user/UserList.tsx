@@ -37,6 +37,7 @@ import {Dropdown} from 'react-native-element-dropdown';
 import {reset, updateRole} from '../../api/levelUpdate/UpdateRoleSlice';
 import {showToast} from '../../constants/commonUtils';
 import BackgroundLoader from '../../components/BackgroundLoader';
+import useBackHandler from '../../constants/useBackHandler';
 
 const {TextField} = Incubator;
 
@@ -87,6 +88,11 @@ const UserList: React.FC<Props> = () => {
   const {IsNetConnected} = useSelector(
     (state: RootState) => state.GlobalVariables,
   );
+
+  useBackHandler(() => {
+    navigation.goBack(); // Navigate back to the previous screen
+    return true; // Prevent default behavior
+  });
 
   useFocusEffect(
     React.useCallback(() => {

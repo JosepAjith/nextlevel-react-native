@@ -29,6 +29,7 @@ import AppStyles from '../../constants/AppStyles';
 import {reset, updateLevel} from '../../api/roleUpgrade/UpdateLevelSlice';
 import {showToast} from '../../constants/commonUtils';
 import CustomAlert from '../../components/CustomAlert';
+import useBackHandler from '../../constants/useBackHandler';
 
 const {TextField} = Incubator;
 
@@ -61,6 +62,11 @@ const UpgradeLevel: React.FC<Props> = () => {
     id: any;
     status: any;
   } | null>(null);
+
+  useBackHandler(() => {
+    navigation.goBack(); // Navigate back to the previous screen
+    return true; // Prevent default behavior
+  });
 
   useFocusEffect(
     React.useCallback(() => {

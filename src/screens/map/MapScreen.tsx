@@ -24,6 +24,7 @@ import ButtonView from '../../components/ButtonView';
 import {PERMISSIONS, RESULTS, check, request} from 'react-native-permissions';
 import {showToast} from '../../constants/commonUtils';
 import AppImages from '../../constants/AppImages';
+import useBackHandler from '../../constants/useBackHandler';
 
 Geocoder.init('AIzaSyACWPy4KNDqex0QYmX-HkF7St0TXA6ARPI', {language: 'en'});
 
@@ -51,6 +52,11 @@ const MapScreen: React.FC<Props> = ({route}: any) => {
   const [address, setAddress] = useState('');
   const [mapType, setMapType] = useState<'standard' | 'hybrid'>('standard');
   const {tripDetails} = useSelector((state: RootState) => state.TripDetails);
+
+  useBackHandler(() => {
+    navigation.goBack(); // Navigate back to the previous screen
+    return true; // Prevent default behavior
+  });
 
   useEffect(() => {
     if (type == 'add') {

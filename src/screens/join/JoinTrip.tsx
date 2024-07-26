@@ -35,6 +35,9 @@ import BackgroundLoader from '../../components/BackgroundLoader';
 import {fetchProfileDetails} from '../../api/profile/ProfileDetailsSlice';
 import {fetchTripDetails} from '../../api/trip/TripDetailsSlice';
 import LevelView from '../../components/LevelView';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import AppStrings from '../../constants/AppStrings';
+import useBackHandler from '../../constants/useBackHandler';
 
 const {TextField} = Incubator;
 
@@ -75,23 +78,26 @@ const JoinTrip: React.FC<Props> = ({route}: any) => {
     (state: RootState) => state.ProfileDetails,
   );
 
+
   useFocusEffect(
     React.useCallback(() => {
-      if (isDeepLink) {
+ 
         // Add back handler for deep link
         const backHandler = BackHandler.addEventListener(
           'hardwareBackPress',
           () => {
+            if (isDeepLink) {
             navigation.replace(RouteNames.BottomTabs); // Navigate to bottom tabs
+            }
+            else{
+              navigation.goBack();
+            }
             return true; // Prevent default behavior
           },
         );
 
         // Clean-up function
         return () => backHandler.remove();
-      }
-      // Clean-up function
-      return () => {};
     }, []),
   );
 
@@ -99,8 +105,13 @@ const JoinTrip: React.FC<Props> = ({route}: any) => {
     if (isDeepLink == true) {
       fetchDetails();
       dispatch(fetchProfileDetails({requestBody: ''}));
+      removeDeepLink();
     }
   }, [isDeepLink]);
+
+  const removeDeepLink = async() => {
+    await AsyncStorage.removeItem(AppStrings.DEEP_LINK_ID);
+  }
 
   const fetchDetails = () => {
     let request = JSON.stringify({

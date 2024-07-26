@@ -26,7 +26,7 @@ import NotificationScreen from '../screens/notification/NotificationScreen';
 import BroadcastScreen from '../screens/broadcast/BroadcastScreen';
 import MapScreen from '../screens/map/MapScreen';
 import DeleteAccount from '../screens/settings/DeleteAccount';
-import { useNavigation } from '@react-navigation/native';
+import { CommonActions, useNavigation } from '@react-navigation/native';
 import UserPicker from '../screens/addtrip/UserPicker';
 import UserTrips from '../screens/user/UserTrips';
 import { AppState, Linking } from 'react-native';
@@ -38,35 +38,78 @@ import UpgradeLevel from '../screens/upgrade/UpgradeLevel';
 const Stack = createNativeStackNavigator();
 
 const AppStack = () => {
-
   const navigation = useNavigation();
   const [appState, setAppState] = useState(AppState.currentState);
 
   useEffect(() => {
-    // Add deep linking handling here
-    Linking.addEventListener('url', handleDeepLink);
+    const handleDeepLink = async ({ url }) => {
+      try {
+        console.log('Received deep link:', url);
+        const route = url.replace(/.*?:\/\//g, '');
+        const id = route.match(/\/([^\/]+)\/?$/)[1];
+        
+        await AsyncStorage.setItem(AppStrings.DEEP_LINK_ID, String(id))
+        .then(()=>{
+            Navigate();
+        })
+        // Clear the navigation stack and show the splash screen
+      
+      } catch (error) {
+        console.error('Error handling deep link:', error);
+      }
+    };
+
+    const Navigate = () => {
+      navigation.dispatch(
+        CommonActions.reset({
+          index: 0,
+          routes: [{ name: RouteNames.SplashScreen }],
+        })
+      );
+    };
+
+
+
+    const handleUrlEvent = (event) => {
+      if (event.url) {
+        handleDeepLink({ url: event.url });
+      }
+    };
+
+    Linking.addEventListener('url', handleUrlEvent);
+
     Linking.getInitialURL().then((url) => {
       if (url) {
         handleDeepLink({ url });
       }
-      else{
-        removeDeepLink();
-      }
     });
-  }, []);
 
-  const handleDeepLink = async ({ url }) => {
-    // Parse the URL and extract information if needed
-    console.log('Received deep link:', url);
-    const route = url.replace(/.*?:\/\//g, '');
-    const id = route.match(/\/([^\/]+)\/?$/)[1];
-    
-    await AsyncStorage.setItem(AppStrings.DEEP_LINK_ID, String(id))
-  }
+    const appStateListener = AppState.addEventListener('change', (nextAppState) => {
+      if (appState.match(/inactive|background/) && nextAppState === 'active') {
+        Linking.addEventListener('url', handleUrlEvent);
 
-  const removeDeepLink = async() => {
-    await AsyncStorage.removeItem(AppStrings.DEEP_LINK_ID);
-  }
+        Linking.getInitialURL().then((url) => {
+          if (url) {
+            console.log('linking')
+            handleDeepLink({ url });
+          }
+        });
+      }
+      setAppState(nextAppState);
+    });
+
+    return () => {
+      appStateListener.remove();
+    };
+  }, [appState, navigation]);
+
+  const removeDeepLink = async () => {
+    try {
+      await AsyncStorage.removeItem(AppStrings.DEEP_LINK_ID);
+    } catch (error) {
+      console.error('Error removing deep link ID:', error);
+    }
+  };
 
   return (
     <Stack.Navigator

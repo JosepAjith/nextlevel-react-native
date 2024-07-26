@@ -7,6 +7,11 @@ const Navigation = () => {
   const dispatch = useDispatch();
   const linking = {
     prefixes: ['https://nxtlevel4x4.com', 'nxtlevel4x4://'], // Add your desired prefixes here
+    config: {
+      screens: {
+        SplashScreen: 'splash',
+        JoinTrip: 'join/:id',
+      }}
   };
 
   

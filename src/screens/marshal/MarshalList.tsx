@@ -22,6 +22,7 @@ import {AnyAction, ThunkDispatch} from '@reduxjs/toolkit';
 import {RootState} from '../../../store';
 import {fetchUserList} from '../../api/user/UserListSlice';
 import BackgroundLoader from '../../components/BackgroundLoader';
+import useBackHandler from '../../constants/useBackHandler';
 
 const {TextField} = Incubator;
 
@@ -50,6 +51,11 @@ const MarshalList: React.FC<Props> = () => {
   const {IsNetConnected} = useSelector(
     (state: RootState) => state.GlobalVariables,
   );
+
+  useBackHandler(() => {
+    navigation.goBack(); // Navigate back to the previous screen
+    return true; // Prevent default behavior
+  });
 
   useFocusEffect(
     React.useCallback(() => {

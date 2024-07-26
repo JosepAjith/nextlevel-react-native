@@ -25,6 +25,7 @@ const SplashScreen: React.FC<Props> = () => {
 
   useEffect(() => {
     const initialize = async () => {
+
       const deepLinkId = await AsyncStorage.getItem(AppStrings.DEEP_LINK_ID);
       const isOnboarded = await AsyncStorage.getItem(AppStrings.IS_ONBOARD);
       const isLoggedIn = await AsyncStorage.getItem(AppStrings.IS_LOGIN);

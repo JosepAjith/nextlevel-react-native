@@ -173,6 +173,7 @@ const AddTripScreen: React.FC<Props> = ({route, id, initial}: Props) => {
     }
   }, [routeId, tripDetails]);
 
+
   function isValidate(): boolean {
     if (!IsNetConnected) {
       showToast('Need internet connection');
@@ -890,10 +891,10 @@ const AddTripScreen: React.FC<Props> = ({route, id, initial}: Props) => {
                     : new Date()
                 }
                 minimumDate={new Date()}
-                maximumDate={moment(
+                maximumDate={routeId == 0 ? moment(
                   tripInput.joining_deadline,
                   'DD-MM-YYYY',
-                ).toDate()}
+                ).toDate(): undefined}
                 onConfirm={(date: any) => {
                   setValidate({
                     ...tripValidate,
@@ -952,7 +953,7 @@ const AddTripScreen: React.FC<Props> = ({route, id, initial}: Props) => {
                     : new Date()
                 }
                 minimumDate={new Date()}
-                maximumDate={moment(tripInput.date, 'DD-MM-YYYY').toDate()}
+                maximumDate={routeId == 0 ? moment(tripInput.date, 'DD-MM-YYYY').toDate() : undefined}
                 onConfirm={(date: any) => {
                   setValidate({
                     ...tripValidate,
@@ -1034,7 +1035,6 @@ const AddTripScreen: React.FC<Props> = ({route, id, initial}: Props) => {
               }));
 
               setValidate({...tripValidate, InvalidImage: false});
-              console.log('Imageeee-----',item)
             }}
             multi={true}
           />

@@ -11,6 +11,7 @@ import {Linking, ScrollView, TouchableOpacity} from 'react-native';
 import {Header} from '../../components/Header';
 import Logout from './Logout';
 import DeviceInfo from 'react-native-device-info';
+import useBackHandler from '../../constants/useBackHandler';
 
 const {TextField} = Incubator;
 
@@ -31,6 +32,11 @@ const SettingsScreen: React.FC<Props> = () => {
   const [isPersonal, setPersonal] = useState(false);
   const [isLogout, setLogOut] = useState(false);
   const version = DeviceInfo.getVersion();
+
+  useBackHandler(() => {
+    navigation.goBack(); // Navigate back to the previous screen
+    return true; // Prevent default behavior
+  });
 
   const renderOption = (image: any, text: string, onPress: () => void) => (
     <TouchableOpacity onPress={onPress} style={styles.view}>

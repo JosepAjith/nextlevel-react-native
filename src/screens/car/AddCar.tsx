@@ -37,6 +37,7 @@ import moment from 'moment';
 import ImageSelector from '../../components/ImageSelector';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import BackgroundLoader from '../../components/BackgroundLoader';
+import useBackHandler from '../../constants/useBackHandler';
 
 const {TextField} = Incubator;
 
@@ -67,6 +68,11 @@ const AddCar: React.FC<Props> = ({route}: any) => {
   const {IsNetConnected} = useSelector(
     (state: RootState) => state.GlobalVariables,
   );
+
+  useBackHandler(() => {
+    navigation.goBack(); // Navigate back to the previous screen
+    return true; // Prevent default behavior
+  });
 
   useEffect(() => {
     if (id !== 0 && profileDetails) {

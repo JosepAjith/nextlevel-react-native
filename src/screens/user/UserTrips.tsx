@@ -14,6 +14,7 @@ import BackgroundLoader from '../../components/BackgroundLoader';
 import ListItem from '../../components/ListItem';
 import {Header} from '../../components/Header';
 import AppImages from '../../constants/AppImages';
+import useBackHandler from '../../constants/useBackHandler';
 
 export type UserTripsNavigationProps = NativeStackNavigationProp<
   RootStackParams,
@@ -34,6 +35,11 @@ const UserTrips: React.FC<Props> = ({route}: any) => {
   const {IsNetConnected} = useSelector(
     (state: RootState) => state.GlobalVariables,
   );
+
+  useBackHandler(() => {
+    navigation.goBack(); // Navigate back to the previous screen
+    return true; // Prevent default behavior
+  });
 
   useFocusEffect(
     React.useCallback(() => {
