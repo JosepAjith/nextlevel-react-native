@@ -11,6 +11,12 @@ export const styles = StyleSheet.create({
         alignItems:'center',
         justifyContent:'center'
     },
+    image: {
+        width: 70,
+        height: 70,
+        resizeMode: 'contain',
+        borderRadius:35
+      },
     name:{
         fontSize:18,
         fontFamily:AppFonts.BOLD,

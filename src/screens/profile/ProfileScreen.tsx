@@ -158,9 +158,7 @@ const ProfileScreen: React.FC<Props> = ({isReplace}: Props) => {
                     ? {uri: profileDetails.user.image}
                     : AppImages.PLACEHOLDER
                 }
-                width={70}
-                height={70}
-                style={{borderRadius: 35}}
+                style={styles.image}
               />
             </View>
             <Text style={styles.name}>{profileDetails?.user.nick_name}</Text>

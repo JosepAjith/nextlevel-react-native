@@ -138,7 +138,6 @@ const App = () => {
 
     const checkToken = async () => {
       const token = await messaging().getToken();
-      console.log('FCM Token:', token);
       await AsyncStorage.setItem(AppStrings.FCM_TOKEN, token);
     };
 
@@ -168,7 +167,6 @@ const App = () => {
   useEffect(() => {
     const unsubscribe = messaging().onMessage(async remoteMessage => {
       onDisplayNotification(remoteMessage);
-      console.log('Foreground Message:', remoteMessage);
     });
     return unsubscribe;
   }, []);
@@ -177,7 +175,6 @@ const App = () => {
     const unsubscribe = messaging().setBackgroundMessageHandler(
       async remoteMessage => {
         onDisplayNotification(remoteMessage);
-        console.log('Background Message:', remoteMessage);
       }
     );
     return unsubscribe;

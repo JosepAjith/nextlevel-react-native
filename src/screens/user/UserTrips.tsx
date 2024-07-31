@@ -1,11 +1,11 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useMemo, useState} from 'react';
 import {Incubator, Text, View} from 'react-native-ui-lib';
 import {RootStackParams, RouteNames} from '../../navigation';
 import {RouteProp, useFocusEffect} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {useNavigation} from '@react-navigation/native';
 import AppColors from '../../constants/AppColors';
-import {FlatList} from 'react-native';
+import {FlatList, SectionList} from 'react-native';
 import {AnyAction, ThunkDispatch} from '@reduxjs/toolkit';
 import {RootState} from '../../../store';
 import {useDispatch, useSelector} from 'react-redux';
@@ -15,6 +15,7 @@ import ListItem from '../../components/ListItem';
 import {Header} from '../../components/Header';
 import AppImages from '../../constants/AppImages';
 import useBackHandler from '../../constants/useBackHandler';
+import AppFonts from '../../constants/AppFonts';
 
 export type UserTripsNavigationProps = NativeStackNavigationProp<
   RootStackParams,
@@ -68,6 +69,25 @@ const UserTrips: React.FC<Props> = ({route}: any) => {
     }
   };
 
+  const sections = useMemo(() => {
+    if (!trip?.data) return [];
+  
+    // Create a map to group trips by level
+    const levelMap = trip.data.reduce((acc, trip) => {
+      if (!acc[trip.level]) {
+        acc[trip.level] = [];
+      }
+      acc[trip.level].push(trip);
+      return acc;
+    }, {});
+  
+    // Transform map into array of sections
+    return Object.keys(levelMap).map((level) => ({
+      title: level,
+      data: levelMap[level],
+    }));
+  }, [trip]);
+
   return (
     <View flex backgroundColor={AppColors.Black} padding-20 paddingB-0>
       <Header
@@ -89,14 +109,26 @@ const UserTrips: React.FC<Props> = ({route}: any) => {
 
       <View marginV-10 />
 
-      <FlatList
-        data={trip?.data}
-        showsVerticalScrollIndicator={false}
-        renderItem={({item, index}) => {
-          return <ListItem item={item} index={index} navigation={navigation} />;
-        }}
-        keyExtractor={(item, index) => `${item.id}-${index}`}
-      />
+      <SectionList
+  sections={sections}
+  keyExtractor={(item, index) => `${item.id}-${index}`}
+  renderSectionHeader={({ section: { title, data } }) => (
+    <View row style={{justifyContent: 'space-between'}} marginV-10>
+                <Text white style={{fontSize: 16, fontFamily: AppFonts.REGULAR}}>
+                  Trip Level
+                </Text>
+                <Text
+                  white
+                  style={{fontSize: 16, fontFamily: AppFonts.BOLD}}>
+                  {title} ( {data.length} )
+                </Text>
+              </View>
+  )}
+  renderItem={({ item, index }) => (
+    <ListItem item={item} index={index} navigation={navigation} />
+  )}
+  showsVerticalScrollIndicator={false}
+/>
     </View>
   );
 };

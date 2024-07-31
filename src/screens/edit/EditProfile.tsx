@@ -114,13 +114,13 @@ const EditProfile: React.FC<Props> = () => {
       });
     }
   }, [profileDetails]);
-
+console.log(profileInput)
   function isValidate(): boolean {
     if (!IsNetConnected) {
       showToast('Need internet connection');
       return false;
     }
-    if (profileInput.image.uri == '') {
+    if (profileInput.image.uri == '' || profileInput.image.uri == '/empty.jpg' || profileInput.image.uri == '/empty.png') {
       setValidate({
         ...profileValidate,
         InvalidImage: true,
@@ -234,6 +234,8 @@ const EditProfile: React.FC<Props> = () => {
     formData.append('occupation', profileInput.occupation);
     formData.append('interest', profileInput.interest);
     formData.append('referred_by', profileInput.referred_by);
+
+    console.log(formData)
     dispatch(
       editProfile({
         requestBody: formData,
@@ -293,7 +295,7 @@ const EditProfile: React.FC<Props> = () => {
 
             <TouchableOpacity onPress={() => setImageClick(!isImageClick)}>
               <View center style={styles.imageView}>
-                {profileInput.image.uri ? (
+                {profileInput.image.uri && profileInput.image.uri != '/empty.jpg' && profileInput.image.uri != '/empty.png' ? (
                   <Image
                     source={{uri: profileInput.image.uri}}
                     style={{width: '100%', height: '100%', borderRadius: 20}}

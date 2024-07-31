@@ -80,8 +80,8 @@ android {
         applicationId "com.nxtlevel.android"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 28
-        versionName "16.0.2"
+        versionCode 29
+        versionName "16.0.3"
 
         manifestPlaceholders = [autoVerify: "true"]
     }

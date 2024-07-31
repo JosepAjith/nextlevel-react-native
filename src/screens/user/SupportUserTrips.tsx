@@ -110,12 +110,12 @@ const SupportUserTrips: React.FC<Props> = ({route}: any) => {
             const {title, data} = section;
             return (
               <View row style={{justifyContent: 'space-between'}} marginV-10>
-                <Text white style={{fontSize: 16, fontFamily: AppFonts.BOLD}}>
+                <Text white style={{fontSize: 16, fontFamily: AppFonts.REGULAR}}>
                   Trip Level
                 </Text>
                 <Text
                   white
-                  style={{fontSize: 16, fontFamily: AppFonts.REGULAR}}>
+                  style={{fontSize: 16, fontFamily: AppFonts.BOLD}}>
                   {title} ( {data.length} )
                 </Text>
               </View>
