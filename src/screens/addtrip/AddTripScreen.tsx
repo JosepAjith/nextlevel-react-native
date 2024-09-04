@@ -455,7 +455,7 @@ const AddTripScreen: React.FC<Props> = ({route, id, initial}: Props) => {
     >
       <View flex backgroundColor={AppColors.Black}>
         {loadingAddTrip && <BackgroundLoader />}
-        <ScrollView>
+        <ScrollView keyboardShouldPersistTaps='handled'>
           <View padding-20>
             {routeId == 0 ? (
               <Header leftIcon={false} title="Create Trip" />

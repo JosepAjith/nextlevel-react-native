@@ -147,7 +147,7 @@ const DeleteAccount: React.FC<Props> = () => {
     <View flex backgroundColor={AppColors.Black} padding-20>
       <Header title="Delete Account" />
 
-      <ScrollView>
+      <ScrollView keyboardShouldPersistTaps='handled'>
         <View flex marginT-30 >
           <Text style={[styles.title, {fontSize: 18}]}>
             Account closure is a permanent action

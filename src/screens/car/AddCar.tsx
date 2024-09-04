@@ -233,7 +233,7 @@ const AddCar: React.FC<Props> = ({route}: any) => {
       <View flex backgroundColor={AppColors.Black}>
         {loadingCar && <BackgroundLoader />}
 
-        <ScrollView>
+        <ScrollView keyboardShouldPersistTaps='handled'>
           <View padding-20>
             <Header title={id == 0 ? 'Add Car' : 'Update Car'} />
 

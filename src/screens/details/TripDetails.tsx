@@ -162,8 +162,9 @@ const TripDetails: React.FC<Props> = ({route}: any) => {
           <ScrollView>
             <View flex padding-20>
               <View row centerV>
-                <View flex row centerV>
-                  <Text style={styles.title}>{tripDetails.data.title}</Text>
+                <View flex row centerV marginR-20>
+                  <Text style={[styles.title, { flex: 1 }]}>{tripDetails.data.title}</Text>
+               
                   <View
                     style={styles.statusView}
                     backgroundColor={

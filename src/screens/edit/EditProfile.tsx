@@ -56,8 +56,7 @@ interface Props {}
 
 const Gender = [
   {type: 'Female', id: 'Female'},
-  {type: 'Male', id: 'Male'},
-  {type: 'Other', id: 'Other'},
+  {type: 'Male', id: 'Male'}
 ];
 const Emirates = [
   {type: 'Abu Dhabi', id: 'Abu Dhabi'},
@@ -289,7 +288,7 @@ console.log(profileInput)
     >
       <View flex backgroundColor={AppColors.Black}>
         {loadingEditProfile && <BackgroundLoader />}
-        <ScrollView>
+        <ScrollView keyboardShouldPersistTaps='handled'>
           <View padding-20>
             <Header title="Edit Profile" />
 
@@ -404,6 +403,7 @@ console.log(profileInput)
                 setValidate({...profileValidate, InvalidGender: false});
               }}
               error={profileValidate.InvalidGender}
+              isSearch={false}
             />
 
             <TextField

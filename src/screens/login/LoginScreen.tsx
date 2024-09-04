@@ -194,7 +194,7 @@ const LoginScreen: React.FC<Props> = () => {
       style={{flex: 1}} // Make sure it takes full height of the screen
       behavior={Platform.OS === 'ios' ? 'padding' : 'padding'} // Adjust behavior for iOS
     >
-      <ScrollView style={{backgroundColor: AppColors.Black}}>
+      <ScrollView style={{backgroundColor: AppColors.Black}} keyboardShouldPersistTaps='handled'>
         <View flex backgroundColor={AppColors.Black} padding-20>
           <View center marginT-20 marginB-40>
             <Text style={styles.title}>Sign in</Text>

@@ -255,7 +255,7 @@ const JoinTrip: React.FC<Props> = ({route}: any) => {
     >
       <View flex backgroundColor={AppColors.Black}>
         {isDeepLink && loadingTripDetails && <BackgroundLoader />}
-        <ScrollView>
+        <ScrollView keyboardShouldPersistTaps='handled'>
           <View padding-20>
             <Header
               title={type == 'edit' ? 'Edit Ride' : 'Join Ride'}

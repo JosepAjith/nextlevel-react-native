@@ -14,9 +14,10 @@ interface Props {
     onChange: any;
     error: any;
     placeholder?: any
+    isSearch?: any;
 }
 
-const DropdownComponent = ({data, item, label, value, onChange, error,placeholder}: Props) => {
+const DropdownComponent = ({data, item, label, value, onChange, error,placeholder, isSearch}: Props) => {
 
   return (
     <Dropdown
@@ -26,7 +27,7 @@ const DropdownComponent = ({data, item, label, value, onChange, error,placeholde
       inputSearchStyle={styles.inputSearchStyle}
       itemTextStyle={{fontSize:12,color:'black'}}
       data={data}
-      search
+      search={isSearch == false ? false : true}
       maxHeight={300}
       labelField={label}
       valueField={value}

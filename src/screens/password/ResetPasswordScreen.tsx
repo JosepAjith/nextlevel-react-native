@@ -129,7 +129,7 @@ const ResetPasswordScreen: React.FC<Props> = () => {
 
         {loadingChangePassword && <BackgroundLoader />}
 
-        <ScrollView>
+        <ScrollView keyboardShouldPersistTaps='handled'>
           <View>
             <TextField
               fieldStyle={styles.field}
