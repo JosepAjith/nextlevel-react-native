@@ -544,7 +544,7 @@
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = NextLevel/NextLevelDebug.entitlements;
-				CURRENT_PROJECT_VERSION = 9;
+				CURRENT_PROJECT_VERSION = 10;
 				DEVELOPMENT_TEAM = M54RSVKAFG;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = NextLevel/Info.plist;
@@ -554,7 +554,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 16.0.2;
+				MARKETING_VERSION = 16.0.4;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -580,7 +580,7 @@
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = NextLevel/NextLevelRelease.entitlements;
-				CURRENT_PROJECT_VERSION = 9;
+				CURRENT_PROJECT_VERSION = 10;
 				DEVELOPMENT_TEAM = M54RSVKAFG;
 				INFOPLIST_FILE = NextLevel/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "NXT LVL 4x4";
@@ -589,7 +589,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 16.0.2;
+				MARKETING_VERSION = 16.0.4;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
