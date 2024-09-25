@@ -110,5 +110,7 @@
 	<array>
 		<string>applinks:nxtlevel4x4.com</string>
 	</array>
+	  <key>FirebaseAppDelegateProxyEnabled</key>
+    <false/>
 </dict>
 </plist>
