@@ -53,7 +53,6 @@ interface Props {}
 const Gender = [
   {type: 'Female', id: 'Female'},
   {type: 'Male', id: 'Male'},
-  {type: 'Other', id: 'Other'},
 ];
 
 const JoinTrip: React.FC<Props> = ({route}: any) => {
@@ -81,37 +80,41 @@ const JoinTrip: React.FC<Props> = ({route}: any) => {
 
   useFocusEffect(
     React.useCallback(() => {
- 
-        // Add back handler for deep link
-        const backHandler = BackHandler.addEventListener(
-          'hardwareBackPress',
-          () => {
-            if (isDeepLink) {
+      // Add back handler for deep link
+      const backHandler = BackHandler.addEventListener(
+        'hardwareBackPress',
+        () => {
+          if (isDeepLink) {
             navigation.replace(RouteNames.BottomTabs); // Navigate to bottom tabs
-            }
-            else{
-              navigation.goBack();
-            }
-            return true; // Prevent default behavior
-          },
-        );
+          } else {
+            navigation.goBack();
+          }
+          return true; // Prevent default behavior
+        },
+      );
 
-        // Clean-up function
-        return () => backHandler.remove();
+      // Clean-up function
+      return () => backHandler.remove();
     }, []),
   );
+
+  useFocusEffect(
+    React.useCallback(() => {
+      dispatch(fetchProfileDetails({requestBody: ''}));
+      return()=>{}
+    },[])
+  )
 
   useEffect(() => {
     if (isDeepLink == true) {
       fetchDetails();
-      dispatch(fetchProfileDetails({requestBody: ''}));
       removeDeepLink();
     }
   }, [isDeepLink]);
 
-  const removeDeepLink = async() => {
+  const removeDeepLink = async () => {
     await AsyncStorage.removeItem(AppStrings.DEEP_LINK_ID);
-  }
+  };
 
   const fetchDetails = () => {
     let request = JSON.stringify({
@@ -144,7 +147,7 @@ const JoinTrip: React.FC<Props> = ({route}: any) => {
           name: item.name,
           phone: item.phone ? item.phone : '',
           gender: item.gender ? item.gender : '',
-          vehicle: '',
+          vehicle: item.cars && item.cars.length > 0 ? item.cars[0].model_name : '' ,
           passenger: '',
           application_status: status,
         });
@@ -218,8 +221,6 @@ const JoinTrip: React.FC<Props> = ({route}: any) => {
       };
     }
 
-    console.log(request)
-
     dispatch(
       joinTrip({
         requestBody: request,
@@ -228,6 +229,11 @@ const JoinTrip: React.FC<Props> = ({route}: any) => {
       }),
     )
       .then(() => {
+          if (!profileDetails?.user.image) {
+            navigation.navigate(RouteNames.EditProfile);
+          } else if (profileDetails.user.cars.length == 0) {
+            navigation.navigate(RouteNames.AddCar, { id: 0 });
+          }
         dispatch(reset());
       })
       .catch((err: any) => console.log(err));
@@ -255,7 +261,7 @@ const JoinTrip: React.FC<Props> = ({route}: any) => {
     >
       <View flex backgroundColor={AppColors.Black}>
         {isDeepLink && loadingTripDetails && <BackgroundLoader />}
-        <ScrollView keyboardShouldPersistTaps='handled'>
+        <ScrollView keyboardShouldPersistTaps="handled">
           <View padding-20>
             <Header
               title={type == 'edit' ? 'Edit Ride' : 'Join Ride'}

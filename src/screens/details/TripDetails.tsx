@@ -44,6 +44,20 @@ export type TripDetailsRouteProps = RouteProp<RootStackParams, 'TripDetails'>;
 
 interface Props {}
 
+const User = [
+  'First Join',
+  'newbie',
+  'newbie+',
+  'Intermediate Exam',
+  'Intermediate',
+  'Intermediate+',
+  'Advanced Exam',
+  'Advanced',
+  'Explorer',
+  'Marshal',
+  'Super Marshal'
+];
+
 const TripDetails: React.FC<Props> = ({route}: any) => {
   const navigation = useNavigation<TripDetailsNavigationProps>();
   const id = route.params.id;
@@ -285,7 +299,7 @@ const TripDetails: React.FC<Props> = ({route}: any) => {
                 )}
               </View>
 
-              {tripDetails.data.trip_book ? (
+              {User.indexOf(type) >= User.indexOf(tripDetails.data.level) ? (tripDetails.data.trip_book ? (
                 tripDetails.data.trip_status !== 'expired' &&
                 tripDetails.data.trip_status !== 'completed' &&
                 tripDetails.data.trip_status !== 'cancelled' ? (
@@ -450,7 +464,10 @@ const TripDetails: React.FC<Props> = ({route}: any) => {
                     </TouchableOpacity>
                   </View>
                 )
-              )}
+              )) :
+              <View style={styles.deadline} marginB-10 center>
+                <Text style={styles.text2}>You don't have the permission to join or support.</Text>
+                </View>}
 
               <Attendance
                 startDate={tripDetails.data.joining_start_date}

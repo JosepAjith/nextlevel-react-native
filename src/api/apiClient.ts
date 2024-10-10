@@ -34,7 +34,7 @@ export const apiClient = async (
       } else if (error.response) {
         // Update UI accordingly
         showToast(error.response.data.message);
-        console.log(error.response.data);
+        console.log(error.response.data, 'kkkk');
       } else if (error.request) {
         showToast(error.request);
       } else {
